@@ -1,7 +1,4 @@
 
-# The graph
-- create networkx graph based on nio objects
-
 # The filtersets
 - Create filtersets based on the nio objects
 - Create a mock loop in which the best effort part of the filterset is continuously updated with the next subset OR shorter list
