@@ -1,20 +1,10 @@
 
 # The filtersets
 
-- Test current setup
+- Implement looping system that decreases the best effort portion of the requirements each time (maybe create a filterset object method (1 for privacy and 1 for security) that updates the internal best effort list to the less demanding one, after which the drop method can be called again? This would create a nice readable loop in the main file)
 
+- Test this setup!
 
-
-- Design best effort mechanism:
-    - biggest subset
-    - ordered list
-- Incorporate these into the strict requirements such that it works in the loop system I described in the report
-- Update drop method with best effort requirements added in
-
-
-
-
-- Create filtersets based on the nio objects
 - Create a mock loop in which the best effort part of the filterset is continuously updated with the next subset OR shorter list
 
 
