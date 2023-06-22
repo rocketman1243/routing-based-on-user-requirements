@@ -1,0 +1,23 @@
+{
+    "as_source": 729,
+    "as_destination": 442,
+    "security": {
+        "strict": [2, 3, 6],
+        "best_effort": [1, 9],
+        "best_effort_mode": "biggest_subset"
+    },
+    "privacy": {
+        "strict": [4, 8],
+        "best_effort": [5, 7, 10],
+        "best_effort_mode": "ordered_list"
+    },
+    "geolocation": {
+        "only_use": [],
+        "exclude": ["AS", "AF", "OC"]
+    },
+    "path_optimization": "minimize_total_latency",
+    "multipath": {
+        "target_amount_of_paths": 5,
+        "minimum_number_of_paths": 3
+    }
+}
