@@ -1,5 +1,19 @@
 
 # The filtersets
+
+- Test current setup
+
+
+
+- Design best effort mechanism:
+    - biggest subset
+    - ordered list
+- Incorporate these into the strict requirements such that it works in the loop system I described in the report
+- Update drop method with best effort requirements added in
+
+
+
+
 - Create filtersets based on the nio objects
 - Create a mock loop in which the best effort part of the filterset is continuously updated with the next subset OR shorter list
 

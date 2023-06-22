@@ -2,17 +2,17 @@
     "as_source": 13,
     "as_destination": 29,
     "security": {
-        "strict": [2, 6, 8],
-        "best_effort": [2, 9],
+        "strict": [2, 8],
+        "best_effort": [1, 3, 9],
         "best_effort_mode": "biggest_subset"
     },
     "privacy": {
-        "strict": [2, 3, 5, 8],
-        "best_effort": [1,4, 7, 9],
+        "strict": [2, 3],
+        "best_effort": [1, 4, 7, 9],
         "best_effort_mode": "biggest_subset"
     },
     "geolocation": {
-        "only_use": ["EU"],
+        "only_use": ["EU", "NA", "SA"],
         "exclude": []
     },
     "path_optimization": "minimize_total_latency",

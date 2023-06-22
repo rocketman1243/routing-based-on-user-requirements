@@ -28,15 +28,13 @@ for i in range(1, 21):
         edge_entry = [nio_object.as_number, outgoing_edge, edge_data]
         edges.append(edge_entry)
 
-print(nio_objects)
-
 # Build graph
 G = nx.Graph()
 G.add_nodes_from(as_numbers)
 G.add_edges_from(edges)
 
 nx.draw(G)
-plt.show()
+# plt.show()
 
 # Generate PRO objects
 pro_objects = []
@@ -47,6 +45,19 @@ for i in range(1, 11):
     pro_content = pro_file.read()
     pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
     pro_objects.append(pro_object)
+
+# Select the first PRO for now
+
+pro = pro_objects[2]
+
+#############################################################################################################
+######## STRICT PHASE #######################################################################################
+#############################################################################################################
+
+filterset = Filterset(pro.security.strict, pro.privacy.strict, pro.geolocation.exclude)
+
+for as_number in as_numbers:
+    print(as_number, filterset.as_has_to_be_removed(nio_objects[as_number], 0))
 
 
 
