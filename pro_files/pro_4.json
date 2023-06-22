@@ -8,7 +8,7 @@
     },
     "privacy": {
         "strict": [4, 8],
-        "best_effort": [6, 9, 12],
+        "best_effort": [6, 7, 9],
         "best_effort_mode": "ordered_list"
     },
     "geolocation": {
