@@ -2,13 +2,13 @@ from itertools import chain, combinations
 
 class Filterset():
 
-    def powerset(input_list):
+    def powerset(self, input_list):
         s = list(input_list)  # allows duplicate elements
         result = list(chain.from_iterable(combinations(s, r) for r in range(len(s)+1)))
         result.reverse()
         return result
 
-    def decreasing_lists(input_list):
+    def decreasing_lists(self, input_list):
         result = []
         for i in range(len(input_list) + 1):
             result.append(input_list[:i])
@@ -23,19 +23,19 @@ class Filterset():
         # where the only_use is interpreted as "exclude everything but this"
         # and the result is union'ed to combine both approaches into one representation
         full_geo_list = set(["EU", "AS", "NA", "SA", "AF", "OC", "AN"])
-        self.geolocations_to_exclude = union(set(pro_object.geolocation.exclude), full_geo_list.difference(set(pro_object.geolocation.only_use)))
+        self.geolocations_to_exclude = set(pro_object.geolocation.exclude).union(full_geo_list.difference(set(pro_object.geolocation.only_use)))
 
         # Generate the subsets for security
         self.best_effort_security_subsets = []
         if pro_object.security.best_effort_mode == "biggest_subset":
-            self.best_effort_security_subsets = powerset(pro_object.security.best_effort)
+            self.best_effort_security_subsets = self.powerset(pro_object.security.best_effort)
         else: # the mode is ordered_list
-            self.best_effort_security_subsets = decreasing_lists(pro_object.security.best_effort)
+            self.best_effort_security_subsets = self.decreasing_lists(pro_object.security.best_effort)
 
         # Generate the subsets for privacy
         self.best_effort_privacy_subsets = []
         if pro_object.privacy.best_effort_mode == "biggest_subset":
-            self.best_effort_privacy_subsets = powerset(pro_object.privacy.best_effort)
+            self.best_effort_privacy_subsets = self.powerset(pro_object.privacy.best_effort)
         else: # the mode is ordered_list
             self.best_effort_privacy_subsets = decreasing_lists(pro_object.privacy.best_effort)
 
@@ -50,8 +50,8 @@ class Filterset():
     def as_has_to_be_removed(self, nio_object, verbose=False) -> bool:
         drop: bool = False
 
-        security_requirements = self.strict_security_requirements + self.best_effort_security_requirements
-        privacy_requirements = self.strict_privacy_requirements + self.best_effort_privacy_requirements
+        security_requirements = self.strict_security_requirements + list(self.best_effort_security_requirements)
+        privacy_requirements = self.strict_privacy_requirements + list(self.best_effort_privacy_requirements)
 
         # check security: The required security requirements have to be a subset of the security
         # requirements of the AS to have self AS handle our path. If self is NOT the case, we

@@ -48,13 +48,13 @@ for i in range(1, 11):
 
 # Select the first PRO for now
 
-pro = pro_objects[2]
+pro = pro_objects[0]
 
 #############################################################################################################
 ######## STRICT PHASE #######################################################################################
 #############################################################################################################
 
-filterset = Filterset(pro.security.strict, pro.privacy.strict, pro.geolocation.exclude)
+filterset = Filterset(pro)
 
 for as_number in as_numbers:
     print(as_number, filterset.as_has_to_be_removed(nio_objects[as_number], 0))
