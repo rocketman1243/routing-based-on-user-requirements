@@ -12,8 +12,8 @@
         "best_effort_mode": "biggest_subset"
     },
     "geolocation": {
-        "only_use": ["SA", "AF"],
-        "exclude": []
+        "only_use": [],
+        "exclude": ["SA", "AF"]
     },
     "path_optimization": "minimize_number_of_hops",
     "multipath": {

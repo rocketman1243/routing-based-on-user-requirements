@@ -2,7 +2,7 @@
     "as_number": 144,
     "security": [1, 2, 3, 5, 6, 8, 9],
     "privacy": [1, 2, 4, 5, 6, 7, 9],
-    "geolocation": ["EU"],
+    "geolocation": ["AS"],
     "connections": [13, 29, 137, 213, 425, 442, 729],
     "latency": [92, 79, 45, 63, 52, 41, 56]
 }

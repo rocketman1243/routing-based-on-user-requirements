@@ -12,7 +12,7 @@
         "best_effort_mode": "ordered_list"
     },
     "geolocation": {
-        "only_use": ["AS", "AF"],
+        "only_use": ["AS"],
         "exclude": []
     },
     "path_optimization": "minimize_number_of_hops",

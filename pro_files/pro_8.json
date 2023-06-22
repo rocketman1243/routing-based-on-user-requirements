@@ -12,7 +12,7 @@
         "best_effort_mode": "biggest_subset"
     },
     "geolocation": {
-        "only_use": ["EU", "AN"],
+        "only_use": ["AN"],
         "exclude": []
     },
     "path_optimization": "minimize_number_of_hops",
