@@ -2,18 +2,18 @@
     "as_source": 834,
     "as_destination": 144,
     "security": {
-        "strict": [1, 2, 3],
+        "strict": [1],
         "best_effort": [4, 8],
         "best_effort_mode": "biggest_subset"
     },
     "privacy": {
-        "strict": [5, 7],
+        "strict": [7],
         "best_effort": [6, 9],
         "best_effort_mode": "biggest_subset"
     },
     "geolocation": {
-        "only_use": ["AN"],
-        "exclude": []
+        "only_use": [],
+        "exclude": ["NA"]
     },
     "path_optimization": "minimize_number_of_hops",
     "multipath": {

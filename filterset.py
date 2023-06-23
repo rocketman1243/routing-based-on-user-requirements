@@ -22,10 +22,6 @@ class Filterset():
         self.strict_security_requirements = pro_object.security.strict 
         self.strict_privacy_requirements = pro_object.privacy.strict 
 
-        # DEBUG, REMOVE LATER
-        print(pro_object.security.strict)
-
-
         # Combine only_use and exclude list into one exclude list,
         # where the only_use is interpreted as "exclude everything but this"
         # and the result is union'ed to combine both approaches into one representation

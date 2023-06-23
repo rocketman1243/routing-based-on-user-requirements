@@ -49,7 +49,6 @@ for i in range(1, 11):
 # Utility method for checking path existence that does not explode if source or dest are removed due to 
 # insufficiently supported features
 def safe_has_path(graph, source, dest) -> bool:
-    # print("hello", graph.nodes, source, dest)
     if source not in graph.nodes or dest not in graph.nodes:
         return False
     else:
@@ -57,7 +56,7 @@ def safe_has_path(graph, source, dest) -> bool:
 
 
 # Select the first PRO for now
-pro = pro_objects[0]
+pro = pro_objects[7]
 
 
 
@@ -65,13 +64,15 @@ pro = pro_objects[0]
 path_exists = safe_has_path(G, pro.as_source, pro.as_destination)
 
 if not(path_exists):
-    print("No path exists at all! Exiting...")
+    print("No path exists at all, even without filtering! Exiting...")
     exit(0)
 
 
 #############################################################################################################
 ######## STRICT PHASE #######################################################################################
 #############################################################################################################
+
+print("\n### STRICT STAGE ###\n")
 
 filterset = Filterset(pro)
 as_numbers_after_strict_phase = []
@@ -96,12 +97,14 @@ if not(path_exists):
     print("No path that adheres to the strict requirements can be found! Exiting...")
     exit(0)
 else:
-    print("Path that adheres to strict privacy requirements", filterset.strict_privacy_requirements, "and security requirements", filterset.strict_security_requirements, "exists:\n", nx.shortest_path(G_strict_phase, pro.as_source, pro.as_destination), "\nContinuing with the best-effort phase!")
+    print("At least one path that adheres to strict privacy requirements", filterset.strict_privacy_requirements, "and security requirements", filterset.strict_security_requirements, "exists! Continuing with the best-effort phase! \n")
 
 
 #############################################################################################################
 ######## BEST EFFORT PHASE ##################################################################################
 #############################################################################################################
+
+print("\n### BEST EFFORT STAGE ###\n")
 
 G_best_effort_phase = copy.deepcopy(G_strict_phase)
 source_and_destination_comply_with_first_set_of_best_effort = True
@@ -133,13 +136,17 @@ while not(path_exists):
 
     path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
 
-best_effort_path = nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination)
 
-print("Best effort shortest path found that adheres to best effort security requirements", filterset.best_effort_security_requirements, "and privacy requirements", filterset.best_effort_privacy_requirements, "found:\n", nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination), "\nContinuing with the optimizaiton phase!")
+if len(filterset.best_effort_privacy_requirements) + len(filterset.best_effort_security_requirements) == 0:
+    print("Unfortunately the best effort requirements could not be satisfied. However, we can still find a path that satisfies the strict requirements. Thus, we now go to the optimization stage!! \n")
+else:
+    print("At least one best effort path that adheres to best effort security requirements", filterset.best_effort_security_requirements, "and privacy requirements", filterset.best_effort_privacy_requirements, " exists! Continuing with the optimization phase! \n")
 
 #######################################################################
 ######## Optimization stage ###########################################
 #######################################################################
+
+print("\n### OPTIMIZATION STAGE ###\n")
 
 G_after_filter = copy.deepcopy(G_best_effort_phase)
 
@@ -165,7 +172,7 @@ else: # optimization strategy is minimize nr of hops
 # sort scored_paths list by score
 scored_paths.sort(key = lambda x: x[1])
 
-print("Here are all possible paths, scored based on the selected optimization strategy (which was", pro.path_optimization, "): ")
+print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "): ")
 for path in scored_paths:
     print(path)
 
@@ -173,6 +180,8 @@ for path in scored_paths:
 #######################################################################
 ######## Multipath stage ##############################################
 #######################################################################
+
+print("\n### MULTIPATH STAGE ###\n")
 
 min_nr_of_paths = pro.multipath.minimum_number_of_paths
 target_nr_of_paths = pro.multipath.target_amount_of_paths
@@ -187,9 +196,9 @@ if len(multipath_selection) == 0:
     print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :D")
 else:
     if pro.path_optimization == "minimize_total_latency":
-        print("The multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
+        print("\n The multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
     else:
-        print("The multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
+        print("\nThe multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
     for path in multipath_selection:
         print(path)
 
