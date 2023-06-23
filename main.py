@@ -56,8 +56,22 @@ pro = pro_objects[0]
 
 filterset = Filterset(pro)
 
-for as_number in as_numbers:
-    print(as_number, filterset.as_has_to_be_removed(nio_objects[as_number], 0))
+    
+
+for i in range(12):
+    print("security:", filterset.best_effort_security_requirements)
+    print("privacy:", filterset.best_effort_privacy_requirements)
+
+    nr_of_removed_items = 0
+    for as_number in as_numbers:
+        if filterset.as_has_to_be_removed(nio_objects[as_number], "not_strict", "not_verbose"):
+            nr_of_removed_items += 1
+
+    print(nr_of_removed_items)
+    filterset.reduce_best_effort_security_constraints()
+    filterset.reduce_best_effort_privacy_constraints()
+
+
 
 
 

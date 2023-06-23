@@ -4,7 +4,7 @@ class Filterset():
 
     def powerset(self, input_list):
         s = list(input_list)  # allows duplicate elements
-        result = list(chain.from_iterable(combinations(s, r) for r in range(len(s)+1)))
+        result = list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))
         result.reverse()
         return result
 
@@ -22,8 +22,11 @@ class Filterset():
         # Combine only_use and exclude list into one exclude list,
         # where the only_use is interpreted as "exclude everything but this"
         # and the result is union'ed to combine both approaches into one representation
-        full_geo_list = set(["EU", "AS", "NA", "SA", "AF", "OC", "AN"])
-        self.geolocations_to_exclude = set(pro_object.geolocation.exclude).union(full_geo_list.difference(set(pro_object.geolocation.only_use)))
+        self.geolocations_to_exclude = set(pro_object.geolocation.exclude)
+
+        if len(pro_object.geolocation.only_use) > 0:
+            full_geo_list = set(["EU", "AS", "NA", "SA", "AF", "OC", "AN"])
+            self.geolocations_to_exclude = full_geo_list.difference(set(pro_object.geolocation.only_use))
 
         # Generate the subsets for security
         self.best_effort_security_subsets = []
@@ -37,11 +40,17 @@ class Filterset():
         if pro_object.privacy.best_effort_mode == "biggest_subset":
             self.best_effort_privacy_subsets = self.powerset(pro_object.privacy.best_effort)
         else: # the mode is ordered_list
-            self.best_effort_privacy_subsets = decreasing_lists(pro_object.privacy.best_effort)
+            self.best_effort_privacy_subsets = self.decreasing_lists(pro_object.privacy.best_effort)
 
         # Initially set the best effort requirement sets to the biggest subset in the list of sets
         self.best_effort_security_requirements = self.best_effort_security_subsets[0]
         self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+
+
+
+
+
+
 
     def best_effort_security_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
         return len(self.best_effort_security_subsets) > 1
@@ -49,25 +58,27 @@ class Filterset():
     def best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
         return len(self.best_effort_privacy_subsets) > 1
 
-    def reduce_best_effort_privacy_constraints(self):
-        if self.best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set():
-            self.best_effort_privacy_subsets.pop(0)
-            self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+    def reduce_best_effort_security_constraints(self):
+        if self.best_effort_security_constraints_are_not_yet_reduced_to_the_empty_set():
+            self.best_effort_security_subsets.pop(0)
+            self.best_effort_security_requirements = self.best_effort_security_subsets[0]
 
     def reduce_best_effort_privacy_constraints(self):
         if self.best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set():
             self.best_effort_privacy_subsets.pop(0)
             self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
 
-    def as_has_to_be_removed(self, nio_object, strict: bool, verbose=False) -> bool:
+    def as_has_to_be_removed(self, nio_object, mode, print_mode) -> bool:
         drop: bool = False
+        strict = mode == "strict"
+        verbose = print_mode == "verbose"
 
         security_requirements = self.strict_security_requirements
         privacy_requirements = self.strict_privacy_requirements
 
         if not(strict):
             security_requirements += list(self.best_effort_security_requirements)
-            security_requirements += list(self.best_effort_privacy_requirements)
+            privacy_requirements += list(self.best_effort_privacy_requirements)
 
 
         # check security: The required security requirements have to be a subset of the security
@@ -77,6 +88,7 @@ class Filterset():
             drop = True
             if verbose:
                 print(security_requirements, "are not a security subset of", nio_object.security)
+
         if not(set(privacy_requirements).issubset(set(nio_object.privacy))):
             drop = True
             if verbose:
@@ -87,6 +99,10 @@ class Filterset():
         for geolocation in nio_object.geolocation:
             if geolocation in self.geolocations_to_exclude:
                 drop = True
+                if verbose:
+                    print(geolocation, "is in", self.geolocations_to_exclude, "while it should be excluded")
                 break
 
+        security_requirements.clear()
+        privacy_requirements.clear()
         return drop
