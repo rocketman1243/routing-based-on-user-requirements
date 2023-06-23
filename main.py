@@ -46,30 +46,97 @@ for i in range(1, 11):
     pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
     pro_objects.append(pro_object)
 
-# Select the first PRO for now
+# Utility method for checking path existence that does not explode if source or dest are removed due to 
+# insufficiently supported features
+def safe_has_path(graph, source, dest) -> bool:
+    # print("hello", graph.nodes, source, dest)
+    if source not in graph.nodes or dest not in graph.nodes:
+        return False
+    else:
+        return nx.has_path(graph, source, dest)
 
+
+# Select the first PRO for now
 pro = pro_objects[0]
+
+
+
+# TEMPORARY Sanity check
+path_exists = safe_has_path(G, pro.as_source, pro.as_destination)
+
+if not(path_exists):
+    print("No path exists at all! Exiting...")
+    exit(0)
+
 
 #############################################################################################################
 ######## STRICT PHASE #######################################################################################
 #############################################################################################################
 
 filterset = Filterset(pro)
+as_numbers_after_strict_phase = []
+G_strict_phase = copy.deepcopy(G)
 
-    
+# Drop nodes that do not comply with strict requirements
+for num in as_numbers:
+    if filterset.as_has_to_be_removed(nio_objects[num], "strict", "not_verbose"):
+        if num in [pro.as_source, pro.as_destination]:
+            # No path can be found as the source or destinaton does not comply
+            # Exit and cry in a corner
+            print("Either source or destination does not comply with the strict reqiurements, so no path can ever be found.\nExiting...")
+            exit()
+    else:
+        as_numbers_after_strict_phase.append(num)
 
-for i in range(12):
-    print("security:", filterset.best_effort_security_requirements)
-    print("privacy:", filterset.best_effort_privacy_requirements)
+# Try to find path
+path_exists = safe_has_path(G_strict_phase, pro.as_source, pro.as_destination)
 
-    nr_of_removed_items = 0
-    for as_number in as_numbers:
-        if filterset.as_has_to_be_removed(nio_objects[as_number], "not_strict", "not_verbose"):
-            nr_of_removed_items += 1
 
-    print(nr_of_removed_items)
+if not(path_exists):
+    print("No path that adheres to the strict requirements can be found! Exiting...")
+    exit(0)
+else:
+    print("Path that adheres to strict privacy requirements", filterset.strict_privacy_requirements, "and security requirements", filterset.strict_security_requirements, "exists:\n", nx.shortest_path(G_strict_phase, pro.as_source, pro.as_destination), "\nContinuing with the best-effort phase!")
+
+
+#############################################################################################################
+######## BEST EFFORT PHASE ##################################################################################
+#############################################################################################################
+
+G_best_effort_phase = copy.deepcopy(G_strict_phase)
+source_and_destination_comply_with_first_set_of_best_effort = True
+
+
+# Drop nodes that do not comply with strict AND all best effort requirements
+for num in as_numbers_after_strict_phase:
+    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "not_verbose"):
+        G_best_effort_phase.remove_node(num)
+
+# Try to find path
+path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
+
+if path_exists:
+    best_effort_path = nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination)
+    print("Found a best-effort path: ", best_effort_path)
+
+while not(path_exists):
     filterset.reduce_best_effort_security_constraints()
     filterset.reduce_best_effort_privacy_constraints()
+
+    # Start with a fresh graph such that we can again remove nodes
+    G_best_effort_phase = copy.deepcopy(G_strict_phase)
+
+    # Drop nodes that do not comply with strict AND reduced set of best effort requirements
+    for num in as_numbers_after_strict_phase:
+        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "not_verbose"):
+            G_best_effort_phase.remove_node(num)
+
+    print("hi")
+    path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
+
+best_effort_path = nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination)
+
+print("Best effort shortest path found that adheres to best effort security requirements", filterset.best_effort_security_requirements, "and privacy requirements", filterset.best_effort_privacy_requirements, "found:\n", nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination), "\nContinuing with the optimizaiton phase!")
 
 
 

@@ -4,9 +4,12 @@ class Filterset():
 
     def powerset(self, input_list):
         s = list(input_list)  # allows duplicate elements
-        result = list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))
-        result.reverse()
-        return result
+        sets = chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+        lists = []
+        for item in sets:
+            lists.append(list(item))
+        lists.reverse()
+        return lists
 
     def decreasing_lists(self, input_list):
         result = []
@@ -18,6 +21,10 @@ class Filterset():
     def __init__(self, pro_object):
         self.strict_security_requirements = pro_object.security.strict 
         self.strict_privacy_requirements = pro_object.privacy.strict 
+
+        # DEBUG, REMOVE LATER
+        print(pro_object.security.strict)
+
 
         # Combine only_use and exclude list into one exclude list,
         # where the only_use is interpreted as "exclude everything but this"
@@ -73,12 +80,14 @@ class Filterset():
         strict = mode == "strict"
         verbose = print_mode == "verbose"
 
-        security_requirements = self.strict_security_requirements
-        privacy_requirements = self.strict_privacy_requirements
+        security_requirements = []
+        privacy_requirements = []
+        security_requirements.extend(self.strict_security_requirements)
+        privacy_requirements.extend(self.strict_privacy_requirements)
 
         if not(strict):
-            security_requirements += list(self.best_effort_security_requirements)
-            privacy_requirements += list(self.best_effort_privacy_requirements)
+            security_requirements.extend(list(self.best_effort_security_requirements))
+            privacy_requirements.extend(list(self.best_effort_privacy_requirements))
 
 
         # check security: The required security requirements have to be a subset of the security
@@ -103,6 +112,7 @@ class Filterset():
                     print(geolocation, "is in", self.geolocations_to_exclude, "while it should be excluded")
                 break
 
-        security_requirements.clear()
-        privacy_requirements.clear()
+        # security_requirements.clear()
+        # privacy_requirements.clear()
+
         return drop
