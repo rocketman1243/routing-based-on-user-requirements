@@ -40,18 +40,35 @@ class Filterset():
             self.best_effort_privacy_subsets = decreasing_lists(pro_object.privacy.best_effort)
 
         # Initially set the best effort requirement sets to the biggest subset in the list of sets
-        self.best_effort_security_subset_index = 0
         self.best_effort_security_requirements = self.best_effort_security_subsets[0]
-
-        self.best_effort_privacy_subset_index = 0
         self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
 
+    def best_effort_security_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
+        return len(self.best_effort_security_subsets) > 1
 
-    def as_has_to_be_removed(self, nio_object, verbose=False) -> bool:
+    def best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
+        return len(self.best_effort_privacy_subsets) > 1
+
+    def reduce_best_effort_privacy_constraints(self):
+        if self.best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set():
+            self.best_effort_privacy_subsets.pop(0)
+            self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+
+    def reduce_best_effort_privacy_constraints(self):
+        if self.best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set():
+            self.best_effort_privacy_subsets.pop(0)
+            self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+
+    def as_has_to_be_removed(self, nio_object, strict: bool, verbose=False) -> bool:
         drop: bool = False
 
-        security_requirements = self.strict_security_requirements + list(self.best_effort_security_requirements)
-        privacy_requirements = self.strict_privacy_requirements + list(self.best_effort_privacy_requirements)
+        security_requirements = self.strict_security_requirements
+        privacy_requirements = self.strict_privacy_requirements
+
+        if not(strict):
+            security_requirements += list(self.best_effort_security_requirements)
+            security_requirements += list(self.best_effort_privacy_requirements)
+
 
         # check security: The required security requirements have to be a subset of the security
         # requirements of the AS to have self AS handle our path. If self is NOT the case, we
