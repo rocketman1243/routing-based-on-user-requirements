@@ -1,10 +1,7 @@
+# Latency triplets
 
-# The path calculation
-- Apply filtersets to filter out graph nodes
-- Find single path. If path cannot be found, update filterset and try again
-- Create a list of all possible paths
-- Score each path both by hops and by latency
-- Create method that sorts & selects n best paths & returns them
-
-
+- Update json NIO files with latency triplets (and a random internal latency of 10-20 ms or so)
+- Figure out a way to add these triplets as virtual links with the corresponding total latency to the graph, and use them in the pathfinding, while being able to reconstruct the full path afterwards (add middle hop as data entry??)
+- Add triplets as virtual links
+- Update pathfinder to reconstruct path after using a virtual link
 

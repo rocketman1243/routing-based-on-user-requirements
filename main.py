@@ -56,7 +56,7 @@ def safe_has_path(graph, source, dest) -> bool:
 
 
 # Select the first PRO for now
-pro = pro_objects[7]
+pro = pro_objects[0]
 
 
 
@@ -72,7 +72,7 @@ if not(path_exists):
 ######## STRICT PHASE #######################################################################################
 #############################################################################################################
 
-print("\n### STRICT STAGE ###\n")
+print("\n### STRICT PHASE ###\n")
 
 filterset = Filterset(pro)
 as_numbers_after_strict_phase = []
@@ -104,7 +104,7 @@ else:
 ######## BEST EFFORT PHASE ##################################################################################
 #############################################################################################################
 
-print("\n### BEST EFFORT STAGE ###\n")
+print("\n### BEST EFFORT PHASE ###\n")
 
 G_best_effort_phase = copy.deepcopy(G_strict_phase)
 source_and_destination_comply_with_first_set_of_best_effort = True
@@ -138,22 +138,22 @@ while not(path_exists):
 
 
 if len(filterset.best_effort_privacy_requirements) + len(filterset.best_effort_security_requirements) == 0:
-    print("Unfortunately the best effort requirements could not be satisfied. However, we can still find a path that satisfies the strict requirements. Thus, we now go to the optimization stage!! \n")
+    print("Unfortunately the best effort requirements could not be satisfied. However, we can still find a path that satisfies the strict requirements. Thus, we now go to the optimization phase!! \n")
 else:
     print("At least one best effort path that adheres to best effort security requirements", filterset.best_effort_security_requirements, "and privacy requirements", filterset.best_effort_privacy_requirements, " exists! Continuing with the optimization phase! \n")
 
 #######################################################################
-######## Optimization stage ###########################################
+######## Optimization phase ###########################################
 #######################################################################
 
-print("\n### OPTIMIZATION STAGE ###\n")
+print("\n### OPTIMIZATION PHASE ###\n")
 
 G_after_filter = copy.deepcopy(G_best_effort_phase)
 
 # Find all available link-disjoint paths
 all_disjoint_paths = nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination)
 
-# Score them based on the chosen metric & pass on to the multipath pruning stage
+# Score them based on the chosen metric & pass on to the multipath pruning phase
 scored_paths = []
 
 def calculate_total_latency(graph, path):
@@ -181,7 +181,7 @@ for path in scored_paths:
 ######## Multipath stage ##############################################
 #######################################################################
 
-print("\n### MULTIPATH STAGE ###\n")
+print("\n### MULTIPATH PHASE ###\n")
 
 min_nr_of_paths = pro.multipath.minimum_number_of_paths
 target_nr_of_paths = pro.multipath.target_amount_of_paths
@@ -196,9 +196,9 @@ if len(multipath_selection) == 0:
     print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :D")
 else:
     if pro.path_optimization == "minimize_total_latency":
-        print("\n The multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
+        print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
     else:
-        print("\nThe multipath stage selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
+        print("\nThe multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
     for path in multipath_selection:
         print(path)
 
