@@ -1,36 +1,40 @@
 import requests
 import networkx as nx
 import json
+import matplotlib.pyplot as plt
 from types import SimpleNamespace
-
-
-asn_filename = "asn_data/asns.jsonl"
-asn_file = open(asn_filename)
-asn_content = asn_file.read()
-asn_object = json.loads(asn_content, object_hook=lambda asn_content: SimpleNamespace(**asn_content))
-
-links_filename = "asn_data/asnLinks.jsonl"
-links_file = open(links_filename)
-links_content = links_file.read()
-links_object = json.loads(links_content, object_hook=lambda links_content: SimpleNamespace(**links_content))
-
-
-for s in as_object:
-    node = s.edges.node.asn
-    nodes.add(node)
-
-for l in links_object.edges:
-    node1 = node.asn0.asn 
-    node2 = node.asn1.asn
-    edges.append([node1, node2])
 
 nodes = []
 edges = []
+
+asn_filename = "asn_data/asns.jsonl"
+asn_file = open(asn_filename)
+
+for line in asn_file:
+    asn_object = json.loads(line)
+    node = int(asn_object["asn"])
+    nodes.append(node)
+
+
+links_filename = "asn_data/asnLinks.jsonl"
+links_file = open(links_filename)
+
+for line in links_file:
+    links_object = json.loads(line)
+    node0 = int(links_object["asn0"]["asn"])
+    node1 = int(links_object["asn1"]["asn"])
+    edges.append([node0, node1])
+
 
 G = nx.Graph()
 
 G.add_nodes_from(nodes)
 G.add_edges_from(edges)
 
-print(G.nodes)
-print(G.edges)
+print(len(G.nodes))
+print(len(G.edges))
+
+
+
+nx.draw(G, with_labels=True)
+plt.show()
