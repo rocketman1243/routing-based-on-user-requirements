@@ -33,8 +33,3 @@ G.add_edges_from(edges)
 
 print(len(G.nodes))
 print(len(G.edges))
-
-
-
-nx.draw(G, with_labels=True)
-plt.show()

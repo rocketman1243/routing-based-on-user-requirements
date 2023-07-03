@@ -1,8 +1,6 @@
 # The actual internet
 
-- Get a network of ASes from bgpview.io or some other bgp looking glass
-- Convert this network to my internal map representation
-- Add actual or fake latency metadata
+- Add actual or fake latency metadata ??? 
 - Connect to path calculator
 - Test path calculator
 
