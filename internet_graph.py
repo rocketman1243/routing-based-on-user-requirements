@@ -6,15 +6,25 @@ from types import SimpleNamespace
 from generate_features_distribution import generate_features
 
 nodes = []
+geolocations = {}
+
 edges = []
 
+# https://api.asrank.caida.org/dev/docs
 asn_filename = "asn_data/asns.jsonl"
 asn_file = open(asn_filename)
 
 for line in asn_file:
     asn_object = json.loads(line)
     node = int(asn_object["asn"])
-    nodes.append(node)
+
+    # TODO: Add this to the networkx node object somehow...................
+    info = {
+        "country": asn_object["country"]["iso"],
+        "lat": asn_object["latitude"],
+        "lon": asn_object["longitude"]
+    }
+
 
 
 links_filename = "asn_data/asnLinks.jsonl"

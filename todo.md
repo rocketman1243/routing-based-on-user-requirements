@@ -1,10 +1,5 @@
 # Linearly distributed privacy & security features + Geolocation
 
-- Rewrite generate_features to be key-value oriented instead of direct-lookup oriented
-
-
-- Add these features as attributes to the AS nodes, such that the index is NOT directly mapped to AS number, as the AS dataset may be imperfect. Just use the same order (with enumerate(ASes) maybe??)
-
 - Grab geolocation (country) from CAIDA dataset
 - Add geolocation (country) as attribute to AS nodes
 
