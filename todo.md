@@ -1,10 +1,5 @@
 # Linearly distributed privacy & security features + Geolocation
 
-- Create method that generates a mapping of privacy and security features to a list of indexes distributed linearly decreasing over the list of indexes, ranging from 1-30 features per category per AS, such that lower index support higher numbers of features and higher indexes support lower number of features
-
-- Rewrite the report to reflect that I use a linearly decreasing distribution of features as that is more realistic (bigger ASes have more resources to implement privacy & security features)
-- Add to agenda to discuss feature distribution with Adrian
-- Make the method flexible such that I can change the distribution with little effort
 - Add these features as attributes to the AS nodes, such that the index is NOT directly mapped to AS number, as the AS dataset may be imperfect. Just use the same order (with enumerate(ASes) maybe??)
 
 - Grab geolocation (country) from CAIDA dataset

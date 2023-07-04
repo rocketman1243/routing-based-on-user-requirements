@@ -3,6 +3,7 @@ import networkx as nx
 import json
 import matplotlib.pyplot as plt
 from types import SimpleNamespace
+from generate_features import generate_features
 
 nodes = []
 edges = []
@@ -31,6 +32,6 @@ G = nx.Graph()
 G.add_nodes_from(nodes)
 G.add_edges_from(edges)
 
-print(len(G.nodes))
-print(len(G.edges))
+privacy_features_distribution = 
 
+for node in G.nodes:
