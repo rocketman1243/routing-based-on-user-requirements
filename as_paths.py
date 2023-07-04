@@ -4,6 +4,8 @@ import json
 import matplotlib.pyplot as plt
 from types import SimpleNamespace
 
+# https://stat.ripe.net/docs/data_api#bgp-state
+
 AS = 3333
 url = f"https://stat.ripe.net/data/bgp-state/data.json?resource=3333"
 data = json.loads(requests.get(url).text)
