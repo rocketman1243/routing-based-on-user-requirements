@@ -35,8 +35,21 @@
 - Create one test PRO based on the internet graph
 - Fiddle until paths can be found
 
+# Path Requirement Object v2 (PROv2)
 
+- Add switch to PRO that allows the user to either allow or deny fallback to  eBGP routing if we cannot find a route using the ASes that are entered into the NIP
+- 
 
+# Path optimization tie breaker
+
+If two or more paths are tied in optimization score, use the path with the most AS peering connections. Do this by doing the following:
+
+- Create method that retrieves the peers of each AS in the path and returns them in a list:
+    - https://bgpview.io/asn/1103#peers-v4
+    - https://bgpview.docs.apiary.io/#reference/0/asn-peers/view-asn-peers
+    - https://www.w3schools.com/python/ref_requests_response.asp
+- Create a method that returns true or false based on whether a certain AS is peering with another AS
+- In the optimization stage: If paths are tied, score them based on the number of peering edges they use & sort based on that
 
 
 ---------------------------
