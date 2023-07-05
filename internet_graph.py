@@ -6,9 +6,10 @@ from types import SimpleNamespace
 from generate_features_distribution import generate_features
 
 nodes = []
-geolocations = {}
-
 edges = []
+
+node_info = {}
+edge_info = {}
 
 # https://api.asrank.caida.org/dev/docs
 asn_filename = "asn_data/asns.jsonl"
@@ -17,6 +18,7 @@ asn_file = open(asn_filename)
 for line in asn_file:
     asn_object = json.loads(line)
     node = int(asn_object["asn"])
+    nodes.append(node)
 
     # TODO: Add this to the networkx node object somehow...................
     info = {
@@ -24,6 +26,7 @@ for line in asn_file:
         "lat": asn_object["latitude"],
         "lon": asn_object["longitude"]
     }
+    node_info[node] = info
 
 
 
@@ -43,8 +46,15 @@ G.add_nodes_from(nodes)
 G.add_edges_from(edges)
 
 
+
+
 privacy_features_distribution = generate_features(30, G.nodes)
 security_features_distribution = generate_features(30, G.nodes)
 
-nx.set_node_attributes(G, privacy_features_distribution, "privacy_features")
-nx.set_node_attributes(G, security_features_distribution, "security_features")
+for node in G.nodes:
+    node_info[node]["privacy_features"] = privacy_features_distribution[node]
+    node_info[node]["security_features"] = security_features_distribution[node]
+
+nx.set_node_attributes(G, node_info)
+
+print(G.nodes[2]["lat"])

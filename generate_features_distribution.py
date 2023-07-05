@@ -37,5 +37,3 @@ def generate_features(max_number_of_features: int, as_numbers: list[int]):
 
     return mapping
 
-
-print(generate_features(5, range(1, 31)))
