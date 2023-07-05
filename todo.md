@@ -1,14 +1,5 @@
-# Linearly distributed privacy & security features + Geolocation
-
-- Grab geolocation (country) from CAIDA dataset
-- Add geolocation (country) as attribute to AS nodes
-
-
 # Latency: Add latency estimation based on geo distance lookup
 
-- Grab coordinates of AS from CAIDA dataset
-- Add coordinates to AS nodes as attributes
-- Find geo distance lookup tool
 - Create method that spits out geographic distance between two random ASes (with input only the two ASes) using the geo lookup tool
 - Research some conversion between geo distance and latency
 - Modify geo distance to spit out latency between two ASes instead
