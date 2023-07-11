@@ -7,25 +7,6 @@ from generate_features_distribution import generate_features
 from geopy import distance
 from copy import deepcopy
 
-# NODES
-nodes = []
-node_info = {}
-
-# https://api.asrank.caida.org/dev/docs
-asn_filename = "asn_data/asns.jsonl"
-asn_file = open(asn_filename)
-
-for line in asn_file:
-    asn_object = json.loads(line)
-    node = asn_object["asn"]
-    nodes.append(node)
-
-    info = {
-        "country": asn_object["country"]["iso"],
-        "lat": asn_object["latitude"],
-        "lon": asn_object["longitude"]
-    }
-    node_info[node] = info
 
 G = nx.Graph()
 
@@ -35,7 +16,7 @@ G = nx.Graph()
 links_filename = "asn_data/as-links.txt"
 links_file = open(links_filename)
 edges = []
-edge_info = {}
+# edge_info = {}
 
 for line in links_file:
     splitted = line.split("|")
@@ -47,40 +28,31 @@ G.add_edges_from(edges)
 # nx.set_edge_attributes(G, edge_info)
 
 
-counter = 0
-connected_nodes = set(list(G.nodes))
-metadata_nodes = set(nodes)
-
-nodes_to_gather_info_for_from_other_sources = list(connected_nodes.difference(metadata_nodes))
-
-# Goal: Get:
-    # - Country
-    # - Lat
-    # - Lon
 
 
-requesturl = "https://api.bgpview.io/asn/"
-print("testAS", nodes_to_gather_info_for_from_other_sources[0])
+# Note: Nodes are added based on edges in connected graph
+# TODO: Insert extra information from additinal sources into node_info
+node_info = {}
 
 
 
 
 
 
-
+nx.set_node_attributes(G, node_info)
 
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
 # After edges are inserted from connected dataset, we generate features based on this
-# privacy_features_distribution = generate_features(30, G.nodes)
-# security_features_distribution = generate_features(30, G.nodes)
+privacy_features_distribution = generate_features(30, G.nodes)
+security_features_distribution = generate_features(30, G.nodes)
 
-# for node in G.nodes:
-#     node_info[node]["privacy_features"] = privacy_features_distribution[node]
-#     node_info[node]["security_features"] = security_features_distribution[node]
+for node in G.nodes:
+    node_info[node]["privacy_features"] = privacy_features_distribution[node]
+    node_info[node]["security_features"] = security_features_distribution[node]
 
-# nx.set_node_attributes(G, node_info)
+nx.set_node_attributes(G, node_info)
 
 
 
@@ -98,20 +70,11 @@ print("testAS", nodes_to_gather_info_for_from_other_sources[0])
 
 
 print("#conn_comp:", nx.number_connected_components(G))
-print("len of nodes and G: ", len(nodes), len(G.nodes))
 
 n = list(G.nodes)
 path = nx.shortest_path(G, n[0], n[50138])
 
-# print(path)
-
-
-nodes.sort()
-
-
-print(nodes[:20])
-print(list(G.nodes)[:20])
-
+print(path)
 
 
 
