@@ -2,27 +2,28 @@ import requests
 import json
 from api_key import get_bing_apy_key # This key is in a local file. To reproduce, make a free bing maps key at https://www.microsoft.com/en-us/maps/create-a-bing-maps-key and use that to convert address to lat/lon
 import geocoder
-
-# ases = ['198482', '198920', '400856', '151149', '272982', '208020', '49592', '198469', '329250', '139839', '151215', '198862', '198513', '151321', '151197', '198839', '329252', '141696', '198998', '151080', '263503', '329243', '151156', '198738', '198749', '211830', '211664', '59888', '198890', '151160', '151148', '201967', '30399', '61427', '151200', '272979', '151359', '203701', '46427', '140036', '329251', '198691', '329253', '151206', '151361', '151188', '138493', '400852', '198687', '151114', '48991', '138219', '61613', '201369', '11721', '211381', '273006', '198953', '198834', '198659', '59867', '18470', '49217', '46308', '198711', '198786', '49775', '59538', '198578', '198883', '151184', '64150', '137271', '58064', '198895', '16589', '198810', '151166', '151176', '329248', '198825', '151189', '202656', '329255', '48779', '198802', '30344', '151330', '198745', '198769', '17024', '202832', '151095', '151207', '273756', '198427', '151084', '151329', '198926', '208949', '151204', '207924', '137259', '400860', '151196', '151183', '395898', '400861', '265076', '212448', '200174', '207400', '151203', '210020', '60566', '329247', '14956', '151214', '134486', '273744', '140305', '270179', '58236', '198483', '198681', '151332', '198448', '151327', '199487', '31916', '52025', '60442', '151151', '208381', '63139', '151338', '151081', '198951', '151356', '210281', '329254', '202798', '198958', '208312', '26692', '151318', '198636', '36141', '151158', '329244', '198587', '19733', '19369', '151077', '329246', '198552', '199402', '206424', '198803', '205463', '201452', '33436', '151093', '60812', '199598', '151175', '211286', '48899', '40381', '198584', '202431', '198542', '27549', '268524', '62447', '208217', '151343', '198607', '61614', '61112', '273727', '198627', '270222', '54005', '198629', '62865', '198652', '151064', '198990', '46410', '198789', '198740']
-
-ases = ['151149', '329250', '329252', '263503', '329243', '151156', '151160', '151148', '151114', '61613', '151166', '151176', '151095', '273756', '151084', '265076', '329247', '273744', '151151', '329254', '151318', '151158', '151077', '151093', '151175', '268524', '61614', '273727']
+from progress.bar import Bar
+from dlc_1_input import get_dlc1_input
 
 
-file = open("asn_data/extra_as_data.csv", "w")
-file.write("as_number, country, lat, lon\n")
-file.close()
-        
+ases = get_dlc1_input()
 
-bad_nodes = []
-bad_addresses = {}
+country_address_file = open("asn_data/dlc_1_output_country_address.csv", "w")
+country_address_file.write("as_number; country; address \n")
+country_address_file.close()
+country_address_file = open("asn_data/dlc_1_output_country_address.csv", "a")
 
-for as_number in ases:
+dlc2_no_address_file = open("dlc_2_input_no_address.csv", "w")
+dlc2_no_address_file.write("as_number, country \n")
+dlc2_no_address_file.close()
+dlc2_no_address_file = open("dlc_2_input_no_address.csv", "a")
+
+def get_country_and_address(as_number: str):
     url = "https://api.bgpview.io/asn/" # + AS number as int
 
     response = json.loads(requests.get(url + as_number).text)
 
     country = response["data"]["country_code"]
-
     address = response["data"]["owner_address"]
     address_as_string = ""
 
@@ -31,24 +32,43 @@ for as_number in ases:
         if i < len(address) - 1:
             address_as_string += ", "
 
+    return (country, address_as_string)
+
+# run this later
+def get_lat_lon_from_address(as_number, country, address: str):
     g = geocoder.bing(address_as_string, key=get_bing_apy_key())
     results = g.json
 
-    if (results is not None):
-
+    if results is not None:
         lat = results['lat']
         lon = results['lng']
-
-        file_append = open("asn_data/extra_as_data.csv", "a")
-        file_append.write(f"{as_number}, {country}, {lat}, {lon}\n")
-        file_append.close()
-
+        return (lat, lon)
     else:
-        bad_nodes.append(as_number)
-        bad_addresses[as_number] = {
-            "address": address_as_string
-        }
+        g = geocoder.bing(country, key=get_bing_apy_key())
 
-file_append.close()
+        if results is not None:
+            lat = results['lat']
+            lon = results['lng']
+            return (lat, lon)
 
-print("bad: ", bad_nodes)
+        else:
+            dlc2_no_address_file.write(f"{as_number}, {country} \n")
+
+
+
+
+bar = Bar("addresses", max = len(ases))
+for as_number in ases:
+    (country, address) = get_country_and_address(as_number)
+    country_address_file.write(f"{as_number}; {country}; {address} \n")
+
+    bar.next()
+
+bar.finish()
+
+
+country_address_file.close()
+
+
+
+
