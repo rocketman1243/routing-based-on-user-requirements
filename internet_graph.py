@@ -17,7 +17,7 @@ asn_file = open(asn_filename)
 
 for line in asn_file:
     asn_object = json.loads(line)
-    node = int(asn_object["asn"])
+    node = asn_object["asn"]
     nodes.append(node)
 
     info = {
@@ -28,16 +28,6 @@ for line in asn_file:
     node_info[node] = info
 
 G = nx.Graph()
-
-G.add_nodes_from(nodes)
-privacy_features_distribution = generate_features(30, G.nodes)
-security_features_distribution = generate_features(30, G.nodes)
-
-for node in G.nodes:
-    node_info[node]["privacy_features"] = privacy_features_distribution[node]
-    node_info[node]["security_features"] = security_features_distribution[node]
-
-nx.set_node_attributes(G, node_info)
 
 
 # LINKS
@@ -57,28 +47,70 @@ G.add_edges_from(edges)
 # nx.set_edge_attributes(G, edge_info)
 
 
-nodes_readonly = deepcopy(nodes)
-print("before trim: ", len(G.nodes))
-for node in nodes_readonly:
-    if G.degree(node) == 0:
-        G.remove_node(node)
-        nodes.remove(node)
+counter = 0
+connected_nodes = set(list(G.nodes))
+metadata_nodes = set(nodes)
 
-print("after trim: ", len(G.nodes))
+nodes_to_gather_info_for_from_other_sources = list(connected_nodes.difference(metadata_nodes))
+
+# Goal: Get:
+    # - Country
+    # - Lat
+    # - Lon
+
+
+requesturl = "https://api.bgpview.io/asn/"
+print("testAS", nodes_to_gather_info_for_from_other_sources[0])
+
+
+
+
+
+
+
+
+
+################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
+
+# After edges are inserted from connected dataset, we generate features based on this
+# privacy_features_distribution = generate_features(30, G.nodes)
+# security_features_distribution = generate_features(30, G.nodes)
+
+# for node in G.nodes:
+#     node_info[node]["privacy_features"] = privacy_features_distribution[node]
+#     node_info[node]["security_features"] = security_features_distribution[node]
+
+# nx.set_node_attributes(G, node_info)
+
+
+
+
+
+
+
+
+
+############### ANALYSIS & VERIFICATION #################
+
+
+
+
+
 
 print("#conn_comp:", nx.number_connected_components(G))
+print("len of nodes and G: ", len(nodes), len(G.nodes))
 
 n = list(G.nodes)
 path = nx.shortest_path(G, n[0], n[50138])
 
-print(path)
+# print(path)
 
 
-# TODO: Deze nodes zijn wel connected (1 connected component), maar sommige missen metadata.
-# Mijn taak wordt nu om die metadata toe te voegen/op te zoeken voor de ASes die het nog niet hebben
+nodes.sort()
 
-# Maar eerst de overheid....
 
+print(nodes[:20])
+print(list(G.nodes)[:20])
 
 
 

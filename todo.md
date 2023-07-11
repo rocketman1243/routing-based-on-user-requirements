@@ -1,3 +1,21 @@
+# Model accuracy (combine connected graph with rich metadata)
+
+- Make a list of metadata items I want for each node (ONLY MUST HAVE!)
+- See how many ASes from the connected dataset appear in the rich dataset to get a feel for it
+- Rewrite graph to only have nodes based on connected model
+- Enhance model with attributes from other datasets, such as:
+    - Country
+    - Lat
+    - Lon
+    - Amount of peers (from peeringdb)
+
+
+# Better feature distribution
+
+- Add metadata about number of peers for each AS from peeringdb or sth else
+- Distribute privacy & security features over ASes based on number of peers: More peers increases amount of supported features. Do use something random: Higher peering amount = higher probability (but not absolute). This is more realistic, since some big players might still implement little features, and some small players might be implementing many features.
+
+
 # Latency: Add latency estimation based on geo distance lookup
 
 - Create method that spits out geographic distance between two random ASes (with input only the two ASes) using the geo lookup tool
