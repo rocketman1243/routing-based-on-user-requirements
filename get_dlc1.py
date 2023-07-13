@@ -6,68 +6,71 @@ from progress.bar import Bar
 from dlc_1_input import get_dlc1_input
 
 
+""" 
+Strategy:
+
+1. Grab country for each AS from the countries txt file
+    - If that file does not contain this AS, add AS to new list and spit that to file
+2. Grab average lat/lon for each AS based on COUNTRY
+3. Spit (as, country, lat, lon) tuple in dlc_1_output file
+4. Rewrite this for the entries not present in countries txt
+
+"""
+
 ases = get_dlc1_input()
 
-country_address_file = open("asn_data/dlc_1_output_country_address.csv", "w")
-country_address_file.write("as_number; country; address \n")
-country_address_file.close()
-country_address_file = open("asn_data/dlc_1_output_country_address.csv", "a")
+output_good = open("asn_data/dlc1_output.csv", "w")
+output_good.write("as_number; country; address \n")
+output_good.close()
+output_good = open("asn_data/dlc1_output.csv", "a")
 
-dlc2_no_address_file = open("dlc_2_input_no_address.csv", "w")
-dlc2_no_address_file.write("as_number, country \n")
-dlc2_no_address_file.close()
-dlc2_no_address_file = open("dlc_2_input_no_address.csv", "a")
+output_bad = open("dlc_2_input.py", "w")
 
-def get_country_and_address(as_number: str):
-    url = "https://api.bgpview.io/asn/" # + AS number as int
 
-    response = json.loads(requests.get(url + as_number).text)
+# Read in country to lat/lon file
+country_to_latlon = {}
+as_to_country = open("asn_data/as_to_country.txt")
 
-    country = response["data"]["country_code"]
-    address = response["data"]["owner_address"]
-    address_as_string = ""
+for line in latlon_file:
+    els = line.split(",")
+    country = els[0]
+    lat = els[2]
+    lon = els[3]
 
-    for i, part in enumerate(address):
-        address_as_string += part 
-        if i < len(address) - 1:
-            address_as_string += ", "
-
-    return (country, address_as_string)
-
-# run this later
-def get_lat_lon_from_address(as_number, country, address: str):
-    g = geocoder.bing(address_as_string, key=get_bing_apy_key())
-    results = g.json
-
-    if results is not None:
-        lat = results['lat']
-        lon = results['lng']
-        return (lat, lon)
-    else:
-        g = geocoder.bing(country, key=get_bing_apy_key())
-
-        if results is not None:
-            lat = results['lat']
-            lon = results['lng']
-            return (lat, lon)
-
-        else:
-            dlc2_no_address_file.write(f"{as_number}, {country} \n")
+    country_to_latlon[country] = {
+        "lat": lat,
+        "lon": lon
+    }
 
 
 
+# Grab country for each AS, grab associated latlon from locations dict and spit in file
+as_country_file = open("asn_data/as_to_country.txt")
+as_to_country = {}
+bad_ases = []
+for line in as_country_file:
+    elements = line.split(", ")
+    as_number = str(elements[0])
+    country = elements[2]
 
-bar = Bar("addresses", max = len(ases))
+    as_to_country[as_number] = country
+
 for as_number in ases:
-    (country, address) = get_country_and_address(as_number)
-    country_address_file.write(f"{as_number}; {country}; {address} \n")
 
-    bar.next()
+    if (as_number not in as_to_country):
+        bad_ases.append(as_number)
 
-bar.finish()
+    country = as_
 
+    latlon = country_to_latlon[as_number]
 
-country_address_file.close()
+    output_good.write(f"{as_number},{country},{latlon["lat"]},{latlon["lon"]}\n")
+
+output_good.close()
+
+output_bad.write(f"def get_bad_as_numbers():\n\treturn {bad_ases}")
+output_bad.close()
+
 
 
 

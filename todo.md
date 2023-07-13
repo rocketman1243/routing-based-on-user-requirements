@@ -1,13 +1,7 @@
 # Model accuracy (combine connected graph with rich metadata)
 
-- Make a list of metadata items I want for each node (ONLY MUST HAVE!)
-- See how many ASes from the connected dataset appear in the rich dataset to get a feel for it
-- Rewrite graph to only have nodes based on connected model
-- Enhance model with attributes from other datasets, such as:
-    - Country
-    - Lat
-    - Lon
-    - Amount of peers (from peeringdb)
+- ONLY get country (NOT address) and use lat/lon based on that. I need to move on!
+- Gather amount of peers for each AS from peeringdb
 
 
 # Better feature distribution
