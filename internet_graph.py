@@ -48,9 +48,34 @@ G.add_edges_from(edges)
 # TODO: Insert extra information from additinal sources into node_info
 node_info = {}
 
+file0 = open("asn_data/dlc0_output.csv", "r")
+file1 = open("asn_data/dlc1_output.csv", "r")
 
+for line in file0:
+    items = line.split(", ")
+    asn = items[0]
+    country = items[1]
+    lat = items[2]
+    lon = items[3]
 
+    node_info[asn] = {
+        "country": country,
+        "lat": lat,
+        "lon": lon
+    }
 
+for line in file1:
+    items = line.split(",")
+    asn = items[0]
+    country = items[1]
+    lat = items[2]
+    lon = items[3]
+
+    node_info[asn] = {
+        "country": country,
+        "lat": lat,
+        "lon": lon
+    }
 
 
 nx.set_node_attributes(G, node_info)
@@ -90,9 +115,14 @@ n = list(G.nodes)
 path = nx.shortest_path(G, n[0], n[50138])
 
 print(path)
+print(len(n))
 
+counter = 0
+for asn in G.nodes:
+    if asn not in node_info:
+        counter += 1
 
-
+print("#nodes without metadata:", counter)
 
 
 
