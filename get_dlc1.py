@@ -67,7 +67,6 @@ for line in latlon_file:
 
 
 # For each AS, grab country from as_to_country, grab latlon from country_to_latlon and spit complete tuple in file
-counter = 0
 for as_number in ases:
 
     if (as_number not in as_to_country):
@@ -75,16 +74,11 @@ for as_number in ases:
         continue # skip this AS and go to next in loop
 
     country = as_to_country[as_number]
-    if country not in country_to_latlon:
-        print(country)
-        counter += 1
-        continue
     latlon = country_to_latlon[country]
 
-    output_good.write(f'{as_number},{country},{latlon["lat"]},{latlon["lon"]}\n')
+    output_good.write(f'{as_number},{country},{latlon["lat"]},{latlon["lon"]}')
 
 output_good.close()
-print(counter)
 
 output_bad.write(f"def get_bad_as_numbers():\n\treturn {bad_ases}\n")
 output_bad.close()
