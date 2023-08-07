@@ -6,6 +6,10 @@ from tqdm import tqdm
 from dlc_node_lists import get_dlc_1_nodes
 
 
+# CONTENTS
+# This script gets the 
+
+
 # NODES
 nodes = []
 node_info = {}

@@ -10,10 +10,11 @@ from dlc_1_input import get_dlc1_input
 Strategy:
 
 1. Grab country for each AS from the countries txt file
-    - If that file does not contain this AS, add AS to new list and spit that to file
+    - If that file does not contain this AS, add AS to new list and spit that to a new file
 2. Grab average lat/lon for each AS based on COUNTRY
 3. Spit (as, country, lat, lon) tuple in dlc_1_output file
-4. Rewrite this for the entries not present in countries txt
+
+4. Find some other as-to-country list & try to fill in the gaps for the entries not present in as_to_countries txt
 
 """
 
@@ -27,13 +28,34 @@ output_good = open("asn_data/dlc1_output.csv", "a")
 output_bad = open("dlc_2_input.py", "w")
 
 
+# Grab country for each AS
+
+
+
+
+
+as_country_file = open("asn_data/as_to_country.csv")
+as_to_country = {}
+bad_ases = []
+for line in as_country_file:
+    elements = line.split(", ")
+    as_number = str(elements[0])
+
+    if len(elements) == 3:
+        country = str(elements[2])[:2]
+
+        if country == 'ZZ':
+            country = 'US'
+
+        as_to_country[as_number] = country
+
 # Read in country to lat/lon file
 country_to_latlon = {}
-as_to_country = open("asn_data/as_to_country.txt")
+latlon_file = open("asn_data/country_to_latlon.csv")
 
 for line in latlon_file:
     els = line.split(",")
-    country = els[0]
+    country = str(els[0])[1:3]
     lat = els[2]
     lon = els[3]
 
@@ -44,31 +66,27 @@ for line in latlon_file:
 
 
 
-# Grab country for each AS, grab associated latlon from locations dict and spit in file
-as_country_file = open("asn_data/as_to_country.txt")
-as_to_country = {}
-bad_ases = []
-for line in as_country_file:
-    elements = line.split(", ")
-    as_number = str(elements[0])
-    country = elements[2]
-
-    as_to_country[as_number] = country
-
+# For each AS, grab country from as_to_country, grab latlon from country_to_latlon and spit complete tuple in file
+counter = 0
 for as_number in ases:
 
     if (as_number not in as_to_country):
         bad_ases.append(as_number)
+        continue # skip this AS and go to next in loop
 
-    country = as_
+    country = as_to_country[as_number]
+    if country not in country_to_latlon:
+        print(country)
+        counter += 1
+        continue
+    latlon = country_to_latlon[country]
 
-    latlon = country_to_latlon[as_number]
-
-    output_good.write(f"{as_number},{country},{latlon["lat"]},{latlon["lon"]}\n")
+    output_good.write(f'{as_number},{country},{latlon["lat"]},{latlon["lon"]}\n')
 
 output_good.close()
+print(counter)
 
-output_bad.write(f"def get_bad_as_numbers():\n\treturn {bad_ases}")
+output_bad.write(f"def get_bad_as_numbers():\n\treturn {bad_ases}\n")
 output_bad.close()
 
 

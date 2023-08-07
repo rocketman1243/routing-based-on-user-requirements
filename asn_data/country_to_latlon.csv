@@ -49,6 +49,7 @@
 "CR","Costa Rica",10,-84
 "CU","Cuba",21.5,-80
 "CV","Cape Verde",16,-24
+"CW","Curacao",12.169570,-68.990021
 "CX","Christmas Island",-10.5,105.67
 "CY","Cyprus",35,33
 "CZ","Czech Republic",49.75,15.5
@@ -210,13 +211,14 @@
 "TH","Thailand",15,100
 "TJ","Tajikistan",39,71
 "TK","Tokelau",-9,-172
+"TL", "Timor-Leste",-8.556856,125.560310
 "TM","Turkmenistan",40,60
 "TN","Tunisia",34,9
 "TO","Tonga",-20,-175
 "TR","Turkey",39,35
 "TT","Trinidad and Tobago",11,-61
 "TV","Tuvalu",-8,178
-"TW","Taiwan",23.5,121
+"TW","Taiwan",23.5,1
 "TZ","Tanzania, United Republic of",-6,35
 "UA","Ukraine",49,32
 "UG","Uganda",1,32
@@ -238,3 +240,11 @@
 "ZA","South Africa",-29,24
 "ZM","Zambia",-15,30
 "ZW","Zimbabwe",-20,30
+"MF","jdjd",18.073099,-63.082199
+"IM","",54.230492,-4.569430
+"GG",,49.571369,-2.417010
+"SS",,36.002525,-95.883797
+"BL",,17.895020,-62.849319
+"JE",,49.212608,-2.132500
+"BQ",,12.178361,-68.238534
+"SX",,18.026,-63.04582

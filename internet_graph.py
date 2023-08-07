@@ -8,6 +8,20 @@ from geopy import distance
 from copy import deepcopy
 
 
+""" 
+CONTENTS
+This script gets all the links from as-links.txt and converts it into a connected graph
+The nodes in this graph form the basis for my internet model
+For that to work, I need to gather the country and approximate lat/lon to run the filters on it
+This is done from multiple sources: 
+- DLC0: asns.json (contains all properly registered ASes)
+- DLC1: as_to_country + country_to_latlon (fills in most of the gaps)
+
+
+
+"""
+
+
 G = nx.Graph()
 
 
@@ -48,11 +62,12 @@ nx.set_node_attributes(G, node_info)
 privacy_features_distribution = generate_features(30, G.nodes)
 security_features_distribution = generate_features(30, G.nodes)
 
-for node in G.nodes:
-    node_info[node]["privacy_features"] = privacy_features_distribution[node]
-    node_info[node]["security_features"] = security_features_distribution[node]
+# TODO: Uncomment this and fix issue later
+# for node in G.nodes:
+#     node_info[node]["privacy_features"] = privacy_features_distribution[node]
+#     node_info[node]["security_features"] = security_features_distribution[node]
 
-nx.set_node_attributes(G, node_info)
+# nx.set_node_attributes(G, node_info)
 
 
 
