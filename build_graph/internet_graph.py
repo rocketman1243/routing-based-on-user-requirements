@@ -28,8 +28,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_filename = "additional_data/as-links.txt"
-links_file = open(links_filename)
+links_file = open( "additional_data/as-links.txt")
 edges = []
 # edge_info = {}
 
@@ -42,59 +41,52 @@ for line in links_file:
 G.add_edges_from(edges)
 # nx.set_edge_attributes(G, edge_info)
 
-
-
-
 # Note: Nodes are added based on edges in connected graph
 node_info = {}
 
-for _, _, files in os.walk("./asn_data"):
-    for file in files:
-        filename = "asn_data/" + file
-        f = open(filename, "r")
-        for line in f:
-            items = line.split(",")
-            asn = items[0]
-            country = items[1]
-            lat = items[2]
-            lon = items[3]
+node_info_file = open( "build_graph/node_attributes.csv", "r")
+for line in node_info_file:
+    items = line.split(",")
 
-            node_info[asn] = {
-                "country": country,
-                "lat": lat,
-                "lon": lon
-            }
+    asn = items[0]
+    country = items[1]
+    lat = items[2]
+    lon = items[3]
+
+    if (lon[-1:] == "\n"):
+        lon = lon[:-1]
+
+    node_info[asn] = {
+        "country": country,
+        "lat": lat,
+        "lon": lon
+    }
 
 nx.set_node_attributes(G, node_info)
 
-
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
+degrees = list(nx.degree(G))
+degrees.sort(key=lambda x: x[1])
+degrees.reverse()
+
+ordered_asns = []
+for l in degrees:
+    ordered_asns.append(l[0])
+
 # After edges are inserted from connected dataset, we generate features based on this
-privacy_features_distribution = generate_features(30, G.nodes)
-security_features_distribution = generate_features(30, G.nodes)
+privacy_features_distribution = generate_features(30, ordered_asns)
+security_features_distribution = generate_features(30, ordered_asns)
 
-# TODO: Uncomment this and fix issue later
-# for node in G.nodes:
-#     node_info[node]["privacy_features"] = privacy_features_distribution[node]
-#     node_info[node]["security_features"] = security_features_distribution[node]
+feature_info = {}
+for node in G.nodes:
+    feature_info[node] = {}
+    feature_info[node]["privacy_features"] = privacy_features_distribution[node]
+    feature_info[node]["security_features"] = security_features_distribution[node]
 
-# nx.set_node_attributes(G, node_info)
-
-
-
-
-
-
-
-
+nx.set_node_attributes(G, feature_info)
 
 ############### ANALYSIS & VERIFICATION #################
-
-
-
-
-
 
 print("#conn_comp:", nx.number_connected_components(G))
 
@@ -103,22 +95,39 @@ path = nx.shortest_path(G, n[0], n[50138])
 
 print(path)
 
-incomplete_nodes = []
-for asn in G.nodes:
-    if asn not in node_info:
-        incomplete_nodes.append(asn)
-        
-file = open("get_incomplete_nodes.py", "w")
-file.write(f"def get_nodes():\n\treturn {incomplete_nodes}")
-file.close()
+print(G.nodes['395798'], G.edges('395798'))
 
-print("#nodes without metadata: ", len(incomplete_nodes))
+# incomplete_nodes = []
+# for asn in G.nodes:
+#     if asn not in node_info:
+#         incomplete_nodes.append(asn)
+        
+# file = open("get_incomplete_nodes.py", "w")
+# file.write(f"def get_nodes():\n\treturn {incomplete_nodes}")
+# file.close()
+
+# print("#nodes without metadata: ", len(incomplete_nodes))
+# print(incomplete_nodes)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 # ONLY use this method on-demand, as it's pretty slow...
-# So use it when optimizing paths
+# So use it when optimizing paths, not already when building the graph
     # lat0 = G.nodes[node0]["lat"]
     # lon0 = G.nodes[node0]["lon"]
     # lat1 = G.nodes[node1]["lat"]
