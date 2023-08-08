@@ -4,7 +4,6 @@ import json
 import matplotlib.pyplot as plt
 from types import SimpleNamespace
 from generate_features_distribution import generate_features
-from geopy import distance
 from copy import deepcopy
 import os
 
@@ -90,29 +89,3 @@ nx.set_node_attributes(G, feature_info)
 
 
 
-
-
-
-
-
-
-
-
-
-
-# ONLY use this method on-demand, as it's pretty slow...
-# So use it when optimizing paths, not already when building the graph
-    # lat0 = G.nodes[node0]["lat"]
-    # lon0 = G.nodes[node0]["lon"]
-    # lat1 = G.nodes[node1]["lat"]
-    # lon1 = G.nodes[node1]["lon"]
-def spit_latency(lat0, lon0, lat1, lon1):
-    result = distance.distance((lat0, lon0), (lat1, lon1))
-    miles = result.miles
-
-    # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
-    # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
-    # https://wintelguy.com/wanlat.html 
-    latency = (miles * 1.1 + 200) * 2 / 124 + 0.5
-
-    return latency

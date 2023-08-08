@@ -4,6 +4,7 @@ import networkx as nx
 import copy
 import matplotlib.pyplot as plt
 from filterset import Filterset
+from geopy import distance
 
 # Generate NIO objects
 nio_objects = {}
@@ -148,6 +149,24 @@ else:
 
 print("\n### OPTIMIZATION PHASE ###\n")
 
+    #  lat0 = G.nodes[node0]["lat"]
+    #  lon0 = G.nodes[node0]["lon"]
+    #  lat1 = G.nodes[node1]["lat"]
+    #  lon1 = G.nodes[node1]["lon"]
+    #  latency = spit_latency(lat0, lon0, lat1, lon1)
+def spit_latency(lat0, lon0, lat1, lon1):
+    result = distance.distance((lat0, lon0), (lat1, lon1))
+    miles = result.miles
+
+    
+
+    # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
+    # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
+    # https://wintelguy.com/wanlat.html 
+    latency = (miles * 1.1 + 200) * 2 / 124 + 0.5
+
+    return latency
+
 G_after_filter = copy.deepcopy(G_best_effort_phase)
 
 # Find all available link-disjoint paths
@@ -159,7 +178,13 @@ scored_paths = []
 def calculate_total_latency(graph, path):
     total = 0
     for i in range(len(path) - 1):
-        total += G_after_filter[path[i]][path[i + 1]]["latency"]
+        node0 = path[i]
+        node1 = path[i + 1] 
+
+        latency = G_after_filter[path[i]][path[i + 1]]["latency"]
+
+        total += latency
+
     return total
 
 if pro.path_optimization == "minimize_total_latency":

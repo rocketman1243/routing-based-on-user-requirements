@@ -1,22 +1,5 @@
 # Model accuracy (combine connected graph with rich metadata)
 
-- ONLY get country (NOT address) and use lat/lon based on that. I need to move on!
-- Gather amount of peers for each AS from peeringdb
-
-
-# Better feature distribution
-
-- Add metadata about number of peers for each AS from peeringdb or sth else
-- Distribute privacy & security features over ASes based on number of peers: More peers increases amount of supported features. Do use something random: Higher peering amount = higher probability (but not absolute). This is more realistic, since some big players might still implement little features, and some small players might be implementing many features.
-
-
-# Latency: Add latency estimation based on geo distance lookup
-
-- Create method that spits out geographic distance between two random ASes (with input only the two ASes) using the geo lookup tool
-- Research some conversion between geo distance and latency
-- Modify geo distance to spit out latency between two ASes instead
-- Add this latency as attribute to each link (Add note to later on optimize this by only estimating latency info when needed (when grading the paths))
-
 # Latency triplets
 
 - Update json NIO files with latency triplets (and a random internal latency of 10-20 ms or so)
