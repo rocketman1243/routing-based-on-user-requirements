@@ -86,32 +86,6 @@ for node in G.nodes:
 
 nx.set_node_attributes(G, feature_info)
 
-############### ANALYSIS & VERIFICATION #################
-
-print("#conn_comp:", nx.number_connected_components(G))
-
-n = list(G.nodes)
-path = nx.shortest_path(G, n[0], n[50138])
-
-print(path)
-
-print(G.nodes['395798'], G.edges('395798'))
-
-# incomplete_nodes = []
-# for asn in G.nodes:
-#     if asn not in node_info:
-#         incomplete_nodes.append(asn)
-        
-# file = open("get_incomplete_nodes.py", "w")
-# file.write(f"def get_nodes():\n\treturn {incomplete_nodes}")
-# file.close()
-
-# print("#nodes without metadata: ", len(incomplete_nodes))
-# print(incomplete_nodes)
-
-
-
-
 
 
 
