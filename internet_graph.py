@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from generate_features_distribution import generate_features
 from geopy import distance
 from copy import deepcopy
+import os
 
 
 """ 
@@ -27,7 +28,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_filename = "asn_data/as-links.txt"
+links_filename = "additional_data/as-links.txt"
 links_file = open(links_filename)
 edges = []
 # edge_info = {}
@@ -45,38 +46,24 @@ G.add_edges_from(edges)
 
 
 # Note: Nodes are added based on edges in connected graph
-# TODO: Insert extra information from additinal sources into node_info
 node_info = {}
 
-file0 = open("asn_data/dlc0_output.csv", "r")
-file1 = open("asn_data/dlc1_output.csv", "r")
+for _, _, files in os.walk("./asn_data"):
+    for file in files:
+        filename = "asn_data/" + file
+        f = open(filename, "r")
+        for line in f:
+            items = line.split(",")
+            asn = items[0]
+            country = items[1]
+            lat = items[2]
+            lon = items[3]
 
-for line in file0:
-    items = line.split(", ")
-    asn = items[0]
-    country = items[1]
-    lat = items[2]
-    lon = items[3]
-
-    node_info[asn] = {
-        "country": country,
-        "lat": lat,
-        "lon": lon
-    }
-
-for line in file1:
-    items = line.split(",")
-    asn = items[0]
-    country = items[1]
-    lat = items[2]
-    lon = items[3]
-
-    node_info[asn] = {
-        "country": country,
-        "lat": lat,
-        "lon": lon
-    }
-
+            node_info[asn] = {
+                "country": country,
+                "lat": lat,
+                "lon": lon
+            }
 
 nx.set_node_attributes(G, node_info)
 
@@ -115,14 +102,17 @@ n = list(G.nodes)
 path = nx.shortest_path(G, n[0], n[50138])
 
 print(path)
-print(len(n))
 
-counter = 0
+incomplete_nodes = []
 for asn in G.nodes:
     if asn not in node_info:
-        counter += 1
+        incomplete_nodes.append(asn)
+        
+file = open("get_incomplete_nodes.py", "w")
+file.write(f"def get_nodes():\n\treturn {incomplete_nodes}")
+file.close()
 
-print("#nodes without metadata:", counter)
+print("#nodes without metadata: ", len(incomplete_nodes))
 
 
 
