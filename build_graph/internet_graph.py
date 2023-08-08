@@ -88,29 +88,23 @@ nx.set_node_attributes(G, feature_info)
 
 #################### SPIT OUT NIO FILES ###########################################
 
-asn = '53224'
-node = G.nodes[asn]
-edges = []
-for e in G.edges(asn):
-    edges.append(e[1])
+for asn in G.nodes:
+    node = G.nodes[asn]
+    edges = []
+    for e in G.edges(asn):
+        edges.append(e[1])
 
-nio = {
-    "as_number": asn,
-    "geolocation": node["geolocation"],
-    "lat": node["lat"],
-    "lon": node["lon"],
-    "connections": edges,
-    "privacy": node["privacy"],
-    "security": node["security"]
-}
+    nio = {
+        "as_number": asn,
+        "geolocation": node["geolocation"],
+        "lat": node["lat"],
+        "lon": node["lon"],
+        "connections": edges,
+        "privacy": node["privacy"],
+        "security": node["security"]
+    }
 
-filename = "nio_files/nio_" + asn + ".json"
-with open(filename, "w") as file:
-    output = json.dumps(nio, indent=2)
-    file.write(output)
-
-testfile = open("nio_files/nio_53224.json", "r")
-content = testfile.read()
-result = json.loads(content, object_hook=lambda content: SimpleNamespace(**content))
-
-print(result.connections)
+    filename = "nio_files/nio_" + asn + ".json"
+    with open(filename, "w") as file:
+        output = json.dumps(nio, indent=2)
+        file.write(output)
