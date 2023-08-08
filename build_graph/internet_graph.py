@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from generate_features_distribution import generate_features
 from copy import deepcopy
 import os
+import pprint
 
 
 """ 
@@ -56,7 +57,7 @@ for line in node_info_file:
         lon = lon[:-1]
 
     node_info[asn] = {
-        "country": country,
+        "geolocation": [ country ],
         "lat": lat,
         "lon": lon
     }
@@ -80,12 +81,36 @@ security_features_distribution = generate_features(30, ordered_asns)
 feature_info = {}
 for node in G.nodes:
     feature_info[node] = {}
-    feature_info[node]["privacy_features"] = privacy_features_distribution[node]
-    feature_info[node]["security_features"] = security_features_distribution[node]
+    feature_info[node]["privacy"] = privacy_features_distribution[node]
+    feature_info[node]["security"] = security_features_distribution[node]
 
 nx.set_node_attributes(G, feature_info)
 
+#################### SPIT OUT NIO FILES ###########################################
 
+asn = '53224'
+node = G.nodes[asn]
+edges = []
+for e in G.edges(asn):
+    edges.append(e[1])
 
+nio = {
+    "as_number": asn,
+    "geolocation": node["geolocation"],
+    "lat": node["lat"],
+    "lon": node["lon"],
+    "connections": edges,
+    "privacy": node["privacy"],
+    "security": node["security"]
+}
 
+filename = "nio_files/nio_" + asn + ".json"
+with open(filename, "w") as file:
+    output = json.dumps(nio, indent=2)
+    file.write(output)
 
+testfile = open("nio_files/nio_53224.json", "r")
+content = testfile.read()
+result = json.loads(content, object_hook=lambda content: SimpleNamespace(**content))
+
+print(result.connections)
