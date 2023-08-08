@@ -1,0 +1,23 @@
+{
+  "as_number": "52446",
+  "geolocation": [
+    "PA"
+  ],
+  "lat": "8.95",
+  "lon": "-79.54",
+  "connections": [
+    "11556"
+  ],
+  "privacy": [
+    1,
+    3,
+    10,
+    28
+  ],
+  "security": [
+    4,
+    6,
+    11,
+    20
+  ]
+}

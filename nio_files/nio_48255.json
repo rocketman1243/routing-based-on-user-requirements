@@ -1,0 +1,23 @@
+{
+  "as_number": "48255",
+  "geolocation": [
+    "IE"
+  ],
+  "lat": "51.9",
+  "lon": "-8.48",
+  "connections": [
+    "2110"
+  ],
+  "privacy": [
+    2,
+    7,
+    9,
+    16
+  ],
+  "security": [
+    3,
+    15,
+    19,
+    24
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "as_number": "328443",
+  "geolocation": [
+    "CD"
+  ],
+  "lat": " The Democratic Republic of the\"",
+  "lon": "0398662",
+  "connections": [
+    "36890"
+  ],
+  "privacy": [
+    2,
+    6,
+    8,
+    15,
+    17,
+    18,
+    20,
+    22,
+    23,
+    26
+  ],
+  "security": [
+    2,
+    8,
+    9,
+    11,
+    12,
+    13,
+    16,
+    17,
+    18,
+    21
+  ]
+}

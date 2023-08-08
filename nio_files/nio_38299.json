@@ -1,0 +1,21 @@
+{
+  "as_number": "38299",
+  "geolocation": [
+    "NZ"
+  ],
+  "lat": "-41.29",
+  "lon": "174.78",
+  "connections": [
+    "38022"
+  ],
+  "privacy": [
+    5,
+    16,
+    22
+  ],
+  "security": [
+    10,
+    24,
+    25
+  ]
+}

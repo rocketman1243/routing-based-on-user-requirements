@@ -1,0 +1,23 @@
+{
+  "as_number": "50170",
+  "geolocation": [
+    "CH"
+  ],
+  "lat": "46.18",
+  "lon": "6.17",
+  "connections": [
+    "6830"
+  ],
+  "privacy": [
+    2,
+    4,
+    13,
+    19
+  ],
+  "security": [
+    3,
+    12,
+    17,
+    29
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "as_number": "25647",
+  "geolocation": [
+    "PL"
+  ],
+  "lat": "53.97",
+  "lon": "22.39",
+  "connections": [
+    "3356"
+  ],
+  "privacy": [
+    5,
+    11
+  ],
+  "security": [
+    13,
+    21
+  ]
+}

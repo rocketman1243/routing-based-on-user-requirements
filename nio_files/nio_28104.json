@@ -1,0 +1,19 @@
+{
+  "as_number": "28104",
+  "geolocation": [
+    "BQ"
+  ],
+  "lat": "12.15",
+  "lon": "-68.28",
+  "connections": [
+    "52389"
+  ],
+  "privacy": [
+    1,
+    3
+  ],
+  "security": [
+    1,
+    8
+  ]
+}

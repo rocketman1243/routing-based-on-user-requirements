@@ -1,0 +1,19 @@
+{
+  "as_number": "27679",
+  "geolocation": [
+    "PA"
+  ],
+  "lat": "8.95",
+  "lon": "-79.54",
+  "connections": [
+    "11556"
+  ],
+  "privacy": [
+    2,
+    5
+  ],
+  "security": [
+    15,
+    23
+  ]
+}

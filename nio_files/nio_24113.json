@@ -1,0 +1,19 @@
+{
+  "as_number": "24113",
+  "geolocation": [
+    "AU"
+  ],
+  "lat": "-33.31",
+  "lon": "151.42",
+  "connections": [
+    "18345"
+  ],
+  "privacy": [
+    7,
+    17
+  ],
+  "security": [
+    8,
+    26
+  ]
+}

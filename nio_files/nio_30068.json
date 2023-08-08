@@ -1,0 +1,19 @@
+{
+  "as_number": "30068",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "49.88",
+  "lon": "-119.48",
+  "connections": [
+    "55130"
+  ],
+  "privacy": [
+    10,
+    11
+  ],
+  "security": [
+    8,
+    13
+  ]
+}

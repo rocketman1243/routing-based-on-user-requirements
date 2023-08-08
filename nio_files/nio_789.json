@@ -1,0 +1,17 @@
+{
+  "as_number": "789",
+  "geolocation": [
+    "EU"
+  ],
+  "lat": "46.846816938805",
+  "lon": "3.65443881721315",
+  "connections": [
+    "2200"
+  ],
+  "privacy": [
+    24
+  ],
+  "security": [
+    28
+  ]
+}

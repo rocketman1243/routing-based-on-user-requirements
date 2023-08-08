@@ -1,0 +1,17 @@
+{
+  "as_number": "3222",
+  "geolocation": [
+    "FI"
+  ],
+  "lat": "60.4347452373445",
+  "lon": "25.140701347705",
+  "connections": [
+    "47605"
+  ],
+  "privacy": [
+    5
+  ],
+  "security": [
+    20
+  ]
+}
