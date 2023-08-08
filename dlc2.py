@@ -9,14 +9,14 @@ file.close()
 file = open("dlc2_output.csv", "a")
 
 for i, num in enumerate(ases):
-    url = "https://api.asrank.caida.org/v2/restful/asns/" + num
-    data = json.loads(requests.get(url).text)["data"]["asn"]
-    if data is None:
-        continue
+    # url = "https://api.asrank.caida.org/v2/restful/asns/" + num
+    # data = json.loads(requests.get(url).text)["data"]["asn"]
+    # if data is None:
+    #     continue
 
-    country = data["country"]["iso"]
-    lat = data["latitude"]
-    lon = data["longitude"]
+    country = "US"
+    lat = 0
+    lon = 0
 
     print(f"{i+1}/{len(ases)} - {num},{country},{lat},{lon}\n")
 
