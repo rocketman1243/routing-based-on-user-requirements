@@ -88,23 +88,25 @@ nx.set_node_attributes(G, feature_info)
 
 #################### SPIT OUT NIO FILES ###########################################
 
-for asn in G.nodes:
-    node = G.nodes[asn]
-    edges = []
-    for e in G.edges(asn):
-        edges.append(e[1])
+# Commented for safety. Uncomment if files need to be re-generated
+# 
+# for asn in G.nodes:
+#     node = G.nodes[asn]
+#     edges = []
+#     for e in G.edges(asn):
+#         edges.append(e[1])
 
-    nio = {
-        "as_number": asn,
-        "geolocation": node["geolocation"],
-        "lat": node["lat"],
-        "lon": node["lon"],
-        "connections": edges,
-        "privacy": node["privacy"],
-        "security": node["security"]
-    }
+#     nio = {
+#         "as_number": asn,
+#         "geolocation": node["geolocation"],
+#         "lat": node["lat"],
+#         "lon": node["lon"],
+#         "connections": edges,
+#         "privacy": node["privacy"],
+#         "security": node["security"]
+#     }
 
-    filename = "nio_files/nio_" + asn + ".json"
-    with open(filename, "w") as file:
-        output = json.dumps(nio, indent=2)
-        file.write(output)
+#     filename = "nio_files/nio_" + asn + ".json"
+#     with open(filename, "w") as file:
+#         output = json.dumps(nio, indent=2)
+#         file.write(output)
