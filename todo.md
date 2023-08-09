@@ -1,6 +1,9 @@
-# Path calculator reborn
+# Proper testing
 
-- Fix filterset generation to not fry my cpu
+- Create a proper testing setup to see whether the whole main pipeline runs CORRECT. That is the goal, that it is functionally CORRECT.
+- Use the testing setup to test!
+
+
 
 
 
@@ -10,22 +13,44 @@
 # Path Requirement Object v2 (PROv2)
 
 - Add switch to PRO that allows the user to either allow or deny fallback to  eBGP routing if we cannot find a route using the ASes that are entered into the NIP
-- 
 
 # Path optimization tie breaker
 
 - If two or more paths are tied in optimization score, use the path with the most AS peering connections, based on total degree of nodes in path. In other words:
 - In the optimization stage: If paths are tied, score them based on the number of peering edges they use & sort based on that
 
----------------------------
-Cost of privacy experiment:
----------------------------
+
+
+
+
+
+# ---------------------------
+# Proof of concept experiment
+# ---------------------------
+
+- Set everyting up to perform this experiment as smoothly as possible (with one wrapper script and possibilities to easily change variables, and an elegant way to spit out statistics and data)
+- test, test, test
+
+# ---------------------------
+# Cost of privacy experiment:
+# ---------------------------
 
 # AS Paths
 
 - Create the as paths set for each AS, bucketed by final AS
 - Add method to return all paths from a certain AS to a final AS by doing first element lookups in the buckets
 - Prepare to use this for 'cost of privacy' experiment
+
+
+# ---------------------------
+# Scalability experiment:
+# ---------------------------
+
+- Arrange code to test best effort mode scalability & implement improvements
+
+
+
+
 
 
 
