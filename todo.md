@@ -1,17 +1,10 @@
 # Model accuracy (combine connected graph with rich metadata)
 
-# Convert internet_graph into NIO
-
-- (If needed) Update internet_graph to incorporate all randomly generated attributes of the NIO to be somewhat true 
-- (If needed) Update NIO structure to incorporate info from internet_graph, in:
-    - Code
-    - Report
-- Update internet_graph.py script to convert full graph into NIO objects, and spit those out into a new NIO folder
-
 # Path calculator reborn (PCR)
 
-- Save copy of working path calculator in archive
+- Generate new PRO objects to use the new as numbers and pick between all countries instead of continents
 - Update latency calculation to not use info from NIO but latency estimation based on lat/lon
+
 - Update path calculator based on other NIO changes
 - Test, test, test
 

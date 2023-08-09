@@ -33,6 +33,20 @@ G = nx.Graph()
 G.add_nodes_from(as_numbers)
 G.add_edges_from(edges)
 
+
+print(nx.number_connected_components(G))
+print(len(G.nodes))
+print(len(G.edges))
+n_str = list(G.nodes)
+n_int = []
+for s in n_str:
+    n_int.append(int(s))
+
+n_int.sort()
+with open("node_numbers.txt", "w") as file:
+    file.write(str(n_int))
+exit()
+
 # # Generate PRO objects
 pro_objects = []
 
