@@ -43,9 +43,10 @@ n_int = []
 for s in n_str:
     n_int.append(int(s))
 
-selection = random.sample(n_int, 40)
-with open("node_numbers.txt", "w") as file:
-    file.write(str(selection))
+n_int.sort()
+
+with open("as_numbers.py", "w") as file:
+    file.write(f"def get_as_numbers():\n\treturn {str(n_int)}")
 exit()
 
 # # Generate PRO objects

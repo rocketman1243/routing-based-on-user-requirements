@@ -1,0 +1,48 @@
+{
+  "as_source": 399913,
+  "as_destination": 199391,
+  "security": {
+    "strict": [
+      20
+    ],
+    "best_effort": [
+      2,
+      5,
+      6,
+      7,
+      9,
+      13,
+      14
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "privacy": {
+    "strict": [
+      20
+    ],
+    "best_effort": [
+      2,
+      5,
+      6,
+      7,
+      9,
+      13,
+      14
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "BJ",
+      "BN",
+      "ID",
+      "NL",
+      "ZA"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 6,
+    "minimum_number_of_paths": 3
+  }
+}

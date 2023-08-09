@@ -1,0 +1,65 @@
+{
+  "as_source": 29229,
+  "as_destination": 212158,
+  "security": {
+    "strict": [
+      6,
+      9,
+      29
+    ],
+    "best_effort": [
+      1,
+      2,
+      7,
+      8,
+      10,
+      12,
+      17,
+      18,
+      21,
+      22,
+      28
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "privacy": {
+    "strict": [
+      6,
+      9,
+      29
+    ],
+    "best_effort": [
+      1,
+      2,
+      7,
+      8,
+      10,
+      12,
+      17,
+      18,
+      21,
+      22,
+      28
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "BS",
+      "GF",
+      "GG",
+      "JO",
+      "LS",
+      "NO",
+      "PS",
+      "SC",
+      "UG",
+      "VN"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  }
+}

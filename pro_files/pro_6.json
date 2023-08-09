@@ -1,0 +1,43 @@
+{
+  "as_source": 201389,
+  "as_destination": 57903,
+  "security": {
+    "strict": [
+      3,
+      5
+    ],
+    "best_effort": [
+      10,
+      12
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "privacy": {
+    "strict": [
+      3,
+      5
+    ],
+    "best_effort": [
+      10,
+      12
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "AU",
+      "BT",
+      "BW",
+      "FJ",
+      "NL",
+      "PH",
+      "PN",
+      "VI"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 4,
+    "minimum_number_of_paths": 4
+  }
+}
