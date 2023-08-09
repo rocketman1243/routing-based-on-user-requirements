@@ -40,7 +40,6 @@ pro_objects = []
 
 for _, _, filenames in os.walk("pro_files/"):
     for filename in filenames:
-        print(filename)
         with open("pro_files/" + filename) as pro_file:
             pro_content = pro_file.read()
             pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
@@ -85,26 +84,11 @@ if not(path_exists):
 print("\n### STRICT PHASE ###\n")
 
 filterset = Filterset(pro)
-as_numbers_after_strict_phase = []
-G_strict_phase = copy.deepcopy(G)
 
 # Drop nodes that do not comply with strict requirements
-for num in as_numbers:
-    if filterset.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
-        if num in [pro.as_source, pro.as_destination]:
-            # No path can be found as the source or destinaton does not comply
-            # Exit and cry in a corner
-            print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
-            exit()
-        else:
-            G_strict_phase.remove_node(num)
-    else:
-        as_numbers_after_strict_phase.append(num)
+G_strict_phase = filterset.apply_strict_filters(G, pro, nio_objects)
 
-# Try to find path
-path_exists = safe_has_path(G_strict_phase, pro.as_source, pro.as_destination)
-
-if not(path_exists):
+if G_strict_phase is None:
     print("No path that adheres to the strict requirements can be found! Exiting...")
     exit(0)
 else:
@@ -117,41 +101,17 @@ else:
 
 print("\n### BEST EFFORT PHASE ###\n")
 
-G_best_effort_phase = copy.deepcopy(G_strict_phase)
-source_and_destination_comply_with_first_set_of_best_effort = True
+result = filterset.calculate_biggest_satisfiable_subset(G_strict_phase, pro, nio_objects)
+
+G_best_effort_phase = result[0]
+satisfied_privacy_requirements = result[1]
+satisfied_security_requirements = result[2]
 
 
-# Drop nodes that do not comply with strict AND all best effort requirements
-for num in as_numbers_after_strict_phase:
-    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
-        G_best_effort_phase.remove_node(num)
-
-# Try to find path
-path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
-
-if path_exists:
-    best_effort_path = nx.shortest_path(G_best_effort_phase, pro.as_source, pro.as_destination)
-    print("Found a best-effort path: ", best_effort_path)
-
-while not(path_exists):
-    filterset.reduce_best_effort_security_constraints()
-    filterset.reduce_best_effort_privacy_constraints()
-
-    # Start with a fresh graph such that we can again remove nodes
-    G_best_effort_phase = copy.deepcopy(G_strict_phase)
-
-    # Drop nodes that do not comply with strict AND reduced set of best effort requirements
-    for num in as_numbers_after_strict_phase:
-        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
-            G_best_effort_phase.remove_node(num)
-
-    path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
-
-
-if len(filterset.best_effort_privacy_requirements) + len(filterset.best_effort_security_requirements) == 0:
-    print("Unfortunately the best effort requirements could not be satisfied. However, we can still find a path that satisfies the strict requirements. Thus, we now go to the optimization phase!! \n")
-else:
-    print("At least one best effort path that adheres to best effort security requirements", filterset.best_effort_security_requirements, "and privacy requirements", filterset.best_effort_privacy_requirements, " exists! Continuing with the optimization phase! \n")
+if len(satisfied_privacy_requirements) + len(satisfied_security_requirements) > 0:
+    print(f"We could satisfy the privacy requirements {satisfied_privacy_requirements} and the security requirements {satisfied_security_requirements}!")
+    
+print("Now, on to the optimization phase!")
 
 #######################################################################
 ######## Optimization phase ###########################################

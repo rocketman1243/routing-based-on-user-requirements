@@ -1,4 +1,6 @@
 from itertools import chain, combinations
+import networkx as nx
+import copy
 
 class Filterset():
 
@@ -108,3 +110,61 @@ class Filterset():
         # privacy_requirements.clear()
 
         return drop
+
+    # Utility method for checking path existence that does not explode if source or dest are removed due to insufficiently supported features
+    def safe_has_path(self, graph, source, dest) -> bool:
+        if source not in graph.nodes or dest not in graph.nodes:
+            return False
+        else:
+            return nx.has_path(graph, source, dest)
+
+    # Applies strict filters and returns a filtered graph if path can be found, None if not
+    def apply_strict_filters(self, G, pro, nio_objects):
+        G_temp = copy.deepcopy(G)
+
+        nodes = list(G_temp.nodes)
+        for num in nodes:
+            if self.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
+                if num in [pro.as_source, pro.as_destination]:
+                    # No path can be found as the source or destinaton does not comply
+                    # Exit and cry in a corner
+                    print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
+                    exit()
+                else:
+                    G_temp.remove_node(num)
+
+        # Try to find path
+        path_exists = self.safe_has_path(G_temp, pro.as_source, pro.as_destination)
+
+        if path_exists:
+            return G_temp
+        else: 
+            return None
+
+    # Returns the filtered_graph after satisfying best_effort requirements, or the input graph 
+    # if none can be satisfied
+    # is the biggest sublist that can be satisfied
+    def calculate_biggest_satisfiable_subset(self, G, pro, nio_objects):
+
+        path_exists = False
+        while not(path_exists):
+
+            # Start with a fresh graph such that we can again remove nodes
+            G_best_effort_phase = copy.deepcopy(G)
+
+            # Drop nodes that do not comply with strict AND reduced set of best effort requirements
+            nodes = list(G_best_effort_phase.nodes)
+            for num in nodes:
+                if self.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
+                    G_best_effort_phase.remove_node(num)
+
+            path_exists = self.safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
+            
+            if not path_exists:
+                self.reduce_best_effort_security_constraints()
+                self.reduce_best_effort_privacy_constraints()
+
+        if path_exists:
+            return (G_best_effort_phase, self.best_effort_privacy_requirements, self.best_effort_security_requirements)
+        else:
+            return G
