@@ -87,6 +87,8 @@ for num in as_numbers:
             # Exit and cry in a corner
             print("Either source or destination does not comply with the strict reqiurements, so no path can ever be found.\nExiting...")
             exit()
+        else:
+            G_strict_phase.remove_node(num)
     else:
         as_numbers_after_strict_phase.append(num)
 

@@ -1,14 +1,10 @@
-# Model accuracy (combine connected graph with rich metadata)
+# Path calculator reborn
 
-# Path calculator reborn (PCR)
+- Fix filterset generation to not fry my cpu
 
-- Generate new PRO objects to use the new as numbers and pick between all countries instead of continents
-- Update latency calculation to not use info from NIO but latency estimation based on lat/lon
-- Verify that include and exclude geolocations now use the full ISO-3166 list instead of only continents
-- Fix the thing where the country is set to EU or some other continent. dat not noice...
 
-- Update path calculator based on other NIO changes
-- Test, test, test
+
+
 
 
 # Path Requirement Object v2 (PROv2)

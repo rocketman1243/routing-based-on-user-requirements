@@ -14,32 +14,35 @@ requirements = range(1, 31)
 
 # Generate random JSON objects
 num_objects = 25
+max_num_strict_reqs = 2
+min_num_best_effort_reqs = 3
+max_num_best_effort_reqs = 8
 output_objects = []
 
 for _ in range(num_objects):
-    as_source = random.choice(as_sources)
+    as_source = str(random.choice(as_sources))
 
     new_ases = as_sources 
-    new_ases.remove(as_source)
-    as_destination = random.choice(new_ases)
+    new_ases.remove(int(as_source))
+    as_destination = str(random.choice(new_ases))
 
     # Requirements for security    
-    security_strict_amount = random.randint(0, 3)
+    security_strict_amount = random.randint(0, max_num_strict_reqs)
     security_strict = random.sample(requirements, security_strict_amount)
     security_strict.sort()
 
     security_other_requirements = [i for i in requirements if i not in security_strict]
-    security_best_effort_amount = random.randint(0, 27)
+    security_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
     security_best_effort_requirements = random.sample(security_other_requirements, security_best_effort_amount)
     security_best_effort_requirements.sort()
 
     # Requirements for privacy
-    privacy_strict_amount = random.randint(0, 3)
+    privacy_strict_amount = random.randint(0, max_num_strict_reqs)
     privacy_strict = random.sample(requirements, privacy_strict_amount)
     privacy_strict.sort()
 
     privacy_other_requirements = [i for i in requirements if i not in privacy_strict]
-    privacy_best_effort_amount = random.randint(0, 27)
+    privacy_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
     privacy_best_effort_requirements = random.sample(privacy_other_requirements, privacy_best_effort_amount)
     privacy_best_effort_requirements.sort()
 
@@ -52,7 +55,7 @@ for _ in range(num_objects):
     
     path_optimization = random.choice(["minimize_total_latency", "minimize_number_of_hops", "none"])
     
-    target_amount_of_paths = random.randint(1, 6)
+    target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
     minimum_number_of_paths = random.randint(1, target_amount_of_paths)
     
     
@@ -83,6 +86,6 @@ for _ in range(num_objects):
 
 # Print the generated JSON objects
 for i, obj in enumerate(output_objects):
-    with open("../pro_files/pro_" + str(i+1) + ".json", "w") as file:
+    with open("../pro_files/pro_" + str(i) + ".json", "w") as file:
         file.write(f"{json.dumps(obj, indent=2)}")
 

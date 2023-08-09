@@ -34,30 +34,15 @@ G = nx.Graph()
 G.add_nodes_from(as_numbers)
 G.add_edges_from(edges)
 
-
-print(nx.number_connected_components(G))
-print(len(G.nodes))
-print(len(G.edges))
-n_str = list(G.nodes)
-n_int = []
-for s in n_str:
-    n_int.append(int(s))
-
-n_int.sort()
-
-with open("as_numbers.py", "w") as file:
-    file.write(f"def get_as_numbers():\n\treturn {str(n_int)}")
-exit()
-
-# # Generate PRO objects
+# Read in PRO objects
 pro_objects = []
 
-for i in range(1, 11):
-    filename = f"pro_files/pro_{i}.json"
-    pro_file = open(filename)
-    pro_content = pro_file.read()
-    pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
-    pro_objects.append(pro_object)
+for _, _, filenames in os.walk("pro_files/"):
+    for filename in filenames:
+        with open("pro_files/" + filename) as pro_file:
+            pro_content = pro_file.read()
+            pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
+            pro_objects.append(pro_object)
 
 # Utility method for checking path existence that does not explode if source or dest are removed due to 
 # insufficiently supported features
@@ -70,6 +55,16 @@ def safe_has_path(graph, source, dest) -> bool:
 
 # Select the first PRO for now
 pro = pro_objects[0]
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -88,8 +83,13 @@ if not(path_exists):
 print("\n### STRICT PHASE ###\n")
 
 filterset = Filterset(pro)
+
+print("after filterset creation")
+
 as_numbers_after_strict_phase = []
 G_strict_phase = copy.deepcopy(G)
+
+print("after deepcopy")
 
 # Drop nodes that do not comply with strict requirements
 for num in as_numbers:
@@ -97,14 +97,19 @@ for num in as_numbers:
         if num in [pro.as_source, pro.as_destination]:
             # No path can be found as the source or destinaton does not comply
             # Exit and cry in a corner
-            print("Either source or destination does not comply with the strict reqiurements, so no path can ever be found.\nExiting...")
+            print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
             exit()
+        else:
+            G_strict_phase.remove_node(num)
     else:
         as_numbers_after_strict_phase.append(num)
+
+print("after removing nodes that do not support strict reqs")
 
 # Try to find path
 path_exists = safe_has_path(G_strict_phase, pro.as_source, pro.as_destination)
 
+print("after finding path")
 
 if not(path_exists):
     print("No path that adheres to the strict requirements can be found! Exiting...")
@@ -125,7 +130,7 @@ source_and_destination_comply_with_first_set_of_best_effort = True
 
 # Drop nodes that do not comply with strict AND all best effort requirements
 for num in as_numbers_after_strict_phase:
-    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "not_verbose"):
+    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "verbose"):
         G_best_effort_phase.remove_node(num)
 
 # Try to find path
@@ -144,7 +149,7 @@ while not(path_exists):
 
     # Drop nodes that do not comply with strict AND reduced set of best effort requirements
     for num in as_numbers_after_strict_phase:
-        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "not_verbose"):
+        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "verbose"):
             G_best_effort_phase.remove_node(num)
 
     path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
@@ -161,16 +166,9 @@ else:
 
 print("\n### OPTIMIZATION PHASE ###\n")
 
-    #  lat0 = G.nodes[node0]["lat"]
-    #  lon0 = G.nodes[node0]["lon"]
-    #  lat1 = G.nodes[node1]["lat"]
-    #  lon1 = G.nodes[node1]["lon"]
-    #  latency = spit_latency(lat0, lon0, lat1, lon1)
 def spit_latency(lat0, lon0, lat1, lon1):
     result = distance.distance((lat0, lon0), (lat1, lon1))
     miles = result.miles
-
-    
 
     # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
     # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
@@ -193,8 +191,12 @@ def calculate_total_latency(graph, path):
         node0 = path[i]
         node1 = path[i + 1] 
 
-        latency = G_after_filter[path[i]][path[i + 1]]["latency"]
+        lat0 = nio_objects[node0].lat
+        lon0 = nio_objects[node0].lon
+        lat1 = nio_objects[node1].lat
+        lon1 = nio_objects[node1].lon
 
+        latency = spit_latency(lat0, lon0, lat1, lon1)
         total += latency
 
     return total
@@ -202,7 +204,8 @@ def calculate_total_latency(graph, path):
 if pro.path_optimization == "minimize_total_latency":
     for path in all_disjoint_paths:
         scored_paths.append([[path], calculate_total_latency(G_after_filter, path)])
-else: # optimization strategy is minimize nr of hops
+else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
+
     for path in all_disjoint_paths:
         scored_paths.append([path, len(path) - 1])
 
@@ -230,7 +233,7 @@ for i in range(target_nr_of_paths, min_nr_of_paths - 1, -1):
         break
 
 if len(multipath_selection) == 0:
-    print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :D")
+    print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
 else:
     if pro.path_optimization == "minimize_total_latency":
         print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
