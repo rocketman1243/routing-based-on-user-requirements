@@ -52,5 +52,3 @@ nio_dict = {
 nio = dict2namedtuple("nio", nio_dict)
 
 filterset = Filterset(pro)
-
-print("as has to be dropped:", filterset.as_has_to_be_removed(nio, "best-effort", "verbose"))
