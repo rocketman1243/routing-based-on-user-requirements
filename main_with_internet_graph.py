@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from filterset import Filterset
 from geopy import distance
 import os
+import random
 
 # Generate NIO objects
 nio_objects = {}
@@ -42,9 +43,9 @@ n_int = []
 for s in n_str:
     n_int.append(int(s))
 
-n_int.sort()
+selection = random.sample(n_int, 40)
 with open("node_numbers.txt", "w") as file:
-    file.write(str(n_int))
+    file.write(str(selection))
 exit()
 
 # # Generate PRO objects
