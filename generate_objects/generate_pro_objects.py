@@ -22,15 +22,29 @@ for _ in range(num_objects):
     new_ases = as_sources 
     new_ases.remove(as_source)
     as_destination = random.choice(new_ases)
-    
-    strict_amount = random.randint(0, 3)
-    strict = random.sample(requirements, strict_amount)
-    strict.sort()
 
-    other_requirements = [i for i in requirements if i not in strict]
-    best_effort_amount = random.randint(0, 27)
-    best_effort = random.sample(other_requirements, best_effort_amount)
-    best_effort.sort()
+    # Requirements for security    
+    security_strict_amount = random.randint(0, 3)
+    security_strict = random.sample(requirements, security_strict_amount)
+    security_strict.sort()
+
+    security_other_requirements = [i for i in requirements if i not in security_strict]
+    security_best_effort_amount = random.randint(0, 27)
+    security_best_effort_requirements = random.sample(security_other_requirements, security_best_effort_amount)
+    security_best_effort_requirements.sort()
+
+    # Requirements for privacy
+    privacy_strict_amount = random.randint(0, 3)
+    privacy_strict = random.sample(requirements, privacy_strict_amount)
+    privacy_strict.sort()
+
+    privacy_other_requirements = [i for i in requirements if i not in privacy_strict]
+    privacy_best_effort_amount = random.randint(0, 27)
+    privacy_best_effort_requirements = random.sample(privacy_other_requirements, privacy_best_effort_amount)
+    privacy_best_effort_requirements.sort()
+
+    security_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
+    privacy_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
     
     geolocation_amount = random.randint(0, 10)
     geolocation_exclude = random.sample(countries, geolocation_amount)
@@ -41,21 +55,19 @@ for _ in range(num_objects):
     target_amount_of_paths = random.randint(1, 6)
     minimum_number_of_paths = random.randint(1, target_amount_of_paths)
     
-    best_effort_mode_security = random.choice(["biggest_subset", "ordered_list"])
-    best_effort_mode_privacy = random.choice(["biggest_subset", "ordered_list"])
     
     data = {
         "as_source": as_source,
         "as_destination": as_destination,
         "security": {
-            "strict": strict,
-            "best_effort": best_effort,
-            "best_effort_mode": best_effort_mode_security
+            "strict": security_strict,
+            "best_effort": security_best_effort_requirements,
+            "best_effort_mode": security_best_effort_mode
         },
         "privacy": {
-            "strict": strict,
-            "best_effort": best_effort,
-            "best_effort_mode": best_effort_mode_privacy
+            "strict": privacy_strict,
+            "best_effort": privacy_best_effort_requirements,
+            "best_effort_mode": privacy_best_effort_mode
         },
         "geolocation": {
             "exclude": geolocation_exclude
@@ -71,6 +83,6 @@ for _ in range(num_objects):
 
 # Print the generated JSON objects
 for i, obj in enumerate(output_objects):
-    with open("pro_files/pro_" + str(i+1) + ".json", "w") as file:
+    with open("../pro_files/pro_" + str(i+1) + ".json", "w") as file:
         file.write(f"{json.dumps(obj, indent=2)}")
 

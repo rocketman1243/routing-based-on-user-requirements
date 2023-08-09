@@ -1,48 +1,64 @@
 {
-  "as_source": 399913,
-  "as_destination": 199391,
+  "as_source": 44779,
+  "as_destination": 150836,
   "security": {
     "strict": [
-      20
+      2,
+      23
     ],
     "best_effort": [
-      2,
+      1,
       5,
-      6,
       7,
+      8,
       9,
-      13,
-      14
-    ],
-    "best_effort_mode": "ordered_list"
-  },
-  "privacy": {
-    "strict": [
-      20
-    ],
-    "best_effort": [
-      2,
-      5,
-      6,
-      7,
-      9,
-      13,
-      14
+      10,
+      12,
+      14,
+      15,
+      16,
+      18,
+      19,
+      20,
+      21,
+      24,
+      25,
+      26,
+      27,
+      28
     ],
     "best_effort_mode": "biggest_subset"
   },
+  "privacy": {
+    "strict": [
+      3
+    ],
+    "best_effort": [
+      1,
+      2,
+      10,
+      11,
+      13,
+      15,
+      18,
+      19,
+      23,
+      24,
+      25,
+      26,
+      29,
+      30
+    ],
+    "best_effort_mode": "ordered_list"
+  },
   "geolocation": {
     "exclude": [
-      "BJ",
-      "BN",
-      "ID",
-      "NL",
-      "ZA"
+      "NZ"
     ]
   },
-  "path_optimization": "none",
+  "path_optimization": "minimize_total_latency",
   "multipath": {
-    "target_amount_of_paths": 6,
-    "minimum_number_of_paths": 3
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 1
   }
 }
