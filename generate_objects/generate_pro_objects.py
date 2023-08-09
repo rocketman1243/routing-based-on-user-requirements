@@ -86,6 +86,6 @@ for _ in range(num_objects):
 
 # Print the generated JSON objects
 for i, obj in enumerate(output_objects):
-    with open("../pro_files/pro_" + str(i) + ".json", "w") as file:
+    with open(f"../pro_files/pro_{i:02}.json", "w") as file:
         file.write(f"{json.dumps(obj, indent=2)}")
 

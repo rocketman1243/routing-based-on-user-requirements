@@ -29,6 +29,7 @@ for _,_,files in os.walk("./nio_files"):
                 edge_entry = [nio_object.as_number, outgoing_edge, edge_data]
                 edges.append(edge_entry)
 
+
 # Build graph
 G = nx.Graph()
 G.add_nodes_from(as_numbers)
@@ -39,6 +40,7 @@ pro_objects = []
 
 for _, _, filenames in os.walk("pro_files/"):
     for filename in filenames:
+        print(filename)
         with open("pro_files/" + filename) as pro_file:
             pro_content = pro_file.read()
             pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
@@ -55,7 +57,7 @@ def safe_has_path(graph, source, dest) -> bool:
 
 # Select the first PRO for now
 pro = pro_objects[0]
-
+print("checking pro from", pro.as_source, "to", pro.as_destination)
 
 
 
@@ -83,17 +85,12 @@ if not(path_exists):
 print("\n### STRICT PHASE ###\n")
 
 filterset = Filterset(pro)
-
-print("after filterset creation")
-
 as_numbers_after_strict_phase = []
 G_strict_phase = copy.deepcopy(G)
 
-print("after deepcopy")
-
 # Drop nodes that do not comply with strict requirements
 for num in as_numbers:
-    if filterset.as_has_to_be_removed(nio_objects[num], "strict", "not_verbose"):
+    if filterset.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
         if num in [pro.as_source, pro.as_destination]:
             # No path can be found as the source or destinaton does not comply
             # Exit and cry in a corner
@@ -104,18 +101,14 @@ for num in as_numbers:
     else:
         as_numbers_after_strict_phase.append(num)
 
-print("after removing nodes that do not support strict reqs")
-
 # Try to find path
 path_exists = safe_has_path(G_strict_phase, pro.as_source, pro.as_destination)
-
-print("after finding path")
 
 if not(path_exists):
     print("No path that adheres to the strict requirements can be found! Exiting...")
     exit(0)
 else:
-    print("At least one path that adheres to strict privacy requirements", filterset.strict_privacy_requirements, "and security requirements", filterset.strict_security_requirements, "exists! Continuing with the best-effort phase! \n")
+    print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase! \n")
 
 
 #############################################################################################################
@@ -130,7 +123,7 @@ source_and_destination_comply_with_first_set_of_best_effort = True
 
 # Drop nodes that do not comply with strict AND all best effort requirements
 for num in as_numbers_after_strict_phase:
-    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "verbose"):
+    if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
         G_best_effort_phase.remove_node(num)
 
 # Try to find path
@@ -149,7 +142,7 @@ while not(path_exists):
 
     # Drop nodes that do not comply with strict AND reduced set of best effort requirements
     for num in as_numbers_after_strict_phase:
-        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "verbose"):
+        if filterset.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
             G_best_effort_phase.remove_node(num)
 
     path_exists = safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
