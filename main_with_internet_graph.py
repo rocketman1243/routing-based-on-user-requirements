@@ -55,7 +55,7 @@ def safe_has_path(graph, source, dest) -> bool:
 
 
 # Select the first PRO for now
-pro = pro_objects[7]
+pro = pro_objects[15]
 print("checking pro from", pro.as_source, "to", pro.as_destination)
 
 
@@ -110,6 +110,8 @@ satisfied_security_requirements = result[2]
 
 if len(satisfied_privacy_requirements) + len(satisfied_security_requirements) > 0:
     print(f"We could satisfy the privacy requirements {satisfied_privacy_requirements} and the security requirements {satisfied_security_requirements}!")
+else:
+    print("No extra best-effort requirements could be satisfied.")
     
 print("Now, on to the optimization phase!")
 

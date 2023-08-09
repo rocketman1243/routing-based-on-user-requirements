@@ -132,7 +132,7 @@ class Filterset():
 
         nodes = list(G_temp.nodes)
         for num in nodes:
-            if self.as_has_to_be_removed(nio_objects[num], "strict", "verbose"):
+            if self.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
                 G_temp.remove_node(num)
 
         # Try to find path
