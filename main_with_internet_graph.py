@@ -55,7 +55,7 @@ def safe_has_path(graph, source, dest) -> bool:
 
 
 # Select the first PRO for now
-pro = pro_objects[0]
+pro = pro_objects[7]
 print("checking pro from", pro.as_source, "to", pro.as_destination)
 
 

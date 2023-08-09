@@ -122,16 +122,18 @@ class Filterset():
     def apply_strict_filters(self, G, pro, nio_objects):
         G_temp = copy.deepcopy(G)
 
+        # First check source and dest, as these need to always be correct
+        begin_or_end_is_bad = self.as_has_to_be_removed(nio_objects[pro.as_source], "strict", "verbose") or \
+            self.as_has_to_be_removed(nio_objects[pro.as_destination], "strict", "verbose")
+
+        if begin_or_end_is_bad:
+            print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
+            exit()
+
         nodes = list(G_temp.nodes)
         for num in nodes:
-            if self.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
-                if num in [pro.as_source, pro.as_destination]:
-                    # No path can be found as the source or destinaton does not comply
-                    # Exit and cry in a corner
-                    print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
-                    exit()
-                else:
-                    G_temp.remove_node(num)
+            if self.as_has_to_be_removed(nio_objects[num], "strict", "verbose"):
+                G_temp.remove_node(num)
 
         # Try to find path
         path_exists = self.safe_has_path(G_temp, pro.as_source, pro.as_destination)
