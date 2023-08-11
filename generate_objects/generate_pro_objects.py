@@ -26,16 +26,6 @@ for _ in range(num_objects):
     new_ases.remove(int(as_source))
     as_destination = str(random.choice(new_ases))
 
-    # Requirements for security    
-    security_strict_amount = random.randint(0, max_num_strict_reqs)
-    security_strict = random.sample(requirements, security_strict_amount)
-    security_strict.sort()
-
-    security_other_requirements = [i for i in requirements if i not in security_strict]
-    security_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
-    security_best_effort_requirements = random.sample(security_other_requirements, security_best_effort_amount)
-    security_best_effort_requirements.sort()
-
     # Requirements for privacy
     privacy_strict_amount = random.randint(0, max_num_strict_reqs)
     privacy_strict = random.sample(requirements, privacy_strict_amount)
@@ -46,8 +36,18 @@ for _ in range(num_objects):
     privacy_best_effort_requirements = random.sample(privacy_other_requirements, privacy_best_effort_amount)
     privacy_best_effort_requirements.sort()
 
-    security_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
+    # Requirements for security    
+    security_strict_amount = random.randint(0, max_num_strict_reqs)
+    security_strict = random.sample(requirements, security_strict_amount)
+    security_strict.sort()
+
+    security_other_requirements = [i for i in requirements if i not in security_strict]
+    security_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
+    security_best_effort_requirements = random.sample(security_other_requirements, security_best_effort_amount)
+    security_best_effort_requirements.sort()
+
     privacy_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
+    security_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
     
     geolocation_amount = random.randint(0, 10)
     geolocation_exclude = random.sample(countries, geolocation_amount)
@@ -62,15 +62,15 @@ for _ in range(num_objects):
     data = {
         "as_source": as_source,
         "as_destination": as_destination,
-        "security": {
-            "strict": security_strict,
-            "best_effort": security_best_effort_requirements,
-            "best_effort_mode": security_best_effort_mode
-        },
         "privacy": {
             "strict": privacy_strict,
             "best_effort": privacy_best_effort_requirements,
             "best_effort_mode": privacy_best_effort_mode
+        },
+        "security": {
+            "strict": security_strict,
+            "best_effort": security_best_effort_requirements,
+            "best_effort_mode": security_best_effort_mode
         },
         "geolocation": {
             "exclude": geolocation_exclude
