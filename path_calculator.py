@@ -186,11 +186,20 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
         print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
         fallback_to_ebgp(we_fallback_to_ebgp)
     else:
+<<<<<<< HEAD
         if verbose:
             if pro.path_optimization == "minimize_total_latency":
                 print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total latency. Here are the paths, along with their total latency!") 
             else:
                 print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total hopcount. Here are the paths, along with their total hopcount!") 
+=======
+        if pro.path_optimization == "minimize_total_latency":
+            if verbose:
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
+        else:
+            if verbose:
+                print("\nThe multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
+>>>>>>> 4116d107e1a6ce15eced16b44f88c21a3568c011
         for path in multipath_selection:
                 print(path)
 
