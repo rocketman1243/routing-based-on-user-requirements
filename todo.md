@@ -1,7 +1,3 @@
-# Path Requirement Object v2 (PROv2)
-
-- Add (and implement) switch to PRO that allows the user to either allow or deny fallback to  eBGP routing if we cannot find a route using the ASes that are entered into the NIP
-
 # Path optimization tie breaker
 
 - If two or more paths are tied in optimization score, use the path with the most AS peering connections, based on total degree of nodes in path. In other words:
