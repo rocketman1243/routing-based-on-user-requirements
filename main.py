@@ -22,8 +22,7 @@ with open(results_file, "w") as file:
 
 
 
-# for i in range(len(pro_objects)):
-for i in [2]:
+for i in range(len(pro_objects)):
     print("pro", i, "/", len(pro_objects))
     pro = pro_objects[i]
 

@@ -67,6 +67,3 @@ def generate_valid_pro_data():
         geolocations.add(nio.geolocation[0])
 
     return (endpoints, supported_privacy_features, supported_security_features, list(geolocations))
-
-result = generate_valid_pro()
-print(result)
