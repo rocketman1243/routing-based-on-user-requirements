@@ -39,8 +39,8 @@ def spit_latency(lat0, lon0, lat1, lon1):
     # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
     # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
     # https://wintelguy.com/wanlat.html 
-    latency = (miles * 1.1 + 200) * 2 / 124 + 0.5
-
+    latency = round((miles * 1.1 + 200) * 2 / 124 + 0.5, 2)
+    
     return latency
 
 def fallback_to_ebgp(we_fallback_to_ebgp):
