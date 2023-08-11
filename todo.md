@@ -1,12 +1,3 @@
-# Path optimization tie breaker
-
-- If two or more paths are tied in optimization score, use the path with the most AS peering connections, based on total degree of nodes in path. In other words:
-- In the optimization stage: If paths are tied, score them based on the number of peering edges they use & sort based on that
-
-
-
-
-
 
 # ---------------------------
 # Proof of concept experiment

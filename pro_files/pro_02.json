@@ -8,10 +8,7 @@
     ],
     "best_effort": [
       11,
-      17,
-      19,
-      20,
-      26
+      17
     ],
     "best_effort_mode": "biggest_subset"
   },
@@ -19,11 +16,7 @@
     "strict": [],
     "best_effort": [
       7,
-      9,
-      12,
-      18,
-      22,
-      30
+      9
     ],
     "best_effort_mode": "biggest_subset"
   },
@@ -44,7 +37,7 @@
   "path_optimization": "minimize_number_of_hops",
   "multipath": {
     "target_amount_of_paths": 4,
-    "minimum_number_of_paths": 4
+    "minimum_number_of_paths": 1
   },
   "fallback_to_ebgp_if_no_path_found": "false"
 }

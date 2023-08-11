@@ -19,4 +19,4 @@ pro = pro_objects[5]
 
 
 
-calculate_paths("test_files/nio_files/", pro, "verbose")
+calculate_paths("test_files/nio_files/", pro, "not_verbose")

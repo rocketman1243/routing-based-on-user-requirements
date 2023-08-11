@@ -7,6 +7,7 @@ from filterset import Filterset
 from geopy import distance
 import os
 import random
+import time
 
 def calculate_total_latency(graph, nio_objects, path):
     total = 0
@@ -43,13 +44,17 @@ def spit_latency(lat0, lon0, lat1, lon1):
     
     return latency
 
-def fallback_to_ebgp(we_fallback_to_ebgp):
-    if we_fallback_to_ebgp:
-        print("No path is found, but the PRO does specify to fallback to EBGP, so the request will now be fulfilled by EBGP!")
-    else:
-        print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
+def fallback_to_ebgp(we_fallback_to_ebgp, verbose, reason_for_failure):
+    if verbose:
+        if we_fallback_to_ebgp:
+            print("No path is found, but the PRO does specify to fallback to EBGP, so the request will now be fulfilled by EBGP!")
+        else:
+            print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
+    return (0, 0, reason_for_failure, 0, 0, 0, 0)
 
 def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
+
+    time_start = time.time()
 
     verbose = print_all == "verbose"
     if verbose:
@@ -84,6 +89,8 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     G.add_nodes_from(as_numbers)
     G.add_edges_from(edges)
 
+    time_after_building_graph = time.time()
+
     #############################################################################################################
     ######## STRICT PHASE #######################################################################################
     #############################################################################################################
@@ -101,12 +108,13 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
         if verbose:
             print("No path that adheres to the strict requirements can be found!")
 
-        fallback_to_ebgp(we_fallback_to_ebgp)
+        return fallback_to_ebgp(we_fallback_to_ebgp, verbose, "strict was too strict")
         exit(0)
     else:
         if verbose:
             print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase!")
 
+    time_after_strict_phase = time.time()
 
     #############################################################################################################
     ######## BEST EFFORT PHASE ##################################################################################
@@ -131,6 +139,9 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
         
     if verbose:
         print("Now, on to the optimization phase!")
+
+
+    time_after_best_effort_phase = time.time()
 
     #######################################################################
     ######## Optimization phase ###########################################
@@ -163,7 +174,6 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     # Then reconstruct path ordering from dict
     tied_paths = {} # 
     for path_and_score in scored_paths:
-        print("path_and_score:", path_and_score)
         path = path_and_score[0]
         score = path_and_score[1]
         if score in tied_paths:
@@ -173,7 +183,6 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
             entry = [path]
 
         tied_paths[score] = entry
-        print("after adding:", tied_paths[score])
 
     for score in tied_paths:
         if len(tied_paths[score]) > 1:
@@ -189,10 +198,9 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
             # sort and update in dict
             path_and_total_degree.sort(key = lambda x: x[1]) 
             path_and_total_degree.reverse()
-            print("list of paths sorted by degrees: ", path_and_total_degree)
-            # reconstruct path list
             tied_paths[score] = path_and_total_degree
 
+    # Reconstruct path list
     optimized_paths = []
     for key in tied_paths:
         for path in tied_paths[key]:
@@ -223,14 +231,23 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     if len(multipath_selection) == 0:
         print("There were only", len(optimized_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
-        fallback_to_ebgp(we_fallback_to_ebgp)
+
+        return fallback_to_ebgp(we_fallback_to_ebgp, verbose, "not enough paths for multipath setting")
+
     else:
-        if verbose:
-            if pro.path_optimization == "minimize_total_latency":
-                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total latency. Here are the paths, along with their total degree and total latency!") 
-            else:
-                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total hopcount. Here are the paths, along with their total degree and total hopcount!") 
-        for path in multipath_selection:
-                print(path)
+        time_after_optimization_phase = time.time()
+
+        round_decimals = 2
+
+        return (
+            len(optimized_paths), 
+            len(multipath_selection), 
+            "success", 
+            round(time_after_building_graph - time_start, round_decimals),
+            round(time_after_strict_phase - time_after_building_graph, round_decimals),
+            round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
+            round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
+            round(time_after_optimization_phase - time_start, round_decimals))
+
 
 
