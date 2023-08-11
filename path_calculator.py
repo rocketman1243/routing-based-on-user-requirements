@@ -44,8 +44,11 @@ def spit_latency(lat0, lon0, lat1, lon1):
     return latency
 
 
-def calculate_paths(nio_path: str, pro):
-    print("checking pro from", pro.as_source, "to", pro.as_destination)
+def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
+
+    verbose = print_all == "verbose"
+    if verbose:
+        print("checking pro from", pro.as_source, "to", pro.as_destination)
 
     # Generate NIO objects
     nio_objects = {}
@@ -78,7 +81,9 @@ def calculate_paths(nio_path: str, pro):
     ######## STRICT PHASE #######################################################################################
     #############################################################################################################
 
-    print("\n### STRICT PHASE ###\n")
+    
+    if verbose:
+        print("\n### STRICT PHASE ###\n")
 
     filterset = Filterset(pro)
 
@@ -86,17 +91,20 @@ def calculate_paths(nio_path: str, pro):
     G_strict_phase = filterset.apply_strict_filters(G, pro, nio_objects)
 
     if G_strict_phase is None:
-        print("No path that adheres to the strict requirements can be found! Exiting...")
+        if verbose:
+            print("No path that adheres to the strict requirements can be found! Exiting...")
         exit(0)
     else:
-        print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase! \n")
+        if verbose:
+            print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase! \n")
 
 
     #############################################################################################################
     ######## BEST EFFORT PHASE ##################################################################################
     #############################################################################################################
 
-    print("\n### BEST EFFORT PHASE ###\n")
+    if verbose:
+        print("\n### BEST EFFORT PHASE ###\n")
 
     result = filterset.calculate_biggest_satisfiable_subset(G_strict_phase, pro, nio_objects)
 
@@ -106,17 +114,21 @@ def calculate_paths(nio_path: str, pro):
 
 
     if len(satisfied_privacy_requirements) + len(satisfied_security_requirements) > 0:
-        print(f"We could satisfy the privacy requirements {satisfied_privacy_requirements} and the security requirements {satisfied_security_requirements}!")
+        if verbose:
+            print(f"We could satisfy the privacy requirements {satisfied_privacy_requirements} and the security requirements {satisfied_security_requirements}!")
     else:
-        print("No extra best-effort requirements could be satisfied.")
+        if verbose:
+            print("No extra best-effort requirements could be satisfied.")
         
-    print("Now, on to the optimization phase!")
+    if verbose:
+        print("Now, on to the optimization phase!")
 
     #######################################################################
     ######## Optimization phase ###########################################
     #######################################################################
 
-    print("\n### OPTIMIZATION PHASE ###\n")
+    if verbose:
+        print("\n### OPTIMIZATION PHASE ###\n")
 
     G_after_filter = copy.deepcopy(G_best_effort_phase)
 
@@ -138,16 +150,19 @@ def calculate_paths(nio_path: str, pro):
     # sort scored_paths list by score
     scored_paths.sort(key = lambda x: x[1])
 
-    print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "): ")
+    if verbose:
+        print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "): ")
     for path in scored_paths:
-        print(path)
+        if verbose:
+            print(path)
 
 
     #######################################################################
     ######## Multipath stage ##############################################
     #######################################################################
 
-    print("\n### MULTIPATH PHASE ###\n")
+    if verbose:
+        print("\n### MULTIPATH PHASE ###\n")
 
     min_nr_of_paths = pro.multipath.minimum_number_of_paths
     target_nr_of_paths = pro.multipath.target_amount_of_paths
@@ -162,10 +177,12 @@ def calculate_paths(nio_path: str, pro):
         print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
     else:
         if pro.path_optimization == "minimize_total_latency":
-            print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
+            if verbose:
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
         else:
-            print("\nThe multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
+            if verbose:
+                print("\nThe multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
         for path in multipath_selection:
-            print(path)
+                print(path)
 
 

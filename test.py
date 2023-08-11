@@ -14,7 +14,7 @@ for _, _, filenames in os.walk(pro_folder):
             pro_object = json.loads(pro_content, object_hook=lambda pro_content: SimpleNamespace(**pro_content))
             pro_objects.append(pro_object)
 
-pro = pro_objects[0]
+pro = pro_objects[3]
 
 
 
