@@ -3,25 +3,16 @@
   "as_destination": "5",
   "privacy": {
     "strict": [
-      6
+      1,
+      2
     ],
     "best_effort": [
-      2,
-      11,
-      16,
-      18,
-      22,
-      27,
-      28
     ],
     "best_effort_mode": "biggest_subset"
   },
   "security": {
     "strict": [],
     "best_effort": [
-      3,
-      19,
-      28
     ],
     "best_effort_mode": "ordered_list"
   },
@@ -33,7 +24,7 @@
   },
   "path_optimization": "none",
   "multipath": {
-    "target_amount_of_paths": 1,
-    "minimum_number_of_paths": 1
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 2
   }
 }
