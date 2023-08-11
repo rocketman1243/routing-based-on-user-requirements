@@ -27,5 +27,6 @@
   "multipath": {
     "target_amount_of_paths": 3,
     "minimum_number_of_paths": 1
-  }
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
 }

@@ -57,6 +57,8 @@ for _ in range(num_objects):
     
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
     minimum_number_of_paths = random.randint(1, target_amount_of_paths)
+
+    fallback_to_ebgp = random.choice(["true", "false"])
     
     
     data = {
@@ -79,7 +81,8 @@ for _ in range(num_objects):
         "multipath": {
             "target_amount_of_paths": target_amount_of_paths,
             "minimum_number_of_paths": minimum_number_of_paths
-        }
+        },
+        "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp
     }
     
     output_objects.append(data)

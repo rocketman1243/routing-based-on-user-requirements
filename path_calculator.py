@@ -43,12 +43,19 @@ def spit_latency(lat0, lon0, lat1, lon1):
 
     return latency
 
+def fallback_to_ebgp(we_fallback_to_ebgp):
+    if we_fallback_to_ebgp:
+        print("No path is found, but the PRO does specify to fallback to EBGP, so the request will now be fulfilled by EBGP!")
+    else:
+        print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
 
 def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     verbose = print_all == "verbose"
     if verbose:
         print("checking pro from", pro.as_source, "to", pro.as_destination)
+    
+    we_fallback_to_ebgp = pro.fallback_to_ebgp_if_no_path_found == "true"
 
     # Generate NIO objects
     nio_objects = {}
@@ -92,11 +99,13 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     if G_strict_phase is None:
         if verbose:
-            print("No path that adheres to the strict requirements can be found! Exiting...")
+            print("No path that adheres to the strict requirements can be found!")
+
+        fallback_to_ebgp(we_fallback_to_ebgp)
         exit(0)
     else:
         if verbose:
-            print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase! \n")
+            print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase!")
 
 
     #############################################################################################################
@@ -175,13 +184,13 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     if len(multipath_selection) == 0:
         print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
+        fallback_to_ebgp(we_fallback_to_ebgp)
     else:
-        if pro.path_optimization == "minimize_total_latency":
-            if verbose:
-                print("\n The multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total latency!") 
-        else:
-            if verbose:
-                print("\nThe multipath phase selected the", len(multipath_selection), "paths that are most optimal, as determined by your optimization strategy. Here are the paths, along with their total hopcount!") 
+        if verbose:
+            if pro.path_optimization == "minimize_total_latency":
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total latency. Here are the paths, along with their total latency!") 
+            else:
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total hopcount. Here are the paths, along with their total hopcount!") 
         for path in multipath_selection:
                 print(path)
 

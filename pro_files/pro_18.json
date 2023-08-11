@@ -1,38 +1,47 @@
 {
-  "as_source": "197786",
-  "as_destination": "149197",
+  "as_source": "328690",
+  "as_destination": "208538",
   "privacy": {
-    "strict": [],
-    "best_effort": [
-      5,
-      12,
-      21,
-      25
-    ],
-    "best_effort_mode": "biggest_subset"
-  },
-  "security": {
     "strict": [
-      9,
-      20
+      7
     ],
     "best_effort": [
-      1,
-      3,
-      8,
-      12,
-      13,
+      10,
+      14,
+      21,
+      23,
       25,
-      27
+      26
     ],
     "best_effort_mode": "ordered_list"
   },
-  "geolocation": {
-    "exclude": []
+  "security": {
+    "strict": [],
+    "best_effort": [
+      8,
+      24,
+      30
+    ],
+    "best_effort_mode": "biggest_subset"
   },
-  "path_optimization": "minimize_total_latency",
+  "geolocation": {
+    "exclude": [
+      "AF",
+      "BH",
+      "BM",
+      "CO",
+      "ES",
+      "KM",
+      "KW",
+      "SJ",
+      "TH",
+      "VG"
+    ]
+  },
+  "path_optimization": "none",
   "multipath": {
     "target_amount_of_paths": 1,
     "minimum_number_of_paths": 1
-  }
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
 }

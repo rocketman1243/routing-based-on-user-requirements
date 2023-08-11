@@ -3,8 +3,7 @@
   "as_destination": "5",
   "privacy": {
     "strict": [
-      1,
-      2
+      5
     ],
     "best_effort": [
     ],
@@ -18,14 +17,13 @@
   },
   "geolocation": {
     "exclude": [
-      "ES",
-      "GW"
+      "ES"
     ]
   },
   "path_optimization": "none",
   "multipath": {
     "target_amount_of_paths": 3,
-    "minimum_number_of_paths": 2
+    "minimum_number_of_paths": 1
   },
   "fallback_to_ebgp_if_no_path_found": "false"
 }

@@ -119,16 +119,18 @@ class Filterset():
             return nx.has_path(graph, source, dest)
 
     # Applies strict filters and returns a filtered graph if path can be found, None if not
-    def apply_strict_filters(self, G, pro, nio_objects):
+    def apply_strict_filters(self, G, pro, nio_objects, verbose_bool = "not_verbose"):
+        verbose = verbose_bool == "verbose"
         G_temp = copy.deepcopy(G)
 
         # First check source and dest, as these need to always be correct
-        begin_or_end_is_bad = self.as_has_to_be_removed(nio_objects[pro.as_source], "strict", "verbose") or \
-            self.as_has_to_be_removed(nio_objects[pro.as_destination], "strict", "verbose")
+        begin_or_end_is_bad = self.as_has_to_be_removed(nio_objects[pro.as_source], "strict", "not_verbose") or \
+            self.as_has_to_be_removed(nio_objects[pro.as_destination], "strict", "not_verbose")
 
         if begin_or_end_is_bad:
-            print("Either source or destination does not comply with the strict requirements, so no path can ever be found.\nExiting...")
-            exit()
+            if verbose:
+                print("Either source or destination does not comply with the strict requirements, so no path can ever be found.")
+            return None
 
         nodes = list(G_temp.nodes)
         for num in nodes:

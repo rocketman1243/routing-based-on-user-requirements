@@ -1,18 +1,6 @@
-# Proper testing
-
-- Create a proper testing setup to see whether the whole main pipeline runs CORRECT. That is the goal, that it is functionally CORRECT.
-- Use the testing setup to test!
-
-
-
-
-
-
-
-
 # Path Requirement Object v2 (PROv2)
 
-- Add switch to PRO that allows the user to either allow or deny fallback to  eBGP routing if we cannot find a route using the ASes that are entered into the NIP
+- Add (and implement) switch to PRO that allows the user to either allow or deny fallback to  eBGP routing if we cannot find a route using the ASes that are entered into the NIP
 
 # Path optimization tie breaker
 
