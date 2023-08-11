@@ -8,7 +8,7 @@ from geopy import distance
 import os
 import random
 
-def calculate_total_latency(graph, path):
+def calculate_total_latency(graph, nio_objects, path):
     total = 0
     for i in range(len(path) - 1):
         node0 = path[i]
@@ -150,18 +150,57 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     if pro.path_optimization == "minimize_total_latency":
         for path in all_disjoint_paths:
-            scored_paths.append([[path], calculate_total_latency(G_after_filter, path)])
+            scored_paths.append([path, calculate_total_latency(G_after_filter, nio_objects, path)])
     else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
-
         for path in all_disjoint_paths:
             scored_paths.append([path, len(path) - 1])
 
     # sort scored_paths list by score
     scored_paths.sort(key = lambda x: x[1])
 
+    # TIE BREAKER: Total degree of path
+    # Create dict that maps score to paths. If one score has multiple paths, sort these on descending total degree. 
+    # Then reconstruct path ordering from dict
+    tied_paths = {} # 
+    for path_and_score in scored_paths:
+        print("path_and_score:", path_and_score)
+        path = path_and_score[0]
+        score = path_and_score[1]
+        if score in tied_paths:
+            entry = tied_paths[score]
+            entry.append(path)
+        else:
+            entry = [path]
+
+        tied_paths[score] = entry
+        print("after adding:", tied_paths[score])
+
+    for score in tied_paths:
+        if len(tied_paths[score]) > 1:
+            path_and_total_degree = []
+            # Calculate total degree for each path
+            paths = tied_paths[score]
+            for path in paths:
+                totalDegree = 0
+                for asn in path:
+                    totalDegree += G.degree[asn]
+                path_and_total_degree.append([path, totalDegree])
+
+            # sort and update in dict
+            path_and_total_degree.sort(key = lambda x: x[1]) 
+            path_and_total_degree.reverse()
+            print("list of paths sorted by degrees: ", path_and_total_degree)
+            # reconstruct path list
+            tied_paths[score] = path_and_total_degree
+
+    optimized_paths = []
+    for key in tied_paths:
+        for path in tied_paths[key]:
+            optimized_paths.append([path, key])
+
     if verbose:
         print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "): ")
-    for path in scored_paths:
+    for path in optimized_paths:
         if verbose:
             print(path)
 
@@ -178,19 +217,19 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
     multipath_selection = []
     for i in range(target_nr_of_paths, min_nr_of_paths - 1, -1):
-        if len(scored_paths) >= i:
-            multipath_selection.extend(scored_paths[:i])
+        if len(optimized_paths) >= i:
+            multipath_selection.extend(optimized_paths[:i])
             break
 
     if len(multipath_selection) == 0:
-        print("There were only", len(scored_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
+        print("There were only", len(optimized_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
         fallback_to_ebgp(we_fallback_to_ebgp)
     else:
         if verbose:
             if pro.path_optimization == "minimize_total_latency":
-                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total latency. Here are the paths, along with their total latency!") 
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total latency. Here are the paths, along with their total degree and total latency!") 
             else:
-                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total hopcount. Here are the paths, along with their total hopcount!") 
+                print("\n The multipath phase selected the", len(multipath_selection), "paths that minimize total hopcount. Here are the paths, along with their total degree and total hopcount!") 
         for path in multipath_selection:
                 print(path)
 

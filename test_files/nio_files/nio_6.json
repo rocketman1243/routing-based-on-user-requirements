@@ -1,5 +1,5 @@
 {
-  "as_number": "1",
+  "as_number": "6",
   "geolocation": [
     "US"
   ],
@@ -8,13 +8,11 @@
   "connections": [
     "2",
     "3",
-    "4", 
+    "5",
     "7"
   ],
   "privacy": [
-    1,
-    2,
-    3
+    1
   ],
   "security": [
   ]

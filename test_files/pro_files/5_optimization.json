@@ -6,9 +6,8 @@
       1
     ],
     "best_effort": [
-      2, 5, 6
     ],
-    "best_effort_mode": "ordered_list"
+    "best_effort_mode": "biggest_subset"
   },
   "security": {
     "strict": [],
@@ -18,13 +17,12 @@
   },
   "geolocation": {
     "exclude": [
-      "ES",
-      "GW"
+      "ES"
     ]
   },
-  "path_optimization": "none",
+  "path_optimization": "minimize_total_latency",
   "multipath": {
-    "target_amount_of_paths": 1,
+    "target_amount_of_paths": 2,
     "minimum_number_of_paths": 1
   },
   "fallback_to_ebgp_if_no_path_found": "false"

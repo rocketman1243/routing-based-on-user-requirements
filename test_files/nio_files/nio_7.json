@@ -1,20 +1,16 @@
 {
-  "as_number": "1",
+  "as_number": "7",
   "geolocation": [
     "US"
   ],
   "lat": "32.41",
   "lon": "-86.25",
   "connections": [
-    "2",
-    "3",
-    "4", 
-    "7"
+    "1",
+    "6"
   ],
   "privacy": [
-    1,
-    2,
-    3
+    1
   ],
   "security": [
   ]
