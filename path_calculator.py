@@ -239,6 +239,10 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
         round_decimals = 2
 
+        if verbose:
+            print("Here are the", len(multipath_selection), "best paths:")
+            print(multipath_selection)
+
         return (
             len(optimized_paths), 
             len(multipath_selection), 
