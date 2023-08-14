@@ -18,15 +18,11 @@ with open(results_file, "w") as file:
     file.write("")
 
 
-
-
-
-pro_objects = [1]
 for i in range(len(pro_objects)):
     print("pro", i, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths("nio_files/", pro, "verbal")
+    output = calculate_paths("nio_files/", pro, "not_verbose")
     """ 
     Output format: 
 
