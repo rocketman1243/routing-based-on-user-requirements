@@ -21,15 +21,16 @@ with open(results_file, "w") as file:
 
 
 
-
+pro_objects = [1]
 for i in range(len(pro_objects)):
     print("pro", i, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths("nio_files/", pro, "not_verbal")
+    output = calculate_paths("nio_files/", pro, "verbal")
     """ 
     Output format: 
 
+    - index of pro
     - Total number of paths found
     - Number of selected paths according to multipath settings
     - Reason for failure

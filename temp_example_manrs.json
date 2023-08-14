@@ -1,0 +1,48 @@
+{
+  "participants": [
+    {
+      "name": "string",
+      "areas_served": [
+        "FR"
+      ],
+      "ASNs": [
+        0
+      ],
+      "member_since": "2020-07-10",
+      "filtering": {
+        "conformance": "conformant",
+        "score": {
+          "value": 0,
+          "severity": "ready"
+        }
+      },
+      "anti_spoofing": {
+        "conformance": "conformant",
+        "score": {
+          "value": 0,
+          "severity": "ready"
+        }
+      },
+      "coordination": {
+        "conformance": "conformant",
+        "score": {
+          "value": 0,
+          "severity": "ready"
+        }
+      },
+      "routing_information": {
+        "conformance": "conformant",
+        "score_irr": {
+          "value": 0,
+          "severity": "ready"
+        },
+        "score_rpki": {
+          "value": 0,
+          "severity": "ready"
+        }
+      },
+      "id": 0
+    }
+  ],
+  "measurement_date": "2023-04-01"
+}
