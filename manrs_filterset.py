@@ -133,6 +133,6 @@ class Filterset():
                 self.reduce_best_effort_constraints()
 
         if path_exists:
-            return (G_best_effort_phase, self.best_effort_privacy_requirements, self.best_effort_security_requirements)
+            return (G_best_effort_phase, self.best_effort_requirements)
         else:
             return G
