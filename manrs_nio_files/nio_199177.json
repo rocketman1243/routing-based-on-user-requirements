@@ -1,0 +1,32 @@
+{
+  "as_number": "199177",
+  "geolocation": [
+    "BG",
+    "CA",
+    "DE",
+    "EU",
+    "NL",
+    "US"
+  ],
+  "lat": "60",
+  "lon": "-95",
+  "connections": [
+    "28305",
+    "61709",
+    "7575",
+    "266224",
+    "264645",
+    "38740",
+    "30985",
+    "7843",
+    "266312",
+    "62532",
+    "205668",
+    "262896",
+    "29580"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

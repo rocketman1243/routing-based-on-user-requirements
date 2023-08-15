@@ -1,0 +1,29 @@
+{
+  "as_number": "5511",
+  "geolocation": [
+    "FR"
+  ],
+  "lat": "50.9614390939484",
+  "lon": "-62.5790145446848",
+  "connections": [
+    "396584",
+    "36678",
+    "16814",
+    "5408",
+    "20857",
+    "3326",
+    "396573",
+    "53096",
+    "3242",
+    "28423",
+    "24592",
+    "3663",
+    "213326",
+    "4764",
+    "21700"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

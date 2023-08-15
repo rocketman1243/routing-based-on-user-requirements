@@ -1,0 +1,25 @@
+{
+  "as_number": "202032",
+  "geolocation": [
+    "CH"
+  ],
+  "lat": "45.85",
+  "lon": "8.94",
+  "connections": [
+    "265141",
+    "59370",
+    "269566",
+    "264014",
+    "701",
+    "33491",
+    "19782",
+    "265461",
+    "132021",
+    "21709",
+    "58299"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

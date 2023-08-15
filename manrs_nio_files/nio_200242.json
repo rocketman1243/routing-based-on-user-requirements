@@ -1,0 +1,34 @@
+{
+  "as_number": "200242",
+  "geolocation": [
+    "CA",
+    "DE",
+    "NL",
+    "US"
+  ],
+  "lat": "60",
+  "lon": "-95",
+  "connections": [
+    "264478",
+    "137",
+    "35710",
+    "60900",
+    "62538",
+    "396579",
+    "396565",
+    "262459",
+    "396555",
+    "396664",
+    "396642",
+    "266266",
+    "142582",
+    "43754",
+    "396595",
+    "59645",
+    "265986"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

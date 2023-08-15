@@ -1,0 +1,25 @@
+{
+  "as_number": "204793",
+  "geolocation": [
+    "DK"
+  ],
+  "lat": "55.39",
+  "lon": "10.43",
+  "connections": [
+    "211380",
+    "263653",
+    "211224",
+    "64063",
+    "15296",
+    "396576",
+    "22258",
+    "27903",
+    "42337",
+    "376",
+    "36912"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,28 @@
+{
+  "as_number": "57187",
+  "geolocation": [
+    "AE"
+  ],
+  "lat": "25.27",
+  "lon": "55.33",
+  "connections": [
+    "396639",
+    "212635",
+    "27446",
+    "45033",
+    "44684",
+    "327849",
+    "396682",
+    "57695",
+    "24514",
+    "396690",
+    "28000",
+    "36623",
+    "29470",
+    "10965"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

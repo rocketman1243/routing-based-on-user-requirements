@@ -1,0 +1,26 @@
+{
+  "as_number": "400442",
+  "geolocation": [
+    "CA",
+    "US"
+  ],
+  "lat": "49.87",
+  "lon": "-97.25",
+  "connections": [
+    "396568",
+    "28007",
+    "7575",
+    "62538",
+    "263732",
+    "16191",
+    "262427",
+    "267012",
+    "266551",
+    "263338",
+    "396450"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

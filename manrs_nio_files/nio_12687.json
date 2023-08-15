@@ -1,0 +1,26 @@
+{
+  "as_number": "12687",
+  "geolocation": [
+    "UA"
+  ],
+  "lat": "49.7574071144543",
+  "lon": "30.496194980042",
+  "connections": [
+    "56457",
+    "44219",
+    "3456",
+    "397196",
+    "141767",
+    "3267",
+    "199591",
+    "41497",
+    "37670",
+    "10214",
+    "269433",
+    "8560"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

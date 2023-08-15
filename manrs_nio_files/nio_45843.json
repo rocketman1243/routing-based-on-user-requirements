@@ -1,0 +1,30 @@
+{
+  "as_number": "45843",
+  "geolocation": [
+    "PK"
+  ],
+  "lat": "24.8900007489746",
+  "lon": "67.064997573278",
+  "connections": [
+    "396605",
+    "63771",
+    "1103",
+    "3754",
+    "28001",
+    "37119",
+    "396625",
+    "36626",
+    "7642",
+    "1853",
+    "56246",
+    "52428",
+    "212934",
+    "266248",
+    "25472",
+    "328381"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

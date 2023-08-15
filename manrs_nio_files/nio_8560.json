@@ -1,0 +1,29 @@
+{
+  "as_number": "8560",
+  "geolocation": [
+    "EU",
+    "US",
+    "DE"
+  ],
+  "lat": "51.284630400324",
+  "lon": "-10.1315592509409",
+  "connections": [
+    "64199",
+    "16094",
+    "27839",
+    "265098",
+    "212635",
+    "53231",
+    "396617",
+    "30985",
+    "203223",
+    "263649",
+    "12687",
+    "4787",
+    "264293"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

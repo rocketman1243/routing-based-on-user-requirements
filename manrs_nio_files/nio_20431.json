@@ -1,0 +1,33 @@
+{
+  "as_number": "20431",
+  "geolocation": [
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "7725",
+    "9267",
+    "29403",
+    "33660",
+    "141680",
+    "36289",
+    "393713",
+    "36678",
+    "264429",
+    "21709",
+    "199993",
+    "33664",
+    "20130",
+    "52818",
+    "20172",
+    "263360",
+    "199839",
+    "267733",
+    "396561"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,26 @@
+{
+  "as_number": "4007",
+  "geolocation": [
+    "NP"
+  ],
+  "lat": "27.7153175638629",
+  "lon": "85.3064296861918",
+  "connections": [
+    "61951",
+    "20214",
+    "11556",
+    "396611",
+    "265016",
+    "58599",
+    "36629",
+    "50520",
+    "47638",
+    "329101",
+    "59715",
+    "16094"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

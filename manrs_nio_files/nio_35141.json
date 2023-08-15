@@ -1,0 +1,26 @@
+{
+  "as_number": "35141",
+  "geolocation": [
+    "BG"
+  ],
+  "lat": "42.6878523302497",
+  "lon": "23.4858912375754",
+  "connections": [
+    "10214",
+    "396599",
+    "262977",
+    "137412",
+    "49375",
+    "396617",
+    "211622",
+    "269832",
+    "262391",
+    "38158",
+    "328594",
+    "263327"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

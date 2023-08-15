@@ -1,0 +1,32 @@
+{
+  "as_number": "10214",
+  "geolocation": [
+    "AU"
+  ],
+  "lat": "-31.9484613045351",
+  "lon": "115.856249711117",
+  "connections": [
+    "36944",
+    "35141",
+    "2516",
+    "396542",
+    "11260",
+    "266372",
+    "137",
+    "263098",
+    "9002",
+    "266448",
+    "52468",
+    "396540",
+    "61588",
+    "52245",
+    "12687",
+    "52866",
+    "21412",
+    "18126"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -28,7 +28,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_file = open( "additional_data/as-links.txt")
+links_file = open("theoretical_analysis/build_graph/as-links.txt")
 edges = []
 # edge_info = {}
 
@@ -44,7 +44,7 @@ G.add_edges_from(edges)
 # Note: Nodes are added based on edges in connected graph
 node_info = {}
 
-node_info_file = open( "build_graph/node_attributes.csv", "r")
+node_info_file = open( "theoretical_analysis/build_graph/node_attributes.csv", "r")
 for line in node_info_file:
     items = line.split(",")
 
@@ -85,6 +85,13 @@ for node in G.nodes:
     feature_info[node]["security"] = security_features_distribution[node]
 
 nx.set_node_attributes(G, feature_info)
+
+
+total_degree = 0
+for node in G.nodes:
+    total_degree += nx.degree(G, node)
+average = total_degree / len(G.nodes)
+print(average, " average degree")
 
 #################### SPIT OUT NIO FILES ###########################################
 

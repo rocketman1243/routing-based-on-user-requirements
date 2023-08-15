@@ -1,0 +1,28 @@
+{
+  "as_number": "3491",
+  "geolocation": [
+    "HK",
+    "US"
+  ],
+  "lat": "44.8640064465559",
+  "lon": "-77.1002614660479",
+  "connections": [
+    "3677",
+    "267361",
+    "264279",
+    "397195",
+    "271383",
+    "34968",
+    "38794",
+    "396586",
+    "396540",
+    "10886",
+    "396654",
+    "396572",
+    "328825"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

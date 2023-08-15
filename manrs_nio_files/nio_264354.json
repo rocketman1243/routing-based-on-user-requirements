@@ -1,0 +1,28 @@
+{
+  "as_number": "264354",
+  "geolocation": [
+    "BR"
+  ],
+  "lat": "-11.1159075667272",
+  "lon": "-57.6090745597329",
+  "connections": [
+    "262907",
+    "397200",
+    "42360",
+    "264237",
+    "3280",
+    "33362",
+    "4134",
+    "24961",
+    "396756",
+    "8717",
+    "50520",
+    "38158",
+    "263338",
+    "8111"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

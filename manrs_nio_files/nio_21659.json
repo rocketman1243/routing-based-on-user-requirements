@@ -1,0 +1,27 @@
+{
+  "as_number": "21659",
+  "geolocation": [
+    "CA",
+    "US"
+  ],
+  "lat": "47.565000977393",
+  "lon": "-52.7550014298425",
+  "connections": [
+    "262391",
+    "270890",
+    "15692",
+    "4809",
+    "20928",
+    "267668",
+    "42360",
+    "60501",
+    "36289",
+    "955",
+    "396675",
+    "269497"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

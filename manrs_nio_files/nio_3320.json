@@ -1,0 +1,42 @@
+{
+  "as_number": "3320",
+  "geolocation": [
+    "CA",
+    "CH",
+    "CN",
+    "CZ",
+    "DE",
+    "ES",
+    "FR",
+    "GB",
+    "GR",
+    "HK",
+    "HU",
+    "IT",
+    "NL",
+    "PL",
+    "SE",
+    "SG",
+    "SK",
+    "SL",
+    "TR",
+    "US"
+  ],
+  "lat": "50.683626434046",
+  "lon": "9.52251146201797",
+  "connections": [
+    "50776",
+    "8737",
+    "266387",
+    "268218",
+    "207590",
+    "212425",
+    "262369",
+    "28263",
+    "33652"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

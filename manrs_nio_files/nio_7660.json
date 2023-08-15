@@ -1,0 +1,30 @@
+{
+  "as_number": "7660",
+  "geolocation": [
+    "HK",
+    "JP",
+    "SG",
+    "TH",
+    "US"
+  ],
+  "lat": "35.2063561457388",
+  "lon": "137.456121012608",
+  "connections": [
+    "8717",
+    "205603",
+    "269037",
+    "87",
+    "45474",
+    "266968",
+    "398866",
+    "29067",
+    "12926",
+    "267562",
+    "49640",
+    "38158"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,32 @@
+{
+  "as_number": "41666",
+  "geolocation": [
+    "CH",
+    "DE",
+    "GB",
+    "LI",
+    "NL",
+    "FI"
+  ],
+  "lat": "60.46",
+  "lon": "22.33",
+  "connections": [
+    "39040",
+    "28263",
+    "64213",
+    "237",
+    "62532",
+    "396828",
+    "328381",
+    "28130",
+    "10965",
+    "1403",
+    "37678",
+    "3333",
+    "269433"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

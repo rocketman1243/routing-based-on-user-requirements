@@ -1,0 +1,40 @@
+{
+  "as_number": "36944",
+  "geolocation": [
+    "BI",
+    "CD",
+    "KE",
+    "MW",
+    "MZ",
+    "RW",
+    "TZ",
+    "UG",
+    "ZA",
+    "ZM",
+    "ZW"
+  ],
+  "lat": "-13.98",
+  "lon": "33.77",
+  "connections": [
+    "57630",
+    "10214",
+    "1025",
+    "57829",
+    "396745",
+    "3676",
+    "136419",
+    "271175",
+    "270577",
+    "264293",
+    "262785",
+    "24592",
+    "19782",
+    "4538",
+    "43754",
+    "212934"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

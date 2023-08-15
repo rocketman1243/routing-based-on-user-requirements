@@ -1,0 +1,27 @@
+{
+  "as_number": "28007",
+  "geolocation": [
+    "CR",
+    "DO",
+    "MX",
+    "PA",
+    "VE"
+  ],
+  "lat": "12.4314043704578",
+  "lon": "-71.852785528674",
+  "connections": [
+    "400442",
+    "28666",
+    "51410",
+    "396653",
+    "396761",
+    "29580",
+    "3549",
+    "266312",
+    "45437"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

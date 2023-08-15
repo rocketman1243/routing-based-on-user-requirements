@@ -4,9 +4,6 @@ import requests, json
 ases = get_nodes()
 
 file = open("dlc2_output.csv", "w")
-file.write("")
-file.close()
-file = open("dlc2_output.csv", "a")
 
 for i, num in enumerate(ases):
     # url = "https://api.asrank.caida.org/v2/restful/asns/" + num

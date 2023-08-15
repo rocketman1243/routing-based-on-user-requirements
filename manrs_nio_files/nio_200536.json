@@ -1,0 +1,33 @@
+{
+  "as_number": "200536",
+  "geolocation": [
+    "AE",
+    "AU",
+    "BR",
+    "CN",
+    "DE",
+    "JP",
+    "KR",
+    "LU",
+    "NL",
+    "SG",
+    "TW",
+    "US"
+  ],
+  "lat": "24",
+  "lon": "54",
+  "connections": [
+    "263616",
+    "15605",
+    "265623",
+    "396586",
+    "272220",
+    "45474",
+    "18126",
+    "267460"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

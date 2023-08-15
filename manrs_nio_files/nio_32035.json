@@ -1,0 +1,35 @@
+{
+  "as_number": "32035",
+  "geolocation": [
+    "AU",
+    "FR",
+    "US",
+    "ZA"
+  ],
+  "lat": "37.9203661203395",
+  "lon": "-110.63074063153",
+  "connections": [
+    "40717",
+    "393713",
+    "23028",
+    "262968",
+    "264359",
+    "135375",
+    "3265",
+    "7850",
+    "396567",
+    "265198",
+    "265811",
+    "132960",
+    "52210",
+    "396595",
+    "27364",
+    "20570",
+    "12570",
+    "50599"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

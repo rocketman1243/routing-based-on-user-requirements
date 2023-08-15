@@ -1,0 +1,23 @@
+{
+  "as_number": "34868",
+  "geolocation": [
+    "DE",
+    "NL",
+    "GB"
+  ],
+  "lat": "51",
+  "lon": "9",
+  "connections": [
+    "15706",
+    "32931",
+    "396688",
+    "207594",
+    "396587",
+    "396575",
+    "3280"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

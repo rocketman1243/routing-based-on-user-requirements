@@ -1,0 +1,23 @@
+{
+  "as_number": "9484",
+  "geolocation": [
+    "MN"
+  ],
+  "lat": "47.9315924186625",
+  "lon": "106.946267388488",
+  "connections": [
+    "27750",
+    "11714",
+    "27839",
+    "36626",
+    "396602",
+    "6057",
+    "20362",
+    "53059",
+    "263018"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

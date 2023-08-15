@@ -1,0 +1,35 @@
+{
+  "as_number": "212425",
+  "geolocation": [
+    "CN",
+    "DE",
+    "JP",
+    "TW",
+    "US"
+  ],
+  "lat": "35",
+  "lon": "105",
+  "connections": [
+    "48571",
+    "396745",
+    "396575",
+    "38794",
+    "22909",
+    "211946",
+    "263057",
+    "3320",
+    "265279",
+    "28107",
+    "16735",
+    "52892",
+    "7850",
+    "396739",
+    "38022",
+    "45437",
+    "48283"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

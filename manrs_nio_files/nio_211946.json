@@ -1,0 +1,34 @@
+{
+  "as_number": "211946",
+  "geolocation": [
+    "CA",
+    "JP",
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "396729",
+    "396557",
+    "266413",
+    "19115",
+    "396606",
+    "56791",
+    "263086",
+    "212425",
+    "42360",
+    "41692",
+    "397212",
+    "61709",
+    "20080",
+    "4809",
+    "13830",
+    "271915",
+    "12779",
+    "266280"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

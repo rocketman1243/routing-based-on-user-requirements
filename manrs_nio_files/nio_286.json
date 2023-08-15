@@ -1,0 +1,20 @@
+{
+  "as_number": "286",
+  "geolocation": [
+    "NL"
+  ],
+  "lat": "52.5",
+  "lon": "5.75",
+  "connections": [
+    "21508",
+    "4134",
+    "61609",
+    "395089",
+    "27903",
+    "53059"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

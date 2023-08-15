@@ -1,0 +1,24 @@
+{
+  "as_number": "60614",
+  "geolocation": [
+    "TW"
+  ],
+  "lat": "23.5",
+  "lon": "1",
+  "connections": [
+    "15954",
+    "5050",
+    "208808",
+    "397203",
+    "15692",
+    "36912",
+    "396608",
+    "269433",
+    "34687",
+    "6509"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

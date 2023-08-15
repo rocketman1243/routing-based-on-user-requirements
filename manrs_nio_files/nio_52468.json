@@ -1,0 +1,26 @@
+{
+  "as_number": "52468",
+  "geolocation": [
+    "PA"
+  ],
+  "lat": "7.81660893871848",
+  "lon": "-80.5281993237924",
+  "connections": [
+    "328073",
+    "3326",
+    "11131",
+    "271383",
+    "39650",
+    "43415",
+    "48571",
+    "10214",
+    "2518",
+    "11025",
+    "62206",
+    "138482"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

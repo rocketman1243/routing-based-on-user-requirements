@@ -1,0 +1,28 @@
+{
+  "as_number": "7642",
+  "geolocation": [
+    "MV"
+  ],
+  "lat": "4.18",
+  "lon": "73.51",
+  "connections": [
+    "135371",
+    "41175",
+    "205531",
+    "64213",
+    "14860",
+    "45437",
+    "27446",
+    "11039",
+    "45843",
+    "266979",
+    "10886",
+    "207594",
+    "1103",
+    "50520"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "non-conformant",
+  "routing_information": "conformant"
+}

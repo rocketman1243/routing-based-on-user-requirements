@@ -1,0 +1,21 @@
+{
+  "as_number": "61461",
+  "geolocation": [
+    "VE"
+  ],
+  "lat": "10.5708405241362",
+  "lon": "-71.6298075472936",
+  "connections": [
+    "39120",
+    "52392",
+    "31746",
+    "33763",
+    "3754",
+    "265016",
+    "396560"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

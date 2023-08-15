@@ -1,0 +1,30 @@
+{
+  "as_number": "680",
+  "geolocation": [
+    "DE"
+  ],
+  "lat": "51.3820959623471",
+  "lon": "10.6585895931653",
+  "connections": [
+    "328582",
+    "7896",
+    "39753",
+    "269832",
+    "1140",
+    "25787",
+    "270370",
+    "263759",
+    "12570",
+    "262149",
+    "42388",
+    "396570",
+    "396600",
+    "50520",
+    "48284",
+    "263750"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

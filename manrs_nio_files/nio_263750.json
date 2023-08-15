@@ -1,0 +1,27 @@
+{
+  "as_number": "263750",
+  "geolocation": [
+    "PY"
+  ],
+  "lat": "-27.1",
+  "lon": "-57.03",
+  "connections": [
+    "33666",
+    "142582",
+    "28929",
+    "11840",
+    "955",
+    "131621",
+    "269566",
+    "270045",
+    "47950",
+    "1741",
+    "680",
+    "397193",
+    "266289"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

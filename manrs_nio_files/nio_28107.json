@@ -1,0 +1,31 @@
+{
+  "as_number": "28107",
+  "geolocation": [
+    "AR",
+    "SJ"
+  ],
+  "lat": "-32.6084703904799",
+  "lon": "-65.3620618556063",
+  "connections": [
+    "1653",
+    "19115",
+    "20570",
+    "264244",
+    "263732",
+    "553",
+    "50520",
+    "41495",
+    "212425",
+    "36623",
+    "396559",
+    "264014",
+    "10515",
+    "264552",
+    "209557",
+    "27553"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

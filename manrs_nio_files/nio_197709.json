@@ -1,0 +1,29 @@
+{
+  "as_number": "197709",
+  "geolocation": [
+    "PL"
+  ],
+  "lat": "50.0696798451052",
+  "lon": "19.9403112466921",
+  "connections": [
+    "266248",
+    "49373",
+    "266261",
+    "29695",
+    "45650",
+    "14041",
+    "265684",
+    "37721",
+    "2708",
+    "61161",
+    "395089",
+    "28479",
+    "38794",
+    "36915",
+    "136943"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

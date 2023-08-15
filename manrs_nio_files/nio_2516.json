@@ -1,0 +1,29 @@
+{
+  "as_number": "2516",
+  "geolocation": [
+    "GB",
+    "HK",
+    "JP",
+    "SG",
+    "US"
+  ],
+  "lat": "35.7857309786874",
+  "lon": "138.530474852535",
+  "connections": [
+    "270045",
+    "199993",
+    "10214",
+    "7773",
+    "53176",
+    "11351",
+    "34225",
+    "267523",
+    "265279",
+    "266551",
+    "396543"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

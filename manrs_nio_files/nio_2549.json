@@ -1,0 +1,26 @@
+{
+  "as_number": "2549",
+  "geolocation": [
+    "MX"
+  ],
+  "lat": "20.75",
+  "lon": "-103.35",
+  "connections": [
+    "28666",
+    "266164",
+    "48918",
+    "103",
+    "5408",
+    "12897",
+    "34428",
+    "268349",
+    "263903",
+    "272220",
+    "11537",
+    "53152"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,25 @@
+{
+  "as_number": "48070",
+  "geolocation": [
+    "GB"
+  ],
+  "lat": "52.5800016841595",
+  "lon": "-0.269986333245351",
+  "connections": [
+    "45796",
+    "36619",
+    "264359",
+    "63771",
+    "267668",
+    "48362",
+    "397198",
+    "43404",
+    "134478",
+    "22122",
+    "262612"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

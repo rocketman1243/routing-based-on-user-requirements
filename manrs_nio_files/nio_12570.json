@@ -1,0 +1,27 @@
+{
+  "as_number": "12570",
+  "geolocation": [
+    "AT",
+    "CZ",
+    "SK"
+  ],
+  "lat": "49.1486298455517",
+  "lon": "16.4017197343449",
+  "connections": [
+    "269347",
+    "132021",
+    "12926",
+    "53096",
+    "680",
+    "265779",
+    "62129",
+    "136734",
+    "11537",
+    "32035",
+    "262565"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,30 @@
+{
+  "as_number": "2603",
+  "geolocation": [
+    "DK",
+    "FI",
+    "IS",
+    "NO",
+    "SE"
+  ],
+  "lat": "57.2612318576122",
+  "lon": "13.6160461427163",
+  "connections": [
+    "396573",
+    "56958",
+    "11955",
+    "267562",
+    "211224",
+    "8111",
+    "205891",
+    "266224",
+    "264429",
+    "138794",
+    "267460",
+    "268508"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

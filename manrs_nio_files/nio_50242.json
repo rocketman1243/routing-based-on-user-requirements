@@ -1,0 +1,29 @@
+{
+  "as_number": "50242",
+  "geolocation": [
+    "SK"
+  ],
+  "lat": "48.9594321741279",
+  "lon": "20.6485680272133",
+  "connections": [
+    "270812",
+    "36629",
+    "30165",
+    "262612",
+    "24961",
+    "263032",
+    "266413",
+    "199354",
+    "263462",
+    "56791",
+    "263616",
+    "140072",
+    "210320",
+    "64199",
+    "35710"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

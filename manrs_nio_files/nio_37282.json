@@ -1,0 +1,31 @@
+{
+  "as_number": "37282",
+  "geolocation": [
+    "CI",
+    "GH",
+    "NG"
+  ],
+  "lat": "6.39283762876989",
+  "lon": "3.1412865310128",
+  "connections": [
+    "2495",
+    "266044",
+    "23955",
+    "25887",
+    "2518",
+    "265986",
+    "28126",
+    "328549",
+    "36617",
+    "132021",
+    "396735",
+    "34878",
+    "10075",
+    "265919",
+    "262977"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "non-conformant",
+  "routing_information": "conformant"
+}

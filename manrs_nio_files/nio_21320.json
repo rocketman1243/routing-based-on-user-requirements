@@ -1,0 +1,26 @@
+{
+  "as_number": "21320",
+  "geolocation": [
+    "EU",
+    "NL"
+  ],
+  "lat": "52.1838386050435",
+  "lon": "0.140075898291154",
+  "connections": [
+    "3326",
+    "397204",
+    "264244",
+    "36617",
+    "136168",
+    "43541",
+    "136308",
+    "45650",
+    "56246",
+    "60475",
+    "4787"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

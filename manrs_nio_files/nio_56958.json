@@ -1,0 +1,21 @@
+{
+  "as_number": "56958",
+  "geolocation": [
+    "ES"
+  ],
+  "lat": "40.45",
+  "lon": "-3.68",
+  "connections": [
+    "2603",
+    "16796",
+    "42360",
+    "13367",
+    "3333",
+    "264014",
+    "136530"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

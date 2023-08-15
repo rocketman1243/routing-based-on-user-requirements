@@ -1,0 +1,34 @@
+{
+  "as_number": "4134",
+  "geolocation": [
+    "AE",
+    "AU",
+    "CN",
+    "DE",
+    "GB",
+    "HK",
+    "JP",
+    "KE",
+    "NL",
+    "RU",
+    "SG",
+    "US",
+    "ZA"
+  ],
+  "lat": "29.8736794357849",
+  "lon": "113.782188123066",
+  "connections": [
+    "286",
+    "396540",
+    "396625",
+    "262459",
+    "266164",
+    "135371",
+    "264354",
+    "396555"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

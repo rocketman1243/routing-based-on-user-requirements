@@ -1,0 +1,28 @@
+{
+  "as_number": "1221",
+  "geolocation": [
+    "AU"
+  ],
+  "lat": "-33.8414939216307",
+  "lon": "145.449688628298",
+  "connections": [
+    "150000",
+    "207960",
+    "267523",
+    "200182",
+    "955",
+    "14525",
+    "264513",
+    "396550",
+    "36622",
+    "397194",
+    "3701",
+    "212635",
+    "266400",
+    "36616"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

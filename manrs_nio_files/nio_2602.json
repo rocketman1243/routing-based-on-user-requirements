@@ -1,0 +1,30 @@
+{
+  "as_number": "2602",
+  "geolocation": [
+    "LU"
+  ],
+  "lat": "49.613586346893",
+  "lon": "6.10711337553822",
+  "connections": [
+    "28130",
+    "53167",
+    "50297",
+    "135375",
+    "262149",
+    "36375",
+    "266979",
+    "52210",
+    "15617",
+    "35710",
+    "2907",
+    "15954",
+    "14065",
+    "12859",
+    "29966",
+    "27364"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

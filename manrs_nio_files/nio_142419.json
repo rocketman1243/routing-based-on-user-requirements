@@ -1,0 +1,19 @@
+{
+  "as_number": "142419",
+  "geolocation": [
+    "IN"
+  ],
+  "lat": "20",
+  "lon": "77",
+  "connections": [
+    "16191",
+    "272554",
+    "33491",
+    "58069",
+    "29695"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

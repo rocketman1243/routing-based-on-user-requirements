@@ -1,0 +1,31 @@
+{
+  "as_number": "24725",
+  "geolocation": [
+    "UA"
+  ],
+  "lat": "50.44",
+  "lon": "30.53",
+  "connections": [
+    "61595",
+    "199354",
+    "7497",
+    "8315",
+    "399445",
+    "268349",
+    "38022",
+    "61802",
+    "270694",
+    "1916",
+    "19157",
+    "58895",
+    "7725",
+    "7850",
+    "396570",
+    "266248",
+    "50300"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "non-conformant",
+  "routing_information": "non-conformant"
+}

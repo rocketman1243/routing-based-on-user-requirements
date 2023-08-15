@@ -1,0 +1,31 @@
+{
+  "as_number": "611",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "46.1449449836952",
+  "lon": "-66.0861382938698",
+  "connections": [
+    "23764",
+    "27750",
+    "199993",
+    "57630",
+    "50297",
+    "26415",
+    "8075",
+    "33490",
+    "132021",
+    "12271",
+    "28130",
+    "11546",
+    "210122",
+    "4764",
+    "208135",
+    "11556",
+    "7342"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

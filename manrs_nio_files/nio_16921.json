@@ -1,0 +1,26 @@
+{
+  "as_number": "16921",
+  "geolocation": [
+    "AR",
+    "BR",
+    "CA",
+    "CL",
+    "CR",
+    "US",
+    "VE"
+  ],
+  "lat": "-19.3058124555172",
+  "lon": "-62.4250982001844",
+  "connections": [
+    "396545",
+    "396675",
+    "57695",
+    "208431",
+    "396585",
+    "35457"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

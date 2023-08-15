@@ -1,0 +1,37 @@
+{
+  "as_number": "203423",
+  "geolocation": [
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "DE",
+    "HK",
+    "JP",
+    "NL",
+    "RU",
+    "TW",
+    "US",
+    "ZA"
+  ],
+  "lat": "60",
+  "lon": "-95",
+  "connections": [
+    "396737",
+    "28423",
+    "262300",
+    "49975",
+    "262720",
+    "203099",
+    "397195",
+    "12761",
+    "213326",
+    "265724",
+    "8893",
+    "42388"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

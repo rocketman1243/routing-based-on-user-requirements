@@ -1,0 +1,25 @@
+{
+  "as_number": "3326",
+  "geolocation": [
+    "EU",
+    "UA"
+  ],
+  "lat": "49.4235088542287",
+  "lon": "31.3118896066649",
+  "connections": [
+    "52468",
+    "21320",
+    "62075",
+    "30165",
+    "5511",
+    "55805",
+    "262983",
+    "329101",
+    "49432",
+    "29465"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,28 @@
+{
+  "as_number": "131935",
+  "geolocation": [
+    "JP"
+  ],
+  "lat": "36",
+  "lon": "138",
+  "connections": [
+    "265867",
+    "29465",
+    "263444",
+    "327849",
+    "13367",
+    "262657",
+    "208323",
+    "23955",
+    "60524",
+    "199118",
+    "396609",
+    "269661",
+    "262988",
+    "36914"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

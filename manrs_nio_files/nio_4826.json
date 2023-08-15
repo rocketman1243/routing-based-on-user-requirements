@@ -1,0 +1,35 @@
+{
+  "as_number": "4826",
+  "geolocation": [
+    "AU",
+    " NZ",
+    " SG",
+    " US"
+  ],
+  "lat": "-34.4022231469524",
+  "lon": "139.671010110512",
+  "connections": [
+    "33490",
+    "37181",
+    "265209",
+    "8737",
+    "2552",
+    "53181",
+    "212389",
+    "20562",
+    "16796",
+    "41018",
+    "36138",
+    "205668",
+    "140731",
+    "393713",
+    "11039",
+    "38193",
+    "396574",
+    "20570"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

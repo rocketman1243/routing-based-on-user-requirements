@@ -1,0 +1,27 @@
+{
+  "as_number": "396608",
+  "geolocation": [
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "396748",
+    "33660",
+    "48918",
+    "18126",
+    "1025",
+    "61888",
+    "37301",
+    "60614",
+    "396955",
+    "53096",
+    "28000",
+    "396675",
+    "16814"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

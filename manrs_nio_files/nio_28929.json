@@ -1,0 +1,28 @@
+{
+  "as_number": "28929",
+  "geolocation": [
+    "IT"
+  ],
+  "lat": "45.8683190786912",
+  "lon": "12.1832708130197",
+  "connections": [
+    "269832",
+    "262427",
+    "263750",
+    "53062",
+    "208323",
+    "39040",
+    "266387",
+    "263982",
+    "266152",
+    "293",
+    "44244",
+    "138482",
+    "271927",
+    "262546"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

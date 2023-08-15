@@ -1,0 +1,30 @@
+{
+  "as_number": "58299",
+  "geolocation": [
+    "CH",
+    "DE",
+    "GB",
+    "LI",
+    "NL",
+    "FI"
+  ],
+  "lat": "48.0663269439305",
+  "lon": "8.61431954165284",
+  "connections": [
+    "397199",
+    "264279",
+    "60475",
+    "15692",
+    "26415",
+    "52545",
+    "48325",
+    "267765",
+    "174",
+    "22431",
+    "202032"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

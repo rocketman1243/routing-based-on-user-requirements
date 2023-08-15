@@ -1,0 +1,29 @@
+{
+  "as_number": "553",
+  "geolocation": [
+    "DE"
+  ],
+  "lat": "48.8036210584406",
+  "lon": "9.01187931856708",
+  "connections": [
+    "38158",
+    "61577",
+    "396557",
+    "132960",
+    "198644",
+    "28107",
+    "266551",
+    "272554",
+    "18126",
+    "8737",
+    "269159",
+    "137",
+    "396567",
+    "20562",
+    "396588"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

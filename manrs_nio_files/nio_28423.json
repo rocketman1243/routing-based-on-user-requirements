@@ -1,0 +1,31 @@
+{
+  "as_number": "28423",
+  "geolocation": [
+    "MX"
+  ],
+  "lat": "23",
+  "lon": "-102",
+  "connections": [
+    "203423",
+    "28212",
+    "271310",
+    "3676",
+    "396699",
+    "31472",
+    "11546",
+    "397202",
+    "5511",
+    "33656",
+    "52873",
+    "266289",
+    "3242",
+    "263624",
+    "265209",
+    "55915",
+    "7896"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

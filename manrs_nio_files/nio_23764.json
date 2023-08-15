@@ -1,0 +1,39 @@
+{
+  "as_number": "23764",
+  "geolocation": [
+    "AE",
+    "AU",
+    "DE",
+    "FR",
+    "GB",
+    "HK",
+    "JP",
+    "KE",
+    "KH",
+    "KR",
+    "MM",
+    "SG",
+    "TH",
+    "ZA",
+    "CN"
+  ],
+  "lat": "36.0636756258008",
+  "lon": "94.8297356583969",
+  "connections": [
+    "2153",
+    "611",
+    "53062",
+    "48283",
+    "1241",
+    "37159",
+    "36616",
+    "26134",
+    "52871",
+    "44530",
+    "396653"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

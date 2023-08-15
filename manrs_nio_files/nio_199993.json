@@ -1,0 +1,28 @@
+{
+  "as_number": "199993",
+  "geolocation": [
+    "PT"
+  ],
+  "lat": "38.74",
+  "lon": "-9.16",
+  "connections": [
+    "2516",
+    "33656",
+    "611",
+    "52592",
+    "396613",
+    "200182",
+    "36374",
+    "36632",
+    "43289",
+    "20431",
+    "7575",
+    "62538",
+    "47481",
+    "49640"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,30 @@
+{
+  "as_number": "199354",
+  "geolocation": [
+    "JO",
+    "DE"
+  ],
+  "lat": "31.95",
+  "lon": "35.93",
+  "connections": [
+    "24725",
+    "11399",
+    "396567",
+    "61748",
+    "25787",
+    "141680",
+    "262448",
+    "266039",
+    "50242",
+    "8283",
+    "263360",
+    "31549",
+    "52275",
+    "52604",
+    "267460"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

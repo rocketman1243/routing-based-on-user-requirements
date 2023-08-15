@@ -1,0 +1,32 @@
+{
+  "as_number": "37301",
+  "geolocation": [
+    "MU"
+  ],
+  "lat": "-20.16",
+  "lon": "57.5",
+  "connections": [
+    "29695",
+    "23955",
+    "264426",
+    "328582",
+    "37697",
+    "396608",
+    "12926",
+    "207594",
+    "1916",
+    "262691",
+    "263759",
+    "202365",
+    "264244",
+    "396578",
+    "396737",
+    "6752",
+    "396571",
+    "59105"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

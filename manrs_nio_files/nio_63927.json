@@ -1,0 +1,25 @@
+{
+  "as_number": "63927",
+  "geolocation": [
+    "PH",
+    "HK"
+  ],
+  "lat": "7.37571233103767",
+  "lon": "124.573871908236",
+  "connections": [
+    "262988",
+    "33667",
+    "20965",
+    "267654",
+    "262645",
+    "4764",
+    "4658",
+    "262907",
+    "28130",
+    "18786"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "non-conformant"
+}

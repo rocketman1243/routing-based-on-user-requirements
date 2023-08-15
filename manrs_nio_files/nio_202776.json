@@ -1,0 +1,34 @@
+{
+  "as_number": "202776",
+  "geolocation": [
+    "DE",
+    "GB",
+    "JP",
+    "TW",
+    "US"
+  ],
+  "lat": "51",
+  "lon": "9",
+  "connections": [
+    "396666",
+    "328825",
+    "262691",
+    "20130",
+    "49975",
+    "36732",
+    "396682",
+    "262760",
+    "269433",
+    "132021",
+    "396664",
+    "396450",
+    "34758",
+    "8220",
+    "397211",
+    "9201"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

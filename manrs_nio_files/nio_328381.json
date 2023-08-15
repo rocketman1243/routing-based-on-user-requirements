@@ -1,0 +1,29 @@
+{
+  "as_number": "328381",
+  "geolocation": [
+    "SD"
+  ],
+  "lat": "15.55",
+  "lon": "32.53",
+  "connections": [
+    "12716",
+    "139328",
+    "396611",
+    "28245",
+    "268207",
+    "28140",
+    "3456",
+    "262494",
+    "41666",
+    "137952",
+    "199839",
+    "61895",
+    "203201",
+    "61588",
+    "45843"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "non-conformant"
+}

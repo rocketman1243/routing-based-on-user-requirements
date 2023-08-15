@@ -1,0 +1,28 @@
+{
+  "as_number": "26619",
+  "geolocation": [
+    "CO"
+  ],
+  "lat": "6.16788516411087",
+  "lon": "-74.9194317829798",
+  "connections": [
+    "262888",
+    "33764",
+    "57829",
+    "53096",
+    "7575",
+    "36375",
+    "30992",
+    "43404",
+    "329121",
+    "266164",
+    "28212",
+    "396659",
+    "44244",
+    "49432"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

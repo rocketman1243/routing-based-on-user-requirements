@@ -1,0 +1,31 @@
+{
+  "as_number": "197301",
+  "geolocation": [
+    "DK"
+  ],
+  "lat": "55.6869658317586",
+  "lon": "12.5505324957615",
+  "connections": [
+    "33764",
+    "397197",
+    "24785",
+    "262565",
+    "207149",
+    "52275",
+    "393990",
+    "28005",
+    "50300",
+    "22909",
+    "10961",
+    "136308",
+    "150487",
+    "49375",
+    "53046",
+    "36733",
+    "11260"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

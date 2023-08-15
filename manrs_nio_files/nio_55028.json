@@ -1,0 +1,29 @@
+{
+  "as_number": "55028",
+  "geolocation": [
+    "CA",
+    "US"
+  ],
+  "lat": "40.2128206233148",
+  "lon": "-92.6916715489366",
+  "connections": [
+    "1299",
+    "265019",
+    "53152",
+    "211380",
+    "131621",
+    "265986",
+    "396701",
+    "61796",
+    "328748",
+    "264552",
+    "29422",
+    "20172",
+    "396715",
+    "50058"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

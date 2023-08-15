@@ -1,0 +1,41 @@
+{
+  "as_number": "9002",
+  "geolocation": [
+    "BY",
+    "CA",
+    "EU",
+    "HK",
+    "JP",
+    "KZ",
+    "KR",
+    "KG",
+    "MD",
+    "RU",
+    "SG",
+    "CH",
+    "UA",
+    "US",
+    "GB"
+  ],
+  "lat": "54.4971281754822",
+  "lon": "15.7904782964775",
+  "connections": [
+    "25581",
+    "24572",
+    "8220",
+    "263649",
+    "50776",
+    "15605",
+    "10214",
+    "52398",
+    "39651",
+    "393713",
+    "3456",
+    "5408",
+    "57630"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

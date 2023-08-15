@@ -1,0 +1,26 @@
+{
+  "as_number": "42861",
+  "geolocation": [
+    "RU"
+  ],
+  "lat": "55.7867478601589",
+  "lon": "37.8698805173992",
+  "connections": [
+    "137",
+    "134478",
+    "14282",
+    "34347",
+    "204680",
+    "37181",
+    "396541",
+    "262493",
+    "269104",
+    "264750",
+    "328014",
+    "33189"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

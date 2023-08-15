@@ -1,0 +1,25 @@
+{
+  "as_number": "3265",
+  "geolocation": [
+    "NL"
+  ],
+  "lat": "52.2302178494213",
+  "lon": "5.0091341503396",
+  "connections": [
+    "20115",
+    "135371",
+    "62166",
+    "268377",
+    "27640",
+    "328341",
+    "32035",
+    "63996",
+    "57630",
+    "58895",
+    "266413"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,24 @@
+{
+  "as_number": "49432",
+  "geolocation": [
+    "AT"
+  ],
+  "lat": "47.24",
+  "lon": "9.6",
+  "connections": [
+    "36617",
+    "9443",
+    "53045",
+    "49375",
+    "33665",
+    "396721",
+    "15699",
+    "26619",
+    "3326",
+    "22742"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

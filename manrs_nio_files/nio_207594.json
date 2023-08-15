@@ -1,0 +1,29 @@
+{
+  "as_number": "207594",
+  "geolocation": [
+    "IT"
+  ],
+  "lat": "40.7264295248194",
+  "lon": "14.5671387271072",
+  "connections": [
+    "263098",
+    "52545",
+    "6752",
+    "396551",
+    "266312",
+    "266260",
+    "37301",
+    "267490",
+    "34868",
+    "269292",
+    "10881",
+    "16838",
+    "14325",
+    "199081",
+    "7642"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

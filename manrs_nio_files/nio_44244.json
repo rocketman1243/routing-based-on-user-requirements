@@ -1,0 +1,26 @@
+{
+  "as_number": "44244",
+  "geolocation": [
+    "IR"
+  ],
+  "lat": "34.9573254403469",
+  "lon": "52.0159828674062",
+  "connections": [
+    "269194",
+    "38634",
+    "15605",
+    "200182",
+    "28929",
+    "36732",
+    "26619",
+    "266260",
+    "262546",
+    "59441",
+    "396756",
+    "397202"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

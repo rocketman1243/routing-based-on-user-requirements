@@ -1,0 +1,25 @@
+{
+  "as_number": "1853",
+  "geolocation": [
+    "AT",
+    "EU"
+  ],
+  "lat": "47.9548654195142",
+  "lon": "15.3394200665286",
+  "connections": [
+    "396543",
+    "211224",
+    "396561",
+    "14860",
+    "266136",
+    "396591",
+    "45843",
+    "262493",
+    "264478",
+    "19836"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

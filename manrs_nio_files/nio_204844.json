@@ -1,0 +1,33 @@
+{
+  "as_number": "204844",
+  "geolocation": [
+    "EU",
+    "HK",
+    "SG",
+    "TW",
+    "US",
+    "GB"
+  ],
+  "lat": "51.54",
+  "lon": "0.05",
+  "connections": [
+    "133815",
+    "137952",
+    "200182",
+    "36622",
+    "11242",
+    "32167",
+    "33656",
+    "396450",
+    "48571",
+    "33665",
+    "4777",
+    "132960",
+    "13367",
+    "396739"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

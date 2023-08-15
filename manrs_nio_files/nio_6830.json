@@ -1,0 +1,38 @@
+{
+  "as_number": "6830",
+  "geolocation": [
+    "BE",
+    "CH",
+    "GB",
+    "IE",
+    "NL",
+    "PL",
+    "SK"
+  ],
+  "lat": "50.6923467141816",
+  "lon": "11.0947467943395",
+  "connections": [
+    "22689",
+    "1916",
+    "137707",
+    "2914",
+    "328549",
+    "56246",
+    "207590",
+    "58069",
+    "269566",
+    "61449",
+    "14325",
+    "396574",
+    "26677",
+    "8111",
+    "36289",
+    "11955",
+    "30165",
+    "262391"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,30 @@
+{
+  "as_number": "142582",
+  "geolocation": [
+    "CN",
+    "DE",
+    "JP"
+  ],
+  "lat": "35",
+  "lon": "105",
+  "connections": [
+    "263750",
+    "28130",
+    "328266",
+    "396561",
+    "5539",
+    "396745",
+    "200242",
+    "197540",
+    "396579",
+    "396565",
+    "36623",
+    "396605",
+    "52428",
+    "21412"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

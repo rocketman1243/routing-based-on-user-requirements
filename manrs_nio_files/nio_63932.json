@@ -1,0 +1,29 @@
+{
+  "as_number": "63932",
+  "geolocation": [
+    "BD"
+  ],
+  "lat": "23.8559912318587",
+  "lon": "90.1508611415929",
+  "connections": [
+    "328677",
+    "270694",
+    "47956",
+    "264457",
+    "263086",
+    "33654",
+    "15605",
+    "328259",
+    "265016",
+    "33660",
+    "265347",
+    "396611",
+    "41732",
+    "136039",
+    "327733"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

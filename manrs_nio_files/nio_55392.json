@@ -1,0 +1,24 @@
+{
+  "as_number": "55392",
+  "geolocation": [
+    "JP"
+  ],
+  "lat": "35.372592014868",
+  "lon": "138.399747118632",
+  "connections": [
+    "28311",
+    "396605",
+    "211369",
+    "47950",
+    "53169",
+    "27664",
+    "328259",
+    "36850",
+    "141767",
+    "263661"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

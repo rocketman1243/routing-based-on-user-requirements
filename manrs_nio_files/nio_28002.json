@@ -1,0 +1,26 @@
+{
+  "as_number": "28002",
+  "geolocation": [
+    "UY"
+  ],
+  "lat": "-33",
+  "lon": "-56",
+  "connections": [
+    "36619",
+    "53059",
+    "12859",
+    "28145",
+    "2152",
+    "61785",
+    "63526",
+    "263086",
+    "203099",
+    "11840",
+    "63980",
+    "36925"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

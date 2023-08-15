@@ -1,0 +1,28 @@
+{
+  "as_number": "3303",
+  "geolocation": [
+    "CH"
+  ],
+  "lat": "47.0337337733279",
+  "lon": "7.86053196817404",
+  "connections": [
+    "397197",
+    "53135",
+    "87",
+    "25485",
+    "37721",
+    "4764",
+    "397198",
+    "50297",
+    "24785",
+    "62538",
+    "264242",
+    "25787",
+    "396739",
+    "208431"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

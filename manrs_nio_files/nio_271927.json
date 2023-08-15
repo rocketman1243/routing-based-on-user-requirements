@@ -1,0 +1,23 @@
+{
+  "as_number": "271927",
+  "geolocation": [
+    "CO"
+  ],
+  "lat": "4.67",
+  "lon": "-74.06",
+  "connections": [
+    "263929",
+    "266266",
+    "209557",
+    "50058",
+    "271175",
+    "265662",
+    "61588",
+    "28929",
+    "36912"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

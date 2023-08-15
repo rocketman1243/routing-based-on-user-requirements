@@ -1,0 +1,38 @@
+{
+  "as_number": "20562",
+  "geolocation": [
+    "BE",
+    "DE",
+    "DK",
+    "EU",
+    "FR",
+    "GB",
+    "LU",
+    "NL"
+  ],
+  "lat": "52.09",
+  "lon": "4.31",
+  "connections": [
+    "28169",
+    "8111",
+    "396558",
+    "5503",
+    "396666",
+    "56246",
+    "264242",
+    "49373",
+    "4826",
+    "211622",
+    "33652",
+    "36850",
+    "11920",
+    "271566",
+    "396658",
+    "553",
+    "11025"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

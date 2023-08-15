@@ -1,0 +1,32 @@
+{
+  "as_number": "41732",
+  "geolocation": [
+    "EU",
+    "RO"
+  ],
+  "lat": "47",
+  "lon": "8",
+  "connections": [
+    "61468",
+    "396625",
+    "141717",
+    "51859",
+    "11840",
+    "28145",
+    "3676",
+    "49409",
+    "329121",
+    "265141",
+    "48362",
+    "264608",
+    "270370",
+    "237",
+    "25472",
+    "396714",
+    "63932"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

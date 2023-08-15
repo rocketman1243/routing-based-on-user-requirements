@@ -1,0 +1,25 @@
+{
+  "as_number": "15296",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "52.7716531241834",
+  "lon": "-113.713252019219",
+  "connections": [
+    "38022",
+    "27903",
+    "328266",
+    "33654",
+    "269159",
+    "271383",
+    "204793",
+    "267831",
+    "396756",
+    "13343",
+    "63526"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

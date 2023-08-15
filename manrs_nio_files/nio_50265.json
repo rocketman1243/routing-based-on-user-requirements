@@ -1,0 +1,24 @@
+{
+  "as_number": "50265",
+  "geolocation": [
+    "RU"
+  ],
+  "lat": "55.6922101944512",
+  "lon": "37.7784305059751",
+  "connections": [
+    "397211",
+    "61796",
+    "35457",
+    "265662",
+    "7859",
+    "38013",
+    "26806",
+    "269832",
+    "47787",
+    "49375"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

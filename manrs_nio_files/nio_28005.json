@@ -1,0 +1,24 @@
+{
+  "as_number": "28005",
+  "geolocation": [
+    "PA"
+  ],
+  "lat": "8.93982961508061",
+  "lon": "-79.5500934189433",
+  "connections": [
+    "16973",
+    "33185",
+    "33189",
+    "328271",
+    "265461",
+    "57630",
+    "197301",
+    "41495",
+    "266413",
+    "200182"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "non-conformant"
+}

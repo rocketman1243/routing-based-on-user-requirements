@@ -1,0 +1,30 @@
+{
+  "as_number": "137952",
+  "geolocation": [
+    "KH"
+  ],
+  "lat": "11.58",
+  "lon": "104.92",
+  "connections": [
+    "204844",
+    "1741",
+    "7859",
+    "264478",
+    "10961",
+    "33764",
+    "204773",
+    "396756",
+    "328381",
+    "399445",
+    "20857",
+    "4764",
+    "11525",
+    "327700",
+    "262448",
+    "33657"
+  ],
+  "filtering": "non-conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "non-conformant"
+}

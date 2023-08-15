@@ -1,0 +1,32 @@
+{
+  "as_number": "49640",
+  "geolocation": [
+    "AT",
+    "IT"
+  ],
+  "lat": "45.4829130503206",
+  "lon": "10.0319594730367",
+  "connections": [
+    "396585",
+    "3676",
+    "262908",
+    "263616",
+    "268218",
+    "5503",
+    "8315",
+    "328341",
+    "63526",
+    "142289",
+    "396617",
+    "266266",
+    "62532",
+    "6057",
+    "396658",
+    "199993",
+    "7660"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

@@ -1,0 +1,21 @@
+{
+  "as_number": "559",
+  "geolocation": [
+    "CH"
+  ],
+  "lat": "46.9904556013857",
+  "lon": "7.77188256865076",
+  "connections": [
+    "61161",
+    "396542",
+    "28634",
+    "265093",
+    "28479",
+    "53167",
+    "49509"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

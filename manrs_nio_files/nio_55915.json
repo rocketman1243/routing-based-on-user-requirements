@@ -1,0 +1,29 @@
+{
+  "as_number": "55915",
+  "geolocation": [
+    "NP"
+  ],
+  "lat": "27.71",
+  "lon": "85.32",
+  "connections": [
+    "12414",
+    "61588",
+    "28666",
+    "59766",
+    "208059",
+    "136943",
+    "396591",
+    "557",
+    "207176",
+    "36617",
+    "64213",
+    "271566",
+    "396699",
+    "33489",
+    "28423"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

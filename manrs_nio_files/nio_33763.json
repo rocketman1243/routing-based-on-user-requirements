@@ -1,0 +1,37 @@
+{
+  "as_number": "33763",
+  "geolocation": [
+    "AO",
+    "BW",
+    "MZ",
+    "NA",
+    "SZ",
+    "ZA",
+    "ZM",
+    "ZW",
+    "MU"
+  ],
+  "lat": "-21.380872901569",
+  "lon": "19.0936709797817",
+  "connections": [
+    "52592",
+    "33362",
+    "39651",
+    "61461",
+    "267765",
+    "207936",
+    "701",
+    "21412",
+    "396585",
+    "28359",
+    "31746",
+    "211358",
+    "264237",
+    "396566",
+    "11808"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

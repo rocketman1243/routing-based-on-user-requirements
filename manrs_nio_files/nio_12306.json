@@ -1,0 +1,26 @@
+{
+  "as_number": "12306",
+  "geolocation": [
+    "DE"
+  ],
+  "lat": "50.2959133978987",
+  "lon": "8.81808749495017",
+  "connections": [
+    "376",
+    "30992",
+    "24572",
+    "138042",
+    "61748",
+    "11714",
+    "396587",
+    "10961",
+    "14282",
+    "48544",
+    "52398",
+    "211562"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}

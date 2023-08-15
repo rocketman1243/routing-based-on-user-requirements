@@ -1,0 +1,32 @@
+{
+  "as_number": "35457",
+  "geolocation": [
+    "BH"
+  ],
+  "lat": "26.2299283998681",
+  "lon": "50.5799478675977",
+  "connections": [
+    "52458",
+    "211390",
+    "2914",
+    "139328",
+    "327733",
+    "50265",
+    "265097",
+    "208323",
+    "396761",
+    "264608",
+    "8769",
+    "204508",
+    "262977",
+    "25249",
+    "5617",
+    "16921",
+    "396588",
+    "8220"
+  ],
+  "filtering": "conformant",
+  "anti_spoofing": "non-conformant",
+  "coordination": "conformant",
+  "routing_information": "conformant"
+}
