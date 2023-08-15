@@ -6,13 +6,8 @@
   "lat": "38",
   "lon": "-97",
   "connections": [
-    "199118",
-    "5511",
-    "53096",
-    "28352",
-    "136168",
-    "136039",
-    "203223"
+    "3974",
+    "131935"
   ],
   "filtering": "conformant",
   "anti_spoofing": "conformant",

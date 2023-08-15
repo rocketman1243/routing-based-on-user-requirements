@@ -1,9 +1,6 @@
 # TOOD
 
-- Convert manrs.json to graph
-- Modify graph to become a fully connected graph
-- Export connected graph to pro objects with a new structure
-- Convert pro objects to graph
+- Generate new pro files
 - Create a new filterset for the manrs pro format
 - Create a new path calculator for the manrs pro format
 - Run tests

@@ -110,6 +110,7 @@ G = nx.Graph()
 G.add_nodes_from(participant_asns)
 nx.set_node_attributes(G, node_features)
 
+
 # TODO: Make graph connected
  
 # 1. Add the real links from as-links.txt for which both endpoints are present in the graph
@@ -118,15 +119,22 @@ links = []
 with open("as-links.txt") as file:
     for full_line in file:
         line = full_line.split("|")
-        a = int(line[0])
-        b = int(line[1])
+        a = line[0]
+        b = line[1]
+        if a in participant_asns and b in participant_asns:
+            links.append([a, b])
+
+with open("as-links-part2.txt") as file:
+    for full_line in file:
+        line = full_line.split("|")
+        a = line[0]
+        b = line[1]
         if a in participant_asns and b in participant_asns:
             links.append([a, b])
 
 G.add_edges_from(links)
 
 
-# Add random edges to connect graph:
 
 # Add 1 edge connecting each subset to the next to make a connected graph
 line_graph = []
@@ -136,21 +144,13 @@ for subset in sorted(nx.connected_components(G), key=len, reverse=True):
 for i in range(len(line_graph) - 1): 
     G.add_edge(line_graph[i], line_graph[i + 1])
 
-# Add some random edges
-
-# This amount of random edges gives an average degree of around 13.3, 
-# which is similar to the average degree of the full-size graph with 75k nodes and 500k edges
-nr_of_random_edges = 6750 
-for i in range(nr_of_random_edges):
-    edge = random.sample(participant_asns, 2)
-    G.add_edge(edge[0], edge[1])
-
-
 # total_degree = 0
 # for node in G.nodes:
 #     total_degree += nx.degree(G, node)
 # average = total_degree / len(G.nodes)
 # print(average, " average degree")
+# print("#connected components:", nx.number_connected_components(G))
+
 
 
 # Convert this graph to NIO objects

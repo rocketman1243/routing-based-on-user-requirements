@@ -8,13 +8,8 @@
   "lat": "51",
   "lon": "9",
   "connections": [
-    "15706",
-    "32931",
-    "396688",
-    "207594",
-    "396587",
-    "396575",
-    "3280"
+    "35457",
+    "28311"
   ],
   "filtering": "conformant",
   "anti_spoofing": "conformant",
