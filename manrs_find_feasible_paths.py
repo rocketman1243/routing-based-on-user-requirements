@@ -57,17 +57,12 @@ def generate_valid_pro_data():
     for asn in path:
         nio = nio_objects[asn]
         # Filter features
-        privacy_copy = copy.deepcopy(supported_privacy_features)
-        for feature in privacy_copy:
-            if feature not in nio.privacy:
-                supported_privacy_features.remove(feature)
-
-        security_copy = copy.deepcopy(supported_security_features)
-        for feature in security_copy:
-            if feature not in nio.security:
-                supported_security_features.remove(feature)
+        features_copy = copy.deepcopy(features)
+        for feature in features_copy:
+            if feature not in nio.features:
+                features.remove(feature)
 
         # Gather geolocation
-        geolocations.add(nio.geolocation[0])
+        geolocations.update(nio.geolocation)
 
-    return (endpoints, supported_privacy_features, supported_security_features, list(geolocations))
+    return (endpoints, features, list(geolocations))

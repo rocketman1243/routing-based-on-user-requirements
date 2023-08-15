@@ -1,0 +1,32 @@
+{
+  "as_source": "396737",
+  "as_destination": "6461",
+  "requirements": {
+    "strict": [
+      "anti_spoofing"
+    ],
+    "best_effort": [
+      "coordination",
+      "filtering",
+      "routing_information"
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "BJ",
+      "DJ",
+      "FM",
+      "IE",
+      "LC",
+      "LU",
+      "PN"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

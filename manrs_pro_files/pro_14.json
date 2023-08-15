@@ -1,0 +1,25 @@
+{
+  "as_source": "264084",
+  "as_destination": "271175",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      "anti_spoofing",
+      "coordination"
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "AF",
+      "KP",
+      "SY"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

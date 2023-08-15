@@ -1,0 +1,35 @@
+{
+  "as_source": "264014",
+  "as_destination": "265016",
+  "requirements": {
+    "strict": [
+      "anti_spoofing",
+      "routing_information",
+      "filtering"
+    ],
+    "best_effort": [
+      "coordination"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "AU",
+      "CG",
+      "EH",
+      "IM",
+      "KM",
+      "KR",
+      "MA",
+      "TK",
+      "TO",
+      "UA"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 5,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

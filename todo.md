@@ -1,6 +1,5 @@
 # TOOD
 
-- Generate new pro files
 - Create a new filterset for the manrs pro format
 - Create a new path calculator for the manrs pro format
 - Run tests

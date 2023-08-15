@@ -1,0 +1,34 @@
+{
+  "as_source": "61604",
+  "as_destination": "11131",
+  "requirements": {
+    "strict": [
+      "filtering",
+      "coordination"
+    ],
+    "best_effort": [
+      "anti_spoofing"
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "CI",
+      "GA",
+      "JM",
+      "JP",
+      "MP",
+      "SI",
+      "SJ",
+      "TF",
+      "TG",
+      "VA"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 5,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}
