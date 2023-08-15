@@ -6,11 +6,12 @@
   "lat": "-10",
   "lon": "-55",
   "connections": [
-    "52275",
-    "3677"
+    "28479",
+    "267490"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "conformant",
-  "routing_information": "conformant"
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
 }

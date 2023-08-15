@@ -29,8 +29,8 @@
     "1103",
     "48070"
   ],
-  "filtering": "non-conformant",
-  "anti_spoofing": "conformant",
-  "coordination": "conformant",
-  "routing_information": "non-conformant"
+  "features": [
+    "anti_spoofing",
+    "coordination"
+  ]
 }

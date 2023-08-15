@@ -9,8 +9,7 @@
     "3356",
     "14840"
   ],
-  "filtering": "non-conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "conformant",
-  "routing_information": "non-conformant"
+  "features": [
+    "coordination"
+  ]
 }

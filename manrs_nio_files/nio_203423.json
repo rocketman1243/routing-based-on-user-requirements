@@ -17,11 +17,12 @@
   "lat": "60",
   "lon": "-95",
   "connections": [
-    "204508",
-    "212934"
+    "396611",
+    "11920"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "conformant",
-  "routing_information": "conformant"
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
 }

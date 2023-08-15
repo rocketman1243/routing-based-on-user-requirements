@@ -64,8 +64,7 @@
     "52873",
     "61595"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "non-conformant",
-  "routing_information": "non-conformant"
+  "features": [
+    "filtering"
+  ]
 }

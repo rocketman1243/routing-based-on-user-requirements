@@ -10,8 +10,8 @@
     "1299",
     "286"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "non-conformant",
-  "routing_information": "conformant"
+  "features": [
+    "filtering",
+    "routing_information"
+  ]
 }

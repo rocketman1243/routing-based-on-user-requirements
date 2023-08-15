@@ -6,11 +6,13 @@
   "lat": "-20.8646010502082",
   "lon": "-41.2400321700695",
   "connections": [
-    "60524",
-    "136530"
+    "265487",
+    "396564"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "conformant",
-  "coordination": "conformant",
-  "routing_information": "conformant"
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
 }

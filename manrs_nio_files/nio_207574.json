@@ -14,8 +14,8 @@
     "199839",
     "41666"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "non-conformant",
-  "coordination": "conformant",
-  "routing_information": "non-conformant"
+  "features": [
+    "filtering",
+    "coordination"
+  ]
 }

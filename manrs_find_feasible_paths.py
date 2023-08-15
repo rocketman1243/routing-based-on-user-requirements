@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 def generate_valid_pro_data():
 
-    nio_path = "../nio_files/"
+    nio_path = "manrs_nio_files/"
 
     # Generate NIO objects
     nio_objects = {}
@@ -42,8 +42,12 @@ def generate_valid_pro_data():
 
     # Gather the requirements that all nodes on this path support
     # We start with everything, and remove what is not supported by any of the nodes on the path
-    supported_privacy_features = list(range(1, 31))
-    supported_security_features = list(range(1, 31))
+    features = [
+        "filtering",
+        "anti_spoofing",
+        "coordination",
+        "routing_information"
+    ] 
 
     # For geolocation, we keep track of the geolocations and later on ensure that we pick a sample of geolocations that does not occur in our path
     geolocations = set()

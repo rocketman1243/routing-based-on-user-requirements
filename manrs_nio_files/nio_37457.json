@@ -9,8 +9,8 @@
     "3491",
     "37100"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "conformant",
-  "coordination": "non-conformant",
-  "routing_information": "non-conformant"
+  "features": [
+    "filtering",
+    "anti_spoofing"
+  ]
 }

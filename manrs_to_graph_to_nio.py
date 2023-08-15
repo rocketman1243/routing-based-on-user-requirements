@@ -5,7 +5,7 @@ import random
 
 node_attributes = {}
 
-with open("node_attributes.csv") as file:
+with open("manrs_data/node_attributes.csv") as file:
     for full_line in file:
         line = full_line.split(",")
         asn = line[0]
@@ -20,7 +20,7 @@ with open("node_attributes.csv") as file:
         }
 
 country_to_latlon = {}
-with open("country_to_latlon.csv") as file:
+with open("manrs_data/country_to_latlon.csv") as file:
     for full_line in file:
         line = full_line.split(",")
         country = line[0][1:-1]
@@ -36,7 +36,7 @@ with open("country_to_latlon.csv") as file:
 participant_asns = []
 
 extra_node_info = {}
-with open("asn_info_caida.json") as caida_file:
+with open("manrs_data/asn_info_caida.json") as caida_file:
     caida_content = caida_file.read()
     caida_object = json.loads(caida_content, object_hook=lambda caida_content: SimpleNamespace(**caida_content))
     asns = caida_object.data.asns.edges
@@ -60,7 +60,7 @@ with open("asn_info_caida.json") as caida_file:
 
 node_features = {}
 
-with open("manrs.json") as manrs_file:
+with open("manrs_data/manrs.json") as manrs_file:
     manrs_content = manrs_file.read()
     manrs_object = json.loads(manrs_content, object_hook=lambda manrs_content: SimpleNamespace(**manrs_content))
     
@@ -116,7 +116,7 @@ nx.set_node_attributes(G, node_features)
 # 1. Add the real links from as-links.txt for which both endpoints are present in the graph
 links = []
 
-with open("as-links.txt") as file:
+with open("manrs_data/as-links.txt") as file:
     for full_line in file:
         line = full_line.split("|")
         a = line[0]
@@ -124,7 +124,7 @@ with open("as-links.txt") as file:
         if a in participant_asns and b in participant_asns:
             links.append([a, b])
 
-with open("as-links-part2.txt") as file:
+with open("manrs_data/as-links-part2.txt") as file:
     for full_line in file:
         line = full_line.split("|")
         a = line[0]
@@ -157,12 +157,18 @@ for i in range(len(line_graph) - 1):
 geolocation = nx.get_node_attributes(G, "geolocation")
 lat = nx.get_node_attributes(G, "lat")
 lon = nx.get_node_attributes(G, "lon")
-filtering = nx.get_node_attributes(G, "filtering")
-anti_spoofing = nx.get_node_attributes(G, "anti_spoofing")
-coordination = nx.get_node_attributes(G, "coordination")
-routing_information = nx.get_node_attributes(G, "routing_information")
+
 
 for asn in participant_asns:
+    features = []
+    if nx.get_node_attributes(G, "filtering")[asn] == "conformant":
+        features.append("filtering")
+    if nx.get_node_attributes(G, "anti_spoofing")[asn] == "conformant":
+        features.append("anti_spoofing")
+    if nx.get_node_attributes(G, "coordination")[asn] == "conformant":
+        features.append("coordination")
+    if nx.get_node_attributes(G, "routing_information")[asn] == "conformant":
+        features.append("routing_information")
 
     edges = []
     for edge in nx.edges(G, asn):
@@ -174,10 +180,7 @@ for asn in participant_asns:
         "lat": lat[asn],
         "lon": lon[asn],
         "connections": edges,
-        "filtering": filtering[asn],
-        "anti_spoofing": anti_spoofing[asn],
-        "coordination": coordination[asn],
-        "routing_information": routing_information[asn]
+        "features": features
     }
 
     with open(f"manrs_nio_files/nio_{asn}.json", "w") as file:

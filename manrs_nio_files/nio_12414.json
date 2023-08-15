@@ -39,10 +39,13 @@
     "1140",
     "3333",
     "399580",
-    "37100"
+    "37100",
+    "262363"
   ],
-  "filtering": "conformant",
-  "anti_spoofing": "conformant",
-  "coordination": "conformant",
-  "routing_information": "conformant"
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
 }
