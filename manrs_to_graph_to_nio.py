@@ -144,12 +144,15 @@ for subset in sorted(nx.connected_components(G), key=len, reverse=True):
 for i in range(len(line_graph) - 1): 
     G.add_edge(line_graph[i], line_graph[i + 1])
 
-# total_degree = 0
-# for node in G.nodes:
-#     total_degree += nx.degree(G, node)
-# average = total_degree / len(G.nodes)
-# print(average, " average degree")
-# print("#connected components:", nx.number_connected_components(G))
+total_degree = 0
+for node in G.nodes:
+    total_degree += nx.degree(G, node)
+average = total_degree / len(G.nodes)
+print(average, " average degree")
+print("#connected components:", nx.number_connected_components(G))
+
+print(len(G.edges), " edges")
+print(len(G.nodes), " nodes")
 
 
 
@@ -183,8 +186,11 @@ for asn in participant_asns:
         "features": features
     }
 
-    with open(f"manrs_nio_files/nio_{asn}.json", "w") as file:
-        file.write(f"{json.dumps(nio, indent=2)}")
+    # Commented for now so I can easily re-run this script for statistics.
+    # Uncomment to re-generate the NIO files
+
+    # with open(f"manrs_nio_files/nio_{asn}.json", "w") as file:
+    #     file.write(f"{json.dumps(nio, indent=2)}")
 
 
 
