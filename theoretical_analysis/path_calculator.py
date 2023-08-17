@@ -52,7 +52,7 @@ def fallback_to_ebgp(we_fallback_to_ebgp, verbose, reason_for_failure):
             print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
     return (0, 0, reason_for_failure, 0, 0, 0, 0)
 
-def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
+def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
     time_start = time.time()
 
@@ -67,9 +67,9 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     as_numbers = []
     edges = []
 
-    for _,_,files in os.walk(nio_path):
+    for _,_,files in os.walk(path_to_nio_files):
         for file in files:
-            with open(nio_path + file, "r") as nio_file:
+            with open(path_to_nio_files + file, "r") as nio_file:
                 nio_content = nio_file.read()
                 nio_object = json.loads(nio_content, object_hook=lambda nio_content: SimpleNamespace(**nio_content))
                 nio_objects[nio_object.as_number] = nio_object
@@ -112,7 +112,7 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
         exit(0)
     else:
         if verbose:
-            print("At least one path that adheres to strict security requirements", filterset.strict_security_requirements, "and privacy requirements", filterset.strict_privacy_requirements, "exists! Continuing with the best-effort phase!")
+            print("At least one path that adheres to strict requirements", filterset.strict_requirements, "exists! Continuing with the best-effort phase!")
 
     time_after_strict_phase = time.time()
 
@@ -126,18 +126,14 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     result = filterset.calculate_biggest_satisfiable_subset(G_strict_phase, pro, nio_objects)
 
     G_best_effort_phase = result[0]
-    satisfied_privacy_requirements = result[1]
-    satisfied_security_requirements = result[2]
+    satisfied_requirements = result[1]
 
-
-    if len(satisfied_privacy_requirements) + len(satisfied_security_requirements) > 0:
-        if verbose:
-            print(f"We could satisfy the privacy requirements {satisfied_privacy_requirements} and the security requirements {satisfied_security_requirements}!")
-    else:
-        if verbose:
-            print("No extra best-effort requirements could be satisfied.")
-        
     if verbose:
+        if len(satisfied_requirements) > 0:
+            print(f"We could satisfy the best-effort requirements {satisfied_requirements}!")
+        else:
+            print("No extra best-effort requirements could be satisfied.")
+
         print("Now, on to the optimization phase!")
 
 
@@ -147,8 +143,6 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     ######## Optimization phase ###########################################
     #######################################################################
 
-    # TODO: SKIP IF STRATEGY IS NONE
-
     if verbose:
         print("\n### OPTIMIZATION PHASE ###\n")
 
@@ -157,62 +151,83 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     # Find all available link-disjoint paths
     all_disjoint_paths = nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination)
 
-    # Score them based on the chosen metric & pass on to the multipath pruning phase
-    scored_paths = []
+    # SKIP IF STRATEGY IS NONE
+    if pro.path_optimization != "none":
+
+        # Score paths based on the chosen metric & pass on to the multipath pruning phase
+        scored_paths = []
 
 
-    if pro.path_optimization == "minimize_total_latency":
-        for path in all_disjoint_paths:
-            scored_paths.append([path, calculate_total_latency(G_after_filter, nio_objects, path)])
-    else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
-        for path in all_disjoint_paths:
-            scored_paths.append([path, len(path) - 1])
+        if pro.path_optimization == "minimize_total_latency":
+            for path in all_disjoint_paths:
+                scored_paths.append([path, calculate_total_latency(G_after_filter, nio_objects, path)])
+        else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
+            for path in all_disjoint_paths:
+                scored_paths.append([path, len(path) - 1])
 
-    # sort scored_paths list by score
-    scored_paths.sort(key = lambda x: x[1])
+        # sort scored_paths list by score
+        scored_paths.sort(key = lambda x: x[1])
 
-    # TIE BREAKER: Total degree of path
-    # Create dict that maps score to paths. If one score has multiple paths, sort these on descending total degree. 
-    # Then reconstruct path ordering from dict
-    tied_paths = {} # 
-    for path_and_score in scored_paths:
-        path = path_and_score[0]
-        score = path_and_score[1]
-        if score in tied_paths:
-            entry = tied_paths[score]
-            entry.append(path)
-        else:
-            entry = [path]
+        # TIE BREAKER: Total degree of path
+        # Create dict that maps score to paths. If one score has multiple paths, sort these on descending total degree. 
+        # Then reconstruct path ordering from dict
+        tied_paths = {} # 
+        for path_and_score in scored_paths:
+            path = path_and_score[0]
+            score = path_and_score[1]
+            if score in tied_paths:
+                entry = tied_paths[score]
+                entry.append(path)
+            else:
+                entry = [path]
 
-        tied_paths[score] = entry
+            tied_paths[score] = entry
 
-    for score in tied_paths:
-        if len(tied_paths[score]) > 1:
-            path_and_total_degree = []
-            # Calculate total degree for each path
-            paths = tied_paths[score]
-            for path in paths:
-                totalDegree = 0
-                for asn in path:
-                    totalDegree += G.degree[asn]
-                path_and_total_degree.append([path, totalDegree])
+        tie_is_broken = False
+        for score in tied_paths:
+            if len(tied_paths[score]) > 1:
+                tie_is_broken = True
+                path_and_total_degree = []
+                # Calculate total degree for each path
+                paths = tied_paths[score]
+                for path in paths:
+                    totalDegree = 0
+                    for asn in path:
+                        totalDegree += G.degree[asn]
+                    path_and_total_degree.append([path, totalDegree])
 
-            # sort and update in dict
-            path_and_total_degree.sort(key = lambda x: x[1]) 
-            path_and_total_degree.reverse()
-            tied_paths[score] = path_and_total_degree
+                # sort and update in dict
+                path_and_total_degree.sort(key = lambda x: x[1]) 
+                path_and_total_degree.reverse()
+                tied_paths[score] = path_and_total_degree
 
-    # Reconstruct path list
-    optimized_paths = []
-    for key in tied_paths:
-        for path in tied_paths[key]:
-            optimized_paths.append([path, key])
+        # Reconstruct path list
+        optimized_paths = []
+        for key in tied_paths:
+            for path in tied_paths[key]:
+                optimized_paths.append([path, key])
 
-    if verbose:
-        print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "): ")
-    for path in optimized_paths:
         if verbose:
-            print(path)
+            if pro.path_optimization == "none":
+                print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was none, so defaulting to minimize_number_of_hops) and the total degree of the path as a tie-breaker if needed:")
+
+                if tie_is_broken:
+                    print("\n( Path, TotalDegree , Number of Hops)")
+
+            else:
+                print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "), and the total degree of the path as a tie-breaker if needed: ")
+
+                if tie_is_broken:
+                    print("\n( Path, TotalDegree , Number of Hops)")
+
+        for path in optimized_paths:
+            if verbose:
+                print(path)
+
+    else:
+        if verbose:
+            print("We skipped optimization phase since the optimization strategy was: none")
+        optimized_paths = list(all_disjoint_paths)
 
 
     #######################################################################
@@ -243,7 +258,8 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
 
         if verbose:
             print("Here are the", len(multipath_selection), "best paths:")
-            print(multipath_selection)
+            for path in multipath_selection:
+                print(path)
 
         return (
             len(optimized_paths), 
