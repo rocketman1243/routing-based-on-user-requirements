@@ -1,0 +1,39 @@
+{
+  "as_source": "136635",
+  "as_destination": "264232",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      1,
+      6,
+      9,
+      11,
+      19,
+      21,
+      27,
+      32,
+      36,
+      47
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "AD",
+      "AS",
+      "FR",
+      "HK",
+      "KW",
+      "NP",
+      "SE",
+      "TR",
+      "TZ"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

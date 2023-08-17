@@ -1,33 +1,32 @@
 {
-  "as_source": "204680",
-  "as_destination": "209102",
+  "as_source": "267563",
+  "as_destination": "13343",
   "requirements": {
     "strict": [
-      "coordination",
-      "routing_information"
+      "filtering"
     ],
     "best_effort": [
-      "anti_spoofing",
-      "filtering"
+      "routing_information",
+      "anti_spoofing"
     ],
     "best_effort_mode": "biggest_subset"
   },
   "geolocation": {
     "exclude": [
-      "BQ",
-      "CL",
-      "CR",
-      "HR",
-      "KI",
-      "LI",
-      "NG",
-      "RS",
-      "SA"
+      "CU",
+      "GB",
+      "IO",
+      "KZ",
+      "LY",
+      "NE",
+      "NO",
+      "PE",
+      "VE"
     ]
   },
-  "path_optimization": "none",
+  "path_optimization": "minimize_total_latency",
   "multipath": {
-    "target_amount_of_paths": 1,
+    "target_amount_of_paths": 3,
     "minimum_number_of_paths": 1
   },
   "fallback_to_ebgp_if_no_path_found": "true"

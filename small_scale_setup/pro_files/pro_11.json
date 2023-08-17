@@ -1,24 +1,26 @@
 {
-  "as_source": "262785",
-  "as_destination": "34687",
+  "as_source": "57187",
+  "as_destination": "7015",
   "requirements": {
     "strict": [
-      "filtering"
+      "routing_information"
     ],
     "best_effort": [
-      "coordination"
+      "anti_spoofing"
     ],
-    "best_effort_mode": "ordered_list"
+    "best_effort_mode": "biggest_subset"
   },
   "geolocation": {
     "exclude": [
-      "BQ",
-      "DJ",
-      "KM",
-      "NA",
-      "NZ",
-      "QA",
-      "TR"
+      "AF",
+      "MH",
+      "MV",
+      "PG",
+      "PN",
+      "PS",
+      "TD",
+      "TN",
+      "UY"
     ]
   },
   "path_optimization": "minimize_number_of_hops",

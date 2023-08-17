@@ -1,0 +1,19 @@
+{
+  "as_number": "42178",
+  "geolocation": [
+    "RU"
+  ],
+  "lat": "60",
+  "lon": "47",
+  "connections": [
+    "12389"
+  ],
+  "features": [
+    11,
+    17,
+    24,
+    41,
+    46,
+    47
+  ]
+}

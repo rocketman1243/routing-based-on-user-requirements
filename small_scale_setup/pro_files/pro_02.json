@@ -1,9 +1,8 @@
 {
-  "as_source": "13041",
-  "as_destination": "262785",
+  "as_source": "14361",
+  "as_destination": "266968",
   "requirements": {
     "strict": [
-      "filtering",
       "coordination"
     ],
     "best_effort": [
@@ -13,17 +12,12 @@
   },
   "geolocation": {
     "exclude": [
-      "BY",
-      "FM",
-      "GH",
-      "GL",
-      "GM",
-      "NC",
-      "PE",
-      "TM"
+      "AX",
+      "MN",
+      "TZ"
     ]
   },
-  "path_optimization": "minimize_number_of_hops",
+  "path_optimization": "none",
   "multipath": {
     "target_amount_of_paths": 2,
     "minimum_number_of_paths": 1
