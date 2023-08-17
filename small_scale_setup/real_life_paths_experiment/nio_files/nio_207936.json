@@ -1,0 +1,19 @@
+{
+  "as_number": "207936",
+  "geolocation": [
+    "EU",
+    "GB"
+  ],
+  "lat": "55.2672917117017",
+  "lon": "17.7246923016783",
+  "connections": [
+    "396664",
+    "61588"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

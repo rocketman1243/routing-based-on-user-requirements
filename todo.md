@@ -1,8 +1,14 @@
 # TOOD
 
+- Write helper script to convert real-life-path-requests to PROs
+- Test real-life experiment on small-scale setup
+
+######### HOLIDAY ###################
+
+- Write code for 'cost of being picky' experiment
 
 
-
+- Incorporate non-binary values in manrs dataset for rpki and IRR (whatever that is :D)
 
 
 

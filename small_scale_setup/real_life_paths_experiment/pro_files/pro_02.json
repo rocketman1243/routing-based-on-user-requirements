@@ -1,0 +1,25 @@
+{
+  "user_story": "I am an exotic tourist in Bhutan (Asia) using the SuperNet Infocomm network and I want to send some pictures back to my family in Brazil which use the Infolic Telecom network while making sure the pictures take the correct path so that I don't have to send them again which is very expensive here in the rural area where I am",
+  "as_source": "28128",
+  "as_destination": "141680",
+  "requirements": {
+    "strict": [
+      "filtering",
+      "anti_spoofing",
+      "routing_information"
+    ],
+    "best_effort": [
+      "coordination"
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": []
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

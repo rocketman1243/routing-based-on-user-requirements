@@ -1,0 +1,27 @@
+{
+  "as_number": "203314",
+  "geolocation": [
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "DE",
+    "HK",
+    "JP",
+    "NL",
+    "RU",
+    "TW",
+    "US",
+    "ZA"
+  ],
+  "lat": "40.04",
+  "lon": "-105.31",
+  "connections": [
+    "7721"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

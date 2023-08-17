@@ -3,12 +3,13 @@ import os
 import json
 from types import SimpleNamespace
 
-small_scale = "small_scale_setup"
+small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
+small_scale_real_life_paths_experiment = "small_scale_setup/real_life_paths_experiment"
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = full_scale_scalability_experiment_path
+CHOSEN_PATH = small_scale_real_life_paths_experiment
 
 
 # Read in PRO objects
@@ -44,7 +45,7 @@ for i in range(len(pro_objects)):
     - total time from start to end
 
     """ 
-    result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]}\n"
+    result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
 
     with open(results_file, "a") as file:
         file.write(result)

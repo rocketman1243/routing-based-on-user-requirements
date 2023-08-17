@@ -1,0 +1,16 @@
+{
+  "as_number": "28022",
+  "geolocation": [
+    "CR"
+  ],
+  "lat": "9.98519399094891",
+  "lon": "-84.1727421268149",
+  "connections": [
+    "174",
+    "3549"
+  ],
+  "features": [
+    "coordination",
+    "routing_information"
+  ]
+}

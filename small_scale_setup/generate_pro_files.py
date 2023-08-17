@@ -4,6 +4,22 @@ from find_feasible_paths import generate_valid_pro_data
 import copy
 
 
+experiment = "proof_of_concept_experiment"
+
+
+
+
+
+
+
+
+
+
+
+
+######################################################
+
+
 # Lists of possible values
 
 countries = [
@@ -21,7 +37,7 @@ all_features = [
     ] 
 
 for _ in range(num_objects):
-    valid_data = generate_valid_pro_data("nio_files/")
+    valid_data = generate_valid_pro_data(f"{experiment}/nio_files/")
 
     endpoints = valid_data[0]
     features = valid_data[1]
@@ -79,6 +95,6 @@ for _ in range(num_objects):
 
 # Print the generated JSON objects
 for i, obj in enumerate(output_objects):
-    with open(f"pro_files/pro_{i:02}.json", "w") as file:
+    with open(f"{experiment}/pro_files/pro_{i:02}.json", "w") as file:
         file.write(f"{json.dumps(obj, indent=2)}")
 

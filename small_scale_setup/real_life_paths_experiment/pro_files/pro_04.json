@@ -1,0 +1,26 @@
+{
+  "user_story": "I am a Russian content creator using the Foton Telecom network wanting to upload some video material to my cloud environment at Datacenter One GmbH in Germany and I want a safe route with no route hijacking and I don't want US people to intercept my traffic",
+  "as_source": "42861",
+  "as_destination": "48918",
+  "requirements": {
+    "strict": [
+      "routing_information"
+    ],
+    "best_effort": [
+      "filtering",
+      "anti_spoofing"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "US"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

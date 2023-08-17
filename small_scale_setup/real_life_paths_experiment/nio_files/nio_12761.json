@@ -1,0 +1,42 @@
+{
+  "as_number": "12761",
+  "geolocation": [
+    "AT",
+    "AU",
+    "BE",
+    "BG",
+    "CH",
+    "CZ",
+    "DE",
+    "DK",
+    "ES",
+    "FR",
+    "GB",
+    "HK",
+    "HU",
+    "IE",
+    "IT",
+    "JP",
+    "LU",
+    "NL",
+    "PL",
+    "PT",
+    "RO",
+    "SE",
+    "SG",
+    "SV",
+    "US"
+  ],
+  "lat": "68.4967700572158",
+  "lon": "40.5532174157987",
+  "connections": [
+    "1299",
+    "8220"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

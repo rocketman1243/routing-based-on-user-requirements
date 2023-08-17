@@ -1,0 +1,19 @@
+{
+  "as_number": "149953",
+  "geolocation": [
+    "ID",
+    "SG"
+  ],
+  "lat": "-6.23",
+  "lon": "106.6",
+  "connections": [
+    "264201",
+    "328381"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

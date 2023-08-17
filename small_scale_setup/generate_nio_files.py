@@ -3,6 +3,25 @@ from types import SimpleNamespace
 import networkx as nx
 import random
 
+
+
+
+experiment = "proof_of_concept_experiment"
+
+
+
+
+
+
+
+
+
+
+
+########################
+
+
+
 node_attributes = {}
 
 with open("data/node_attributes.csv") as file:
@@ -181,7 +200,7 @@ for asn in participant_asns:
     # Commented for now so I can easily re-run this script for statistics.
     # Uncomment to re-generate the NIO files
 
-    # with open(f"nio_files/nio_{asn}.json", "w") as file:
+    # with open(f"{experiment}/nio_files/nio_{asn}.json", "w") as file:
     #     file.write(f"{json.dumps(nio, indent=2)}")
 
 

@@ -1,0 +1,23 @@
+{
+  "as_number": "48292",
+  "geolocation": [
+    "DE",
+    "FR",
+    "NL",
+    "TR",
+    "US"
+  ],
+  "lat": "43.0501093603242",
+  "lon": "26.8163083362353",
+  "connections": [
+    "41666",
+    "58299",
+    "213151",
+    "202365"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

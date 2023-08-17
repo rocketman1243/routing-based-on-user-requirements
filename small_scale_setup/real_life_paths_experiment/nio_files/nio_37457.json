@@ -1,0 +1,16 @@
+{
+  "as_number": "37457",
+  "geolocation": [
+    "ZA"
+  ],
+  "lat": "-27.7816936727149",
+  "lon": "27.3533315361692",
+  "connections": [
+    "3491",
+    "37100"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing"
+  ]
+}

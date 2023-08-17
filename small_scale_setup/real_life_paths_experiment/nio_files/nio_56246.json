@@ -1,0 +1,17 @@
+{
+  "as_number": "56246",
+  "geolocation": [
+    "ID"
+  ],
+  "lat": "-6.43056276497972",
+  "lon": "107.256710535028",
+  "connections": [
+    "329121",
+    "264201"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination"
+  ]
+}

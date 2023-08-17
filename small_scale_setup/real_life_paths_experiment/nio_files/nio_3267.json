@@ -1,0 +1,23 @@
+{
+  "as_number": "3267",
+  "geolocation": [
+    "RU"
+  ],
+  "lat": "56.330936974687",
+  "lon": "39.1855428482108",
+  "connections": [
+    "1299",
+    "2603",
+    "37721",
+    "41327",
+    "60501",
+    "20965",
+    "39120"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

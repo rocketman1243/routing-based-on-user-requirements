@@ -1,0 +1,19 @@
+{
+  "as_number": "36138",
+  "geolocation": [
+    "IT",
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "210320",
+    "264300"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

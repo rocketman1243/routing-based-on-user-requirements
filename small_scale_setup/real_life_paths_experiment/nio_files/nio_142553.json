@@ -1,0 +1,21 @@
+{
+  "as_number": "142553",
+  "geolocation": [
+    "CN",
+    " HK",
+    " JP",
+    " US",
+    " EU"
+  ],
+  "lat": "35",
+  "lon": "105",
+  "connections": [
+    "60900",
+    "16973"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

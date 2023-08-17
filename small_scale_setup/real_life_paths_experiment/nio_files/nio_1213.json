@@ -1,0 +1,23 @@
+{
+  "as_number": "1213",
+  "geolocation": [
+    "IE"
+  ],
+  "lat": "54.2605530328948",
+  "lon": "-9.92782121092791",
+  "connections": [
+    "174",
+    "20965",
+    "21320",
+    "3303",
+    "9002",
+    "60501",
+    "39120",
+    "6461"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

@@ -50,7 +50,7 @@ def fallback_to_ebgp(we_fallback_to_ebgp, verbose, reason_for_failure):
             print("No path is found, but the PRO does specify to fallback to EBGP, so the request will now be fulfilled by EBGP!")
         else:
             print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
-    return (0, 0, reason_for_failure, 0, 0, 0, 0)
+    return (0, 0, reason_for_failure, 0, 0, 0, 0, 0, 0)
 
 def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
@@ -261,6 +261,16 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
             for path in multipath_selection:
                 print(path)
 
+        # Generate ; separated example path
+        path_list = multipath_selection[0]
+        if isinstance(path_list[0], list):
+            path_list = path_list[0]
+        example_path = ""
+        for i in range(len(path_list) - 1):
+
+            example_path += str(path_list[i]) + ";"
+        example_path += str(path_list[len(path_list) - 1])
+
         return (
             len(optimized_paths), 
             len(multipath_selection), 
@@ -269,7 +279,8 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
             round(time_after_strict_phase - time_after_building_graph, round_decimals),
             round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
             round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
-            round(time_after_optimization_phase - time_start, round_decimals))
+            round(time_after_optimization_phase - time_start, round_decimals),
+            example_path)
 
 
 

@@ -1,0 +1,16 @@
+{
+  "as_number": "16796",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "49.9144806895235",
+  "lon": "-99.3073229489995",
+  "connections": [
+    "10965"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

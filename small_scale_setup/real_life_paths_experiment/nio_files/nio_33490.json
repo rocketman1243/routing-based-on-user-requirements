@@ -1,0 +1,18 @@
+{
+  "as_number": "33490",
+  "geolocation": [
+    "US"
+  ],
+  "lat": "44.02936572153",
+  "lon": "-112.071056711913",
+  "connections": [
+    "3356",
+    "7922"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}
