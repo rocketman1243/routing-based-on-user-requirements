@@ -8,12 +8,8 @@
   "connections": [
     "11979"
   ],
-  "privacy": [
-    15,
-    27
-  ],
-  "security": [
-    16,
-    28
+  "features": [
+    13,
+    22
   ]
 }

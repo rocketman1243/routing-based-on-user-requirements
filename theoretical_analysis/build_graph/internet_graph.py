@@ -28,7 +28,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_file = open("theoretical_analysis/build_graph/as-links.txt")
+links_file = open("as-links.txt")
 edges = []
 # edge_info = {}
 
@@ -44,7 +44,7 @@ G.add_edges_from(edges)
 # Note: Nodes are added based on edges in connected graph
 node_info = {}
 
-node_info_file = open( "theoretical_analysis/build_graph/node_attributes.csv", "r")
+node_info_file = open( "node_attributes.csv", "r")
 for line in node_info_file:
     items = line.split(",")
 
@@ -75,14 +75,12 @@ for l in degrees:
     ordered_asns.append(l[0])
 
 # After edges are inserted from connected dataset, we generate features based on this
-privacy_features_distribution = generate_features(30, ordered_asns)
-security_features_distribution = generate_features(30, ordered_asns)
+features = generate_features(30, ordered_asns)
 
 feature_info = {}
 for node in G.nodes:
     feature_info[node] = {}
-    feature_info[node]["privacy"] = privacy_features_distribution[node]
-    feature_info[node]["security"] = security_features_distribution[node]
+    feature_info[node]["features"] = features[node]
 
 nx.set_node_attributes(G, feature_info)
 
@@ -97,23 +95,22 @@ print(average, " average degree")
 
 # Commented for safety. Uncomment if files need to be re-generated
 # 
-# for asn in G.nodes:
-#     node = G.nodes[asn]
-#     edges = []
-#     for e in G.edges(asn):
-#         edges.append(e[1])
+for asn in G.nodes:
+    node = G.nodes[asn]
+    edges = []
+    for e in G.edges(asn):
+        edges.append(e[1])
 
-#     nio = {
-#         "as_number": asn,
-#         "geolocation": node["geolocation"],
-#         "lat": node["lat"],
-#         "lon": node["lon"],
-#         "connections": edges,
-#         "privacy": node["privacy"],
-#         "security": node["security"]
-#     }
+    nio = {
+        "as_number": asn,
+        "geolocation": node["geolocation"],
+        "lat": node["lat"],
+        "lon": node["lon"],
+        "connections": edges,
+        "features": node["features"],
+    }
 
-#     filename = "nio_files/nio_" + asn + ".json"
-#     with open(filename, "w") as file:
-#         output = json.dumps(nio, indent=2)
-#         file.write(output)
+    filename = "../nio_files/nio_" + asn + ".json"
+    with open(filename, "w") as file:
+        output = json.dumps(nio, indent=2)
+        file.write(output)

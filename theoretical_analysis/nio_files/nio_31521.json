@@ -8,12 +8,8 @@
   "connections": [
     "12306"
   ],
-  "privacy": [
-    22,
-    26
-  ],
-  "security": [
-    5,
-    19
+  "features": [
+    13,
+    23
   ]
 }

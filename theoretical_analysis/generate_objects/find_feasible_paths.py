@@ -42,8 +42,7 @@ def generate_valid_pro_data():
 
     # Gather the requirements that all nodes on this path support
     # We start with everything, and remove what is not supported by any of the nodes on the path
-    supported_privacy_features = list(range(1, 31))
-    supported_security_features = list(range(1, 31))
+    supported_features = list(range(1, 31))
 
     # For geolocation, we keep track of the geolocations and later on ensure that we pick a sample of geolocations that does not occur in our path
     geolocations = set()
@@ -53,17 +52,12 @@ def generate_valid_pro_data():
     for asn in path:
         nio = nio_objects[asn]
         # Filter features
-        privacy_copy = copy.deepcopy(supported_privacy_features)
-        for feature in privacy_copy:
-            if feature not in nio.privacy:
-                supported_privacy_features.remove(feature)
-
-        security_copy = copy.deepcopy(supported_security_features)
-        for feature in security_copy:
-            if feature not in nio.security:
-                supported_security_features.remove(feature)
+        feature_copy = copy.deepcopy(supported_features)
+        for feature in feature_copy:
+            if feature not in nio.features:
+                supported_features.remove(feature)
 
         # Gather geolocation
         geolocations.add(nio.geolocation[0])
 
-    return (endpoints, supported_privacy_features, supported_security_features, list(geolocations))
+    return (endpoints, supported_features, list(geolocations))

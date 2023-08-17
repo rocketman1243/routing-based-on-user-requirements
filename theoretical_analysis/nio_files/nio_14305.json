@@ -8,10 +8,7 @@
   "connections": [
     "40264"
   ],
-  "privacy": [
-    21
-  ],
-  "security": [
-    27
+  "features": [
+    30
   ]
 }

@@ -1,27 +1,28 @@
 {
-  "as_source": "8303",
-  "as_destination": "53254",
-  "privacy": {
-    "strict": [],
-    "best_effort": [],
-    "best_effort_mode": "ordered_list"
-  },
-  "security": {
+  "as_source": "269202",
+  "as_destination": "34162",
+  "requirements": {
     "strict": [],
     "best_effort": [
-      8
+      8,
+      14,
+      17,
+      21,
+      22
     ],
-    "best_effort_mode": "biggest_subset"
+    "best_effort_mode": "ordered_list"
   },
   "geolocation": {
     "exclude": [
-      "BE"
+      "BE",
+      "IO",
+      "SA"
     ]
   },
-  "path_optimization": "none",
+  "path_optimization": "minimize_number_of_hops",
   "multipath": {
-    "target_amount_of_paths": 1,
+    "target_amount_of_paths": 2,
     "minimum_number_of_paths": 1
   },
-  "fallback_to_ebgp_if_no_path_found": "false"
+  "fallback_to_ebgp_if_no_path_found": "true"
 }

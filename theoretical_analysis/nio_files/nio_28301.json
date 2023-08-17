@@ -8,12 +8,8 @@
   "connections": [
     "1916"
   ],
-  "privacy": [
-    22,
-    28
-  ],
-  "security": [
-    13,
-    22
+  "features": [
+    5,
+    23
   ]
 }

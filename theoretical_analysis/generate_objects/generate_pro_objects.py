@@ -25,35 +25,23 @@ for _ in range(num_objects):
     valid_data = generate_valid_pro_data()
 
     endpoints = valid_data[0]
-    privacy_features = valid_data[1]
-    security_features = valid_data[2]
-    countries_to_not_block = valid_data[3]
+    features = valid_data[1]
+    countries_to_not_block = valid_data[2]
 
     as_source = endpoints[0]
     as_destination = endpoints[1]
 
     # Requirements for privacy
-    privacy_strict_amount = random.randint(0, len(privacy_features))
-    privacy_strict = random.sample(privacy_features, privacy_strict_amount)
-    privacy_strict.sort()
+    strict_amount = random.randint(0, len(features))
+    strict_requirements = random.sample(features, strict_amount)
+    strict_requirements.sort()
 
-    privacy_other_requirements = [i for i in requirements if i not in privacy_strict]
-    privacy_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
-    privacy_best_effort_requirements = random.sample(privacy_other_requirements, privacy_best_effort_amount)
-    privacy_best_effort_requirements.sort()
+    other_requirements = [i for i in requirements if i not in strict_requirements]
+    best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
+    best_effort_requirements = random.sample(other_requirements, best_effort_amount)
+    best_effort_requirements.sort()
 
-    # Requirements for security    
-    security_strict_amount = random.randint(0, len(security_features))
-    security_strict = random.sample(security_features, security_strict_amount)
-    security_strict.sort()
-
-    security_other_requirements = [i for i in requirements if i not in security_strict]
-    security_best_effort_amount = random.randint(min_num_best_effort_reqs, max_num_best_effort_reqs)
-    security_best_effort_requirements = random.sample(security_other_requirements, security_best_effort_amount)
-    security_best_effort_requirements.sort()
-
-    privacy_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
-    security_best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
+    best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
     
     geolocation_amount = random.randint(0, 10)
     geolocation_copy = copy.deepcopy(countries)
@@ -72,15 +60,10 @@ for _ in range(num_objects):
     data = {
         "as_source": as_source,
         "as_destination": as_destination,
-        "privacy": {
-            "strict": privacy_strict,
-            "best_effort": privacy_best_effort_requirements,
-            "best_effort_mode": privacy_best_effort_mode
-        },
-        "security": {
-            "strict": security_strict,
-            "best_effort": security_best_effort_requirements,
-            "best_effort_mode": security_best_effort_mode
+        "requirements": {
+            "strict": strict_requirements,
+            "best_effort": best_effort_requirements,
+            "best_effort_mode": best_effort_mode
         },
         "geolocation": {
             "exclude": geolocation_exclude

@@ -8,10 +8,7 @@
   "connections": [
     "1853"
   ],
-  "privacy": [
-    7
-  ],
-  "security": [
-    3
+  "features": [
+    6
   ]
 }

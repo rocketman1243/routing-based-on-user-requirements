@@ -8,10 +8,7 @@
   "connections": [
     "9070"
   ],
-  "privacy": [
-    19
-  ],
-  "security": [
-    12
+  "features": [
+    6
   ]
 }

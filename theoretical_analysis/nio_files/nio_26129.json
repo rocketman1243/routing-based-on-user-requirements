@@ -8,12 +8,8 @@
   "connections": [
     "5555"
   ],
-  "privacy": [
-    19,
-    24
-  ],
-  "security": [
-    24,
-    29
+  "features": [
+    5,
+    25
   ]
 }

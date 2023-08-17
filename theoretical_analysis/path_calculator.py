@@ -147,6 +147,8 @@ def calculate_paths(nio_path: str, pro, print_all = "no_pls"):
     ######## Optimization phase ###########################################
     #######################################################################
 
+    # TODO: SKIP IF STRATEGY IS NONE
+
     if verbose:
         print("\n### OPTIMIZATION PHASE ###\n")
 

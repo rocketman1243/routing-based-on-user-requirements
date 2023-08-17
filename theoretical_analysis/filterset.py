@@ -21,8 +21,7 @@ class Filterset():
         return result
   
     def __init__(self, pro_object):
-        self.strict_security_requirements = pro_object.security.strict 
-        self.strict_privacy_requirements = pro_object.privacy.strict 
+        self.strict_requirements = pro_object.requirements.strict 
 
         # Combine only_use and exclude list into one exclude list,
         # where the only_use is interpreted as "exclude everything but this"
@@ -30,84 +29,50 @@ class Filterset():
         self.geolocations_to_exclude = set(pro_object.geolocation.exclude)
 
         # Generate the subsets for security
-        self.best_effort_security_subsets = []
-        if pro_object.security.best_effort_mode == "biggest_subset":
-            self.best_effort_security_subsets = self.powerset(pro_object.security.best_effort)
+        self.best_effort_subsets = []
+        if pro_object.requirements.best_effort_mode == "biggest_subset":
+            self.best_effort_subsets = self.powerset(pro_object.requirements.best_effort)
         else: # the mode is ordered_list
-            self.best_effort_security_subsets = self.decreasing_lists(pro_object.security.best_effort)
-
-        # Generate the subsets for privacy
-        self.best_effort_privacy_subsets = []
-        if pro_object.privacy.best_effort_mode == "biggest_subset":
-            self.best_effort_privacy_subsets = self.powerset(pro_object.privacy.best_effort)
-        else: # the mode is ordered_list
-            self.best_effort_privacy_subsets = self.decreasing_lists(pro_object.privacy.best_effort)
+            self.best_effort_subsets = self.decreasing_lists(pro_object.requirements.best_effort)
 
         # Initially set the best effort requirement sets to the biggest subset in the list of sets
-        self.best_effort_security_requirements = self.best_effort_security_subsets[0]
-        self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+        self.best_effort_requirements = self.best_effort_subsets[0]
 
+    def best_effort_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
+        return len(self.best_effort_subsets) > 1
 
-
-
-
-
-
-    def best_effort_security_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
-        return len(self.best_effort_security_subsets) > 1
-
-    def best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set(self) -> bool:
-        return len(self.best_effort_privacy_subsets) > 1
-
-    def reduce_best_effort_security_constraints(self):
-        if self.best_effort_security_constraints_are_not_yet_reduced_to_the_empty_set():
-            self.best_effort_security_subsets.pop(0)
-            self.best_effort_security_requirements = self.best_effort_security_subsets[0]
-
-    def reduce_best_effort_privacy_constraints(self):
-        if self.best_effort_privacy_constraints_are_not_yet_reduced_to_the_empty_set():
-            self.best_effort_privacy_subsets.pop(0)
-            self.best_effort_privacy_requirements = self.best_effort_privacy_subsets[0]
+    def reduce_best_effort_constraints(self):
+        if self.best_effort_constraints_are_not_yet_reduced_to_the_empty_set():
+            self.best_effort_subsets.pop(0)
+            self.best_effort_requirements = self.best_effort_subsets[0]
 
     def as_has_to_be_removed(self, nio_object, mode, print_mode) -> bool:
         drop: bool = False
         strict = mode == "strict"
         verbose = print_mode == "verbose"
 
-        security_requirements = []
-        privacy_requirements = []
-        security_requirements.extend(self.strict_security_requirements)
-        privacy_requirements.extend(self.strict_privacy_requirements)
+        requirements = []
+        requirements.extend(self.strict_requirements)
 
         if not(strict):
-            security_requirements.extend(list(self.best_effort_security_requirements))
-            privacy_requirements.extend(list(self.best_effort_privacy_requirements))
+            requirements.extend(list(self.best_effort_requirements))
 
-
-        # check security: The required security requirements have to be a subset of the security
-        # requirements of the AS to have self AS handle our path. If self is NOT the case, we
-        # drop self AS from our graph. Same for privacy...
-        if not(set(security_requirements).issubset(set(nio_object.security))):
+        # check requirements: The required requirements have to be a subset of the 
+        # requirements of the AS to have this AS handle our path. If this is NOT the case, we
+        # drop this AS from our graph. 
+        if not(set(requirements).issubset(set(nio_object.features))):
             drop = True
             if verbose:
-                print(security_requirements, "are not a security subset of", nio_object.security)
+                print(requirements, "are not a subset of", nio_object.features)
 
-        if not(set(privacy_requirements).issubset(set(nio_object.privacy))):
-            drop = True
-            if verbose:
-                print(privacy_requirements, "are not a privacy subset of", nio_object.privacy)
-
-        # Check whether the geolocation(s) of self AS fall in the list of geolocations that we
-        # want to EXCLUDE. If so, we drop self AS
+        # Check whether the geolocation(s) of this AS falls in the list of geolocations that we
+        # want to EXCLUDE. If so, we drop the AS
         for geolocation in nio_object.geolocation:
             if geolocation in self.geolocations_to_exclude:
                 drop = True
                 if verbose:
                     print(geolocation, "is in", self.geolocations_to_exclude, "while it should be excluded")
                 break
-
-        # security_requirements.clear()
-        # privacy_requirements.clear()
 
         return drop
 
@@ -165,10 +130,9 @@ class Filterset():
             path_exists = self.safe_has_path(G_best_effort_phase, pro.as_source, pro.as_destination)
             
             if not path_exists:
-                self.reduce_best_effort_security_constraints()
-                self.reduce_best_effort_privacy_constraints()
+                self.reduce_best_effort_constraints()
 
         if path_exists:
-            return (G_best_effort_phase, self.best_effort_privacy_requirements, self.best_effort_security_requirements)
+            return (G_best_effort_phase, self.best_effort_requirements)
         else:
             return G
