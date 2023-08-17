@@ -1,0 +1,32 @@
+{
+  "as_source": "14911",
+  "as_destination": "213221",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      15,
+      16,
+      18,
+      22,
+      28,
+      31,
+      32,
+      36,
+      47,
+      49
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "MN",
+      "MS"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

@@ -1,0 +1,17 @@
+{
+  "as_number": "9443",
+  "geolocation": [
+    "AU"
+  ],
+  "lat": "-34.2449291308203",
+  "lon": "145.803249742483",
+  "connections": [
+    "4826"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

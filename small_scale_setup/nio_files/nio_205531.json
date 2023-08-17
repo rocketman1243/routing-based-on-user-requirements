@@ -1,0 +1,18 @@
+{
+  "as_number": "205531",
+  "geolocation": [
+    "GB",
+    "IE"
+  ],
+  "lat": "32.8",
+  "lon": "-117.17",
+  "connections": [
+    "25249",
+    "212389"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

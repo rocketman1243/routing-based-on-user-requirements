@@ -1,0 +1,48 @@
+{
+  "as_source": "53306",
+  "as_destination": "397616",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      6,
+      7,
+      9,
+      13,
+      14,
+      15,
+      16,
+      19,
+      20,
+      22,
+      24,
+      29,
+      32,
+      33,
+      35,
+      44,
+      46,
+      47,
+      48,
+      50
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "BD",
+      "FO",
+      "ID",
+      "LT",
+      "ML",
+      "NL",
+      "SZ",
+      "TD"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

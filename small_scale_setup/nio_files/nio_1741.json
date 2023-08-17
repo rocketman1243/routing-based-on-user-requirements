@@ -1,0 +1,17 @@
+{
+  "as_number": "1741",
+  "geolocation": [
+    "FI"
+  ],
+  "lat": "61.6487683396614",
+  "lon": "24.9666574532495",
+  "connections": [
+    "2603"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

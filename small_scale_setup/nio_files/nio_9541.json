@@ -1,0 +1,17 @@
+{
+  "as_number": "9541",
+  "geolocation": [
+    "PK"
+  ],
+  "lat": "28.6359687821277",
+  "lon": "69.9966026812167",
+  "connections": [
+    "174",
+    "24440"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

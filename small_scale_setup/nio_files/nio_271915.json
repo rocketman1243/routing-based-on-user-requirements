@@ -1,0 +1,20 @@
+{
+  "as_number": "271915",
+  "geolocation": [
+    "CL",
+    "US"
+  ],
+  "lat": "25.78",
+  "lon": "-80.19",
+  "connections": [
+    "174",
+    "16735",
+    "60501",
+    "20080",
+    "39120"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing"
+  ]
+}

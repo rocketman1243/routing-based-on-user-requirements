@@ -1,0 +1,27 @@
+{
+  "as_number": "51514",
+  "geolocation": [
+    "NL"
+  ],
+  "lat": "51.6373998236895",
+  "lon": "1.90595906323448",
+  "connections": [
+    "24785",
+    "49509",
+    "37721",
+    "8283",
+    "41666",
+    "1103",
+    "58299",
+    "12859",
+    "3333",
+    "1140",
+    "37100"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

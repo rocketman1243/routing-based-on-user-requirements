@@ -1,0 +1,37 @@
+{
+  "as_source": "137642",
+  "as_destination": "393347",
+  "requirements": {
+    "strict": [
+      11,
+      24,
+      29
+    ],
+    "best_effort": [
+      4,
+      16,
+      22,
+      26
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "EC",
+      "FI",
+      "JO",
+      "MH",
+      "MV",
+      "NC",
+      "RO",
+      "TW",
+      "ZW"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

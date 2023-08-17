@@ -1,0 +1,18 @@
+{
+  "as_number": "50242",
+  "geolocation": [
+    "SK"
+  ],
+  "lat": "48.9594321741279",
+  "lon": "20.6485680272133",
+  "connections": [
+    "400442",
+    "142289"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "as_number": "46019",
+  "geolocation": [
+    "ID"
+  ],
+  "lat": "-7.52518262743316",
+  "lon": "111.246530907783",
+  "connections": [
+    "56791",
+    "36850"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "as_number": "208976",
+  "geolocation": [
+    "AU",
+    "CH",
+    "DE",
+    "EU",
+    "GB",
+    "NZ",
+    "US"
+  ],
+  "lat": "50.1567524226945",
+  "lon": "8.8498466900685",
+  "connections": [
+    "37721",
+    "1140",
+    "12859",
+    "41666",
+    "3333",
+    "8283",
+    "213151",
+    "202365",
+    "58299",
+    "1103",
+    "37100"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

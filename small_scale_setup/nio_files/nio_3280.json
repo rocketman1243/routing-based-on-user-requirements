@@ -1,0 +1,21 @@
+{
+  "as_number": "3280",
+  "geolocation": [
+    "AT",
+    "DE",
+    "FR",
+    "GB",
+    "RO",
+    "US"
+  ],
+  "lat": "57.6124147349599",
+  "lon": "-10.0914236182121",
+  "connections": [
+    "396588",
+    "328582"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing"
+  ]
+}

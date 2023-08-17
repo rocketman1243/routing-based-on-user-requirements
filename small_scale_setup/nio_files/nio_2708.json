@@ -1,0 +1,17 @@
+{
+  "as_number": "2708",
+  "geolocation": [
+    "MX"
+  ],
+  "lat": "20.6064695319044",
+  "lon": "-100.995653886744",
+  "connections": [
+    "3356"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

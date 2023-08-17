@@ -1,0 +1,32 @@
+{
+  "as_source": "57187",
+  "as_destination": "7015",
+  "requirements": {
+    "strict": [
+      "routing_information"
+    ],
+    "best_effort": [
+      "anti_spoofing"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "AF",
+      "MH",
+      "MV",
+      "PG",
+      "PN",
+      "PS",
+      "TD",
+      "TN",
+      "UY"
+    ]
+  },
+  "path_optimization": "minimize_number_of_hops",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

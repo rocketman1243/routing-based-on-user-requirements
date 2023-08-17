@@ -1,0 +1,29 @@
+{
+  "as_source": "1",
+  "as_destination": "5",
+  "privacy": {
+    "strict": [
+      5
+    ],
+    "best_effort": [
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "security": {
+    "strict": [],
+    "best_effort": [
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "ES"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

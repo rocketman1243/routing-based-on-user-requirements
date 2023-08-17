@@ -1,0 +1,23 @@
+{
+  "as_number": "44530",
+  "geolocation": [
+    "CH",
+    "DE",
+    "FR",
+    "NL"
+  ],
+  "lat": "45.3073255608053",
+  "lon": "5.01047617029096",
+  "connections": [
+    "3320",
+    "6830",
+    "41327",
+    "3303",
+    "4134"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}
