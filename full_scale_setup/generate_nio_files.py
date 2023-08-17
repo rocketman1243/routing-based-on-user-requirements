@@ -23,7 +23,9 @@ This is done from multiple sources:
 """
 
 number_of_features_in_distribution = 30
-output_path = "nio_files"
+
+experiment = "scalability_experiment"
+
 
 
 
@@ -31,6 +33,8 @@ output_path = "nio_files"
 
 ###################
 
+
+output_path = experiment + "/nio_files"
 
 G = nx.Graph()
 

@@ -1,26 +1,32 @@
 {
-  "as_source": "14911",
-  "as_destination": "213221",
+  "as_source": "150928",
+  "as_destination": "43570",
   "requirements": {
     "strict": [],
     "best_effort": [
-      15,
-      16,
-      18,
-      22,
+      6,
+      9,
+      14,
+      25,
+      26,
       28,
-      31,
-      32,
-      36,
-      47,
-      49
+      40,
+      42
     ],
-    "best_effort_mode": "ordered_list"
+    "best_effort_mode": "biggest_subset"
   },
   "geolocation": {
     "exclude": [
-      "MN",
-      "MS"
+      "CX",
+      "DJ",
+      "FJ",
+      "GB",
+      "GI",
+      "GR",
+      "MQ",
+      "MX",
+      "NO",
+      "NZ"
     ]
   },
   "path_optimization": "minimize_total_latency",

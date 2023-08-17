@@ -1,50 +1,36 @@
 {
-  "as_source": "29458",
-  "as_destination": "212567",
+  "as_source": "138602",
+  "as_destination": "45288",
   "requirements": {
     "strict": [],
     "best_effort": [
       1,
-      2,
-      3,
-      5,
-      6,
-      7,
       8,
-      10,
       11,
-      13,
-      14,
-      15,
+      16,
       17,
-      19,
-      20,
-      23,
-      27,
+      28,
       29,
       30,
       31,
       32,
       33,
       34,
-      35,
-      36,
       39,
-      40,
-      45,
-      46,
+      41,
+      44,
       48
     ],
-    "best_effort_mode": "ordered_list"
+    "best_effort_mode": "biggest_subset"
   },
   "geolocation": {
     "exclude": [
-      "AR",
-      "CC",
-      "DO",
-      "MK",
-      "NP",
-      "TM"
+      "BL",
+      "GH",
+      "GR",
+      "KW",
+      "PE",
+      "SH"
     ]
   },
   "path_optimization": "none",

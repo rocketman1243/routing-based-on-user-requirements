@@ -6,9 +6,9 @@ import json
 from types import SimpleNamespace
 
 
-def generate_valid_pro_data():
+def generate_valid_pro_data(experiment):
 
-    nio_path = "nio_files/"
+    nio_path = experiment + "/nio_files/"
 
     # Generate NIO objects
     nio_objects = {}

@@ -1,0 +1,28 @@
+{
+  "as_source": "133112",
+  "as_destination": "34002",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      16,
+      38,
+      44,
+      49
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "FJ",
+      "IS",
+      "NG",
+      "PW"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

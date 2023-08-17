@@ -3,11 +3,12 @@ import os
 import json
 from types import SimpleNamespace
 
-small_scale_path = "small_scale_setup"
-full_size_path = "theoretical_analysis"
+small_scale = "small_scale_setup"
+full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
+full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = full_size_path
+CHOSEN_PATH = full_scale_scalability_experiment_path
 
 
 # Read in PRO objects

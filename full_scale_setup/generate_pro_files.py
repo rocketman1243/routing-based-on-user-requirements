@@ -10,19 +10,18 @@ max_number_of_strict_requirements = 0
 
 # Range that best effort requirements can take on, with number of elements per step
 best_effort_amount_ranges = [
-    [10, 10], 
-    [20, 20],
-    [30, 30],
-    [40, 40],
-    [50, 50]
+    [4, 4], 
+    [8, 8],
+    [12, 12],
+    [16, 16],
+    [20, 20]
 ]
 
 number_of_objects_per_best_effort_range = 2
 
 requirements = range(1, 51)
 
-output_path = "scalability_pro_files"
-
+experiment = "scalability_experiment"
 
 
 
@@ -38,6 +37,7 @@ output_path = "scalability_pro_files"
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
+output_path = experiment + "/pro_files"
 files = os.listdir(output_path)
 for file in files:
     file_path = os.path.join(output_path, file)
@@ -62,7 +62,7 @@ num_objects = len(best_effort_amount_ranges) * number_of_objects_per_best_effort
 
 for index in range(num_objects):
 
-    valid_data = generate_valid_pro_data()
+    valid_data = generate_valid_pro_data(experiment)
 
     endpoints = valid_data[0]
     features = valid_data[1]
