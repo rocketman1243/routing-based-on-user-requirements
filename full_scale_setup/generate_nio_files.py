@@ -38,7 +38,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_file = open("data/as-links-long.txt")
+links_file = open("data/as-links-small.txt")
 edges = []
 # edge_info = {}
 
@@ -106,10 +106,12 @@ print("#connected components", len(list(nx.connected_components(G))))
 
 #################### SPIT OUT NIO FILES ###########################################
 
+# TODO This setup creates issues as the graph contains undocumented nodes, which should not be the case
 nodes_copy = deepcopy(list(G.nodes))
+bad_nodes = []
 for asn in nodes_copy:
     if asn not in node_info:
-        G.remove_node(asn)
+        bad_nodes.append(asn)
         continue
 
     node = G.nodes[asn]
@@ -130,3 +132,7 @@ for asn in nodes_copy:
     with open(filename, "w") as file:
         output = json.dumps(nio, indent=2)
         file.write(output)
+
+print("# bad nodes:", len(bad_nodes))
+print("#connected components", len(list(nx.connected_components(G))))
+print("#nodes in G:", len(list(G.nodes)))

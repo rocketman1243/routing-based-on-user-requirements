@@ -94,7 +94,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     print("G #nodes:", len(G.nodes))
     print("#nio_objects:", len(nio_objects))
     diff = set(list(G.nodes)).difference(set(list(nio_objects.keys())))
-    print(diff)
+    print("#connected componenets g:", len(list(nx.connected_components(G))))
 
     print("48297 in G.nodes:", '48297' in G.nodes)
     print("48297 in nio_objects:", '48297' in nio_objects)
