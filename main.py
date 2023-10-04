@@ -6,12 +6,11 @@ from types import SimpleNamespace
 small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
 small_scale_real_life_paths_experiment = "small_scale_setup/real_life_paths_experiment"
 
-# TODO: Fix these experiments as for some reason they do not work.....
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = full_scale_proof_of_concept_experiment_path
+CHOSEN_PATH = full_scale_scalability_experiment_path
 
 
 # Read in PRO objects   
@@ -28,11 +27,12 @@ results_file = f"{CHOSEN_PATH}/results/output.csv"
 with open(results_file, "w") as file:
     file.write("")
 
+# TODO: For some reason it starts with PRO 04.... Fix and test scalability experiment
 for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths(f"{CHOSEN_PATH}/nio_files/", pro, "not_verbose")
+    output = calculate_paths(f"{CHOSEN_PATH}/nio_files/", pro, "verbose")
     """ 
     Output format: 
 

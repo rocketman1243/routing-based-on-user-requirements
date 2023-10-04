@@ -97,14 +97,7 @@ class Filterset():
                 print("Either source or destination does not comply with the strict requirements, so no path can ever be found.")
             return None
 
-        # TODO: nodes contains an entry (48297) which is not in nio_objects.
-        # The question is: How is nio_objects constructed, and how is it possible that it differs from the nodes in G?
-        # Is nio_objects not updated after the best effort phase, causing the strict phase to request removal of an already removed node?
-        # This does not make sense, as the problem suggests that G_temp.nodes is a strict superset of nio_objects..... , where
-        #   48297 IS in G_temp.nodes but is NOT in nio_objects.   Is nio_objects empty maybe??
         nodes = copy.deepcopy(list(G_temp.nodes))
-        print("G #nodes:", len(G_temp.nodes))
-        print("nio_objects len:", len(nio_objects))
         for num in nodes:
             if self.as_has_to_be_removed(nio_objects[num], "strict", "no_verbose"):
                 G_temp.remove_node(num)

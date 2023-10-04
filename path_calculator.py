@@ -67,6 +67,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     as_numbers = []
     edges = []
 
+    counter = 0
     for _,_,files in os.walk(path_to_nio_files):
         for file in files:
             with open(path_to_nio_files + file, "r") as nio_file:
@@ -75,31 +76,22 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
                 nio_objects[nio_object.as_number] = nio_object
 
                 as_numbers.append(nio_object.as_number)
+                counter += 1
 
                 for index, outgoing_edge in enumerate(nio_object.connections):
+
                     # This can be updated later when edge data _is_ needed. For now its empty.
                     edge_data = {
                         # Add stuff when needed
                     }
+
                     edge_entry = [nio_object.as_number, outgoing_edge, edge_data]
                     edges.append(edge_entry)
-
 
     # Build graph
     G = nx.Graph()
     G.add_nodes_from(as_numbers)
     G.add_edges_from(edges)
-
-    print("after building graph:")
-    print("G #nodes:", len(G.nodes))
-    print("#nio_objects:", len(nio_objects))
-    diff = set(list(G.nodes)).difference(set(list(nio_objects.keys())))
-    print("#connected componenets g:", len(list(nx.connected_components(G))))
-
-    print("48297 in G.nodes:", '48297' in G.nodes)
-    print("48297 in nio_objects:", '48297' in nio_objects)
-
-    # TODO: Check for duplicates in nio_objects
 
     time_after_building_graph = time.time()
 

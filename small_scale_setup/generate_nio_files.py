@@ -2,6 +2,7 @@ import json
 from types import SimpleNamespace
 import networkx as nx
 import random
+import os
 
 
 
@@ -10,7 +11,20 @@ experiment = "proof_of_concept_experiment"
 
 
 
+output_path = experiment + "/nio_files"
 
+
+# CLEANUP COMMENTED FOR EASY STATS. WHEN ACTUALLY RUNNING, UNCOMMENT CLEANUP
+
+# Cleanup previous files in directory as the number of objects may be less than before, 
+# causing dead files from previous runs to still exist
+
+
+# files = os.listdir(output_path)
+# for file in files:
+#     file_path = os.path.join(output_path, file)
+#     if os.path.isfile(file_path):
+#         os.remove(file_path)
 
 
 

@@ -21,7 +21,7 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 
 number_of_features_in_distribution = 30
 
-experiment = "proof_of_concept_experiment"
+experiment = "scalability_experiment"
 
 
 
@@ -33,12 +33,26 @@ experiment = "proof_of_concept_experiment"
 
 output_path = experiment + "/nio_files"
 
+
+
+# Cleanup previous files in directory as the number of objects may be less than before, 
+# causing dead files from previous runs to still exist
+
+files = os.listdir(output_path)
+for file in files:
+    file_path = os.path.join(output_path, file)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+
+
+#######################3
+
 G = nx.Graph()
 
 
 # LINKS
 
-links_file = open("data/as-links-small.txt")
+links_file = open("data/as-links.txt")
 edges = []
 # edge_info = {}
 
@@ -106,13 +120,13 @@ print("#connected components", len(list(nx.connected_components(G))))
 
 #################### SPIT OUT NIO FILES ###########################################
 
-# TODO This setup creates issues as the graph contains undocumented nodes, which should not be the case
 nodes_copy = deepcopy(list(G.nodes))
-bad_nodes = []
+# bad_nodes = []
+print(" hello ", len(nodes_copy))
 for asn in nodes_copy:
-    if asn not in node_info:
-        bad_nodes.append(asn)
-        continue
+    # if asn not in node_info:
+    #     bad_nodes.append(asn)
+    #     continue
 
     node = G.nodes[asn]
     edges = []
@@ -133,6 +147,6 @@ for asn in nodes_copy:
         output = json.dumps(nio, indent=2)
         file.write(output)
 
-print("# bad nodes:", len(bad_nodes))
+# print("# bad nodes:", len(bad_nodes))
 print("#connected components", len(list(nx.connected_components(G))))
 print("#nodes in G:", len(list(G.nodes)))
