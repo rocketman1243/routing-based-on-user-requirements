@@ -5,14 +5,16 @@ from types import SimpleNamespace
 
 small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
 small_scale_real_life_paths_experiment = "small_scale_setup/real_life_paths_experiment"
+
+# TODO: Fix these experiments as for some reason they do not work.....
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = small_scale_real_life_paths_experiment
+CHOSEN_PATH = full_scale_proof_of_concept_experiment_path
 
 
-# Read in PRO objects
+# Read in PRO objects   
 pro_objects = []
 
 for _, _, filenames in os.walk(f"{CHOSEN_PATH}/pro_files/"):

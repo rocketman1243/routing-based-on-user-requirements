@@ -14,17 +14,14 @@ CONTENTS
 This script gets all the links from as-links.txt and converts it into a connected graph
 The nodes in this graph form the basis for my internet model
 For that to work, I need to gather the country and approximate lat/lon to run the filters on it
-This is done from multiple sources: 
-- DLC0: asns.json (contains all properly registered ASes)
-- DLC1: as_to_country + country_to_latlon (fills in most of the gaps)
-
+This is done from the info in node_attributes.csv, where I combined the info from all kinds of sources into a AS_NUMBER,COUNTRY,LAT,LON csv
 
 
 """
 
 number_of_features_in_distribution = 30
 
-experiment = "scalability_experiment"
+experiment = "proof_of_concept_experiment"
 
 
 
@@ -103,11 +100,16 @@ for node in G.nodes:
     total_degree += nx.degree(G, node)
 average = total_degree / len(G.nodes)
 print(average, " average degree")
+print("#connected components", len(list(nx.connected_components(G))))
 
 #################### SPIT OUT NIO FILES ###########################################
 
+nodes_copy = deepcopy(list(G.nodes))
+for asn in nodes_copy:
+    if asn not in node_info:
+        G.remove_node(asn)
+        continue
 
-for asn in G.nodes:
     node = G.nodes[asn]
     edges = []
     for e in G.edges(asn):
