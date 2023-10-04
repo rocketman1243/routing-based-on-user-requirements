@@ -38,7 +38,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_file = open("data/as-links.txt")
+links_file = open("data/as-links-long.txt")
 edges = []
 # edge_info = {}
 
@@ -93,6 +93,8 @@ for node in G.nodes:
     feature_info[node]["features"] = features[node]
 
 nx.set_node_attributes(G, feature_info)
+
+print("#nodes in G: ", len(G.nodes))
 
 
 total_degree = 0
