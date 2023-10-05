@@ -17,6 +17,7 @@ CHOSEN_PATH = full_scale_scalability_experiment_path
 pro_objects = []
 
 for _, _, filenames in os.walk(f"{CHOSEN_PATH}/pro_files/"):
+    filenames.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
     for filename in filenames:
         with open(f"{CHOSEN_PATH}/pro_files/" + filename) as pro_file:
             pro_content = pro_file.read()
@@ -45,6 +46,7 @@ for i in range(len(pro_objects)):
     - time of best effort phase
     - time of optimization phase
     - total time from start to end
+    - one of the found paths
 
     """ 
     result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
