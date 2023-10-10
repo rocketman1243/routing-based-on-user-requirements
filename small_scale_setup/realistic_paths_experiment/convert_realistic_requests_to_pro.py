@@ -2,7 +2,7 @@ import csv
 import random
 import json
 
-filename = "real_life_path_requests.csv"
+filename = "realistic_path_requests.csv"
 
 pro_objects = []
 

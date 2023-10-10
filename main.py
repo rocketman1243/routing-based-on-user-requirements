@@ -4,13 +4,13 @@ import json
 from types import SimpleNamespace
 
 small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
-small_scale_real_life_paths_experiment = "small_scale_setup/real_life_paths_experiment"
+small_scale_real_life_paths_experiment = "small_scale_setup/realistic_paths_experiment"
 
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = full_scale_scalability_experiment_path
+CHOSEN_PATH = small_scale_proof_of_concept_path
 
 
 # Read in PRO objects   
@@ -33,7 +33,7 @@ for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths(f"{CHOSEN_PATH}/nio_files/", pro, "verbose")
+    output = calculate_paths(f"{CHOSEN_PATH}/nio_files/", pro, "not_verbose")
     """ 
     Output format: 
 
