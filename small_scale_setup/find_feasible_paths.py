@@ -5,6 +5,15 @@ import networkx as nx
 import json
 from types import SimpleNamespace
 
+def perform_random_walk(G, start_node):
+    length = random.randint(10, 100)
+    path = []
+    current_node = start_node
+    for i in range(length):
+        path.append(current_node)
+        current_node = random.choice(list(G.edges(current_node)))[1]
+    return path
+
 
 def generate_valid_pro_data(nio_path):
 
@@ -35,8 +44,9 @@ def generate_valid_pro_data(nio_path):
     G.add_edges_from(edges)
 
     # find path
-    endpoints = random.sample(as_numbers, 2)
-    path = nx.shortest_path(G, endpoints[0], endpoints[1])
+    start_node = random.choice(as_numbers)
+    path = perform_random_walk(G, start_node)
+    endpoints = [start_node, path[-1]]
 
     # Gather the requirements that all nodes on this path support
     # We start with everything, and remove what is not supported by any of the nodes on the path
