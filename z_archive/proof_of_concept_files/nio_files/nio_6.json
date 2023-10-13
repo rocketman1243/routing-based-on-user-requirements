@@ -1,8 +1,0 @@
-{
-    "as_number": 213,
-    "security": [1, 2, 3, 5, 7, 8, 9],
-    "privacy": [1, 2, 4, 6, 7, 9, 10],
-    "geolocation": ["AF"],
-    "connections": [13, 29, 137, 425, 442],
-    "latency": [50, 82, 24, 58, 68]
-}
