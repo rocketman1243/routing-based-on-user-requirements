@@ -247,7 +247,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     multipath_selection = []
     until = 0
     if len(optimized_paths) >= min_nr_of_paths:
-        if len(optimized_paths <= target_nr_of_paths):
+        if len(optimized_paths) <= target_nr_of_paths:
             until = len(optimized_paths)
         else:
             until = target_nr_of_paths
