@@ -245,46 +245,51 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     target_nr_of_paths = pro.multipath.target_amount_of_paths
 
     multipath_selection = []
-    for i in range(target_nr_of_paths, min_nr_of_paths - 1, -1):
-        if len(optimized_paths) >= i:
-            multipath_selection.extend(optimized_paths[:i])
-            break
+    until = 0
+    if len(optimized_paths) >= min_nr_of_paths:
+        if len(optimized_paths <= target_nr_of_paths):
+            until = len(optimized_paths)
+        else:
+            until = target_nr_of_paths
 
-    if len(multipath_selection) == 0:
-        print("There were only", len(optimized_paths), "link-disjoint paths available that comply with the requirements. The minimum was", min_nr_of_paths, ", so the request cannot be satisfied :'(")
 
+    if until > 0:
+        multipath_selection.extend(optimized_paths[:until])
+    else:
+        print("There were only", len(optimized_paths), "link-disjoint paths available that comply with the requirements. The minimum was", \
+              min_nr_of_paths, ", so the request cannot be satisfied :'(")
         return fallback_to_ebgp(we_fallback_to_ebgp, verbose, "not enough paths for multipath setting")
 
-    else:
-        time_after_optimization_phase = time.time()
 
-        round_decimals = 2
+    time_after_optimization_phase = time.time()
 
-        if verbose:
-            print("Here are the", len(multipath_selection), "best paths:")
-            for path in multipath_selection:
-                print(path)
+    round_decimals = 2
 
-        # Generate ; separated example path
-        path_list = multipath_selection[0]
-        if isinstance(path_list[0], list):
-            path_list = path_list[0]
-        example_path = ""
-        for i in range(len(path_list) - 1):
+    if verbose:
+        print("Here are the", len(multipath_selection), "best paths:")
+        for path in multipath_selection:
+            print(path)
 
-            example_path += str(path_list[i]) + ";"
-        example_path += str(path_list[len(path_list) - 1])
+    # Generate ; separated example path
+    path_list = multipath_selection[0]
+    if isinstance(path_list[0], list):
+        path_list = path_list[0]
+    example_path = ""
+    for i in range(len(path_list) - 1):
 
-        return (
-            len(optimized_paths), 
-            len(multipath_selection), 
-            "success", 
-            round(time_after_building_graph - time_start, round_decimals),
-            round(time_after_strict_phase - time_after_building_graph, round_decimals),
-            round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
-            round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
-            round(time_after_optimization_phase - time_start, round_decimals),
-            example_path)
+        example_path += str(path_list[i]) + ";"
+    example_path += str(path_list[len(path_list) - 1])
+
+    return (
+        len(optimized_paths), 
+        len(multipath_selection), 
+        "success", 
+        round(time_after_building_graph - time_start, round_decimals),
+        round(time_after_strict_phase - time_after_building_graph, round_decimals),
+        round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
+        round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
+        round(time_after_optimization_phase - time_start, round_decimals),
+        example_path)
 
 
 
