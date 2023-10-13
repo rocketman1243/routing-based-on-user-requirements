@@ -28,7 +28,7 @@ class Filterset():
         # and the result is union'ed to combine both approaches into one representation
         self.geolocations_to_exclude = set(pro_object.geolocation.exclude)
 
-        # Generate the subsets for security
+        # Generate the subsets 
         self.best_effort_subsets = []
         if pro_object.requirements.best_effort_mode == "biggest_subset":
             self.best_effort_subsets = self.powerset(pro_object.requirements.best_effort)
@@ -48,14 +48,13 @@ class Filterset():
 
     def as_has_to_be_removed(self, nio_object, mode, print_mode) -> bool:
         drop: bool = False
-        strict = mode == "strict"
         verbose = print_mode == "verbose"
 
         requirements = []
-        requirements.extend(self.strict_requirements)
-
-        if not(strict):
-            requirements.extend(list(self.best_effort_requirements))
+        if mode == "strict":
+            requirements.extend(self.strict_requirements)
+        else: # mode == "best_effort"
+            requirements.extend(self.best_effort_requirements)
 
         # check requirements: The required requirements have to be a subset of the 
         # requirements of the AS to have this AS handle our path. If this is NOT the case, we
@@ -121,7 +120,7 @@ class Filterset():
             # Start with a fresh graph such that we can again remove nodes
             G_best_effort_phase = copy.deepcopy(G)
 
-            # Drop nodes that do not comply with strict AND reduced set of best effort requirements
+            # Drop nodes that do not comply with current best effort requirements
             nodes = list(G_best_effort_phase.nodes)
             for num in nodes:
                 if self.as_has_to_be_removed(nio_objects[num], "best_effort", "no_verbose"):
