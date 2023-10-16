@@ -1,0 +1,19 @@
+{
+  "as_number": "211946",
+  "geolocation": [
+    "CA",
+    "JP",
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "36617",
+    "11025"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

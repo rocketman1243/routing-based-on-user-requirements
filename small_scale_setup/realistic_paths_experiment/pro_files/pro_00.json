@@ -1,0 +1,27 @@
+{
+  "user_story": "I am a Dutch openfiber customer and want to do online banking on my Interbank account in the US and I want to be sure my bank is not being spoofed and that my route is not hijacked and I heard that Brazil often tries to intercept bank traffic so I want to exclude Brazil",
+  "as_source": "207176",
+  "as_destination": "398866",
+  "requirements": {
+    "strict": [
+      "anti_spoofing",
+      "routing_information"
+    ],
+    "best_effort": [
+      "coordination",
+      "filtering"
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "BR"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

@@ -1,0 +1,18 @@
+{
+  "as_number": "29422",
+  "geolocation": [
+    "FI"
+  ],
+  "lat": "60.2606456983856",
+  "lon": "25.0568258977183",
+  "connections": [
+    "36632",
+    "271175"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

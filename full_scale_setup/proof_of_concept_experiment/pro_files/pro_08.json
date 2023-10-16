@@ -1,0 +1,31 @@
+{
+  "as_source": "52942",
+  "as_destination": "48984",
+  "requirements": {
+    "strict": [
+      16
+    ],
+    "best_effort": [
+      6,
+      15,
+      27
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "CM",
+      "EG",
+      "FK",
+      "LT",
+      "PH",
+      "ZA"
+    ]
+  },
+  "path_optimization": "minimize_number_of_hops",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

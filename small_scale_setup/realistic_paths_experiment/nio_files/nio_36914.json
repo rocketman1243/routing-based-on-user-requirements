@@ -1,0 +1,19 @@
+{
+  "as_number": "36914",
+  "geolocation": [
+    "KE"
+  ],
+  "lat": "-1.27547430032025",
+  "lon": "36.8207311264192",
+  "connections": [
+    "23764",
+    "36944",
+    "37100"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

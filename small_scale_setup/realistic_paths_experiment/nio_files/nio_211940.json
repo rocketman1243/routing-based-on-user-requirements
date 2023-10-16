@@ -1,0 +1,18 @@
+{
+  "as_number": "211940",
+  "geolocation": [
+    "EU",
+    "RO"
+  ],
+  "lat": "46",
+  "lon": "25",
+  "connections": [
+    "203236",
+    "205603"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

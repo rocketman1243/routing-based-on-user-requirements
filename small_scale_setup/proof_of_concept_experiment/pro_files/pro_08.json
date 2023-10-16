@@ -1,0 +1,25 @@
+{
+  "as_source": "7860",
+  "as_destination": "202365",
+  "requirements": {
+    "strict": [
+      "filtering"
+    ],
+    "best_effort": [
+      "anti_spoofing",
+      "coordination"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "MT"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

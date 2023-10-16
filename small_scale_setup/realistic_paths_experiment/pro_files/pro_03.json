@@ -1,0 +1,24 @@
+{
+  "user_story": "I am an APNIC employee and I want to secretly watch some American sports from Comcast but nobody may notice so I want the very best connection possible",
+  "as_source": "4608",
+  "as_destination": "7015",
+  "requirements": {
+    "strict": [
+      "filtering",
+      "anti_spoofing",
+      "coordination",
+      "routing_information"
+    ],
+    "best_effort": [],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": []
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

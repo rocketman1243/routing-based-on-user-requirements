@@ -1,0 +1,17 @@
+{
+  "as_number": "50700",
+  "geolocation": [
+    "AT"
+  ],
+  "lat": "47.33",
+  "lon": "13.33",
+  "connections": [
+    "60587"
+  ],
+  "features": [
+    7,
+    8,
+    13,
+    17
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "as_number": "63771",
+  "geolocation": [
+    "JP"
+  ],
+  "lat": "35.6250103219544",
+  "lon": "139.699965646454",
+  "connections": [
+    "59105"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

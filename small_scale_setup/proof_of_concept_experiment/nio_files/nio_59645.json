@@ -1,0 +1,21 @@
+{
+  "as_number": "59645",
+  "geolocation": [
+    "EU",
+    "DE"
+  ],
+  "lat": "50.5183544187209",
+  "lon": "7.44442013310388",
+  "connections": [
+    "58299",
+    "24961",
+    "35710",
+    "41327",
+    "41666"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

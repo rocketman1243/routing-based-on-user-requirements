@@ -162,6 +162,6 @@ cython_debug/
 
 # Custom stuff
 *api*
-*/nio_files
-*/pro_files
-*/results
+*/nio_files/*
+*/pro_files/*
+*/results/*

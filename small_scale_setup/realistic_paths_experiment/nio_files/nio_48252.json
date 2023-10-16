@@ -1,0 +1,40 @@
+{
+  "as_number": "48252",
+  "geolocation": [
+    "AG",
+    "AI",
+    "AW",
+    "BB",
+    "BM",
+    "BQ",
+    "CW",
+    "DM",
+    "GD",
+    "GF",
+    "GP",
+    "GY",
+    "HT",
+    "JM",
+    "KN",
+    "KY",
+    "LC",
+    "MQ",
+    "MS",
+    "PA",
+    "SR",
+    "SV",
+    "TT",
+    "VG"
+  ],
+  "lat": "14.6560284434605",
+  "lon": "-61.1054359184054",
+  "connections": [
+    "61449",
+    "262492"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "as_number": "28423",
+  "geolocation": [
+    "MX"
+  ],
+  "lat": "23",
+  "lon": "-102",
+  "connections": [
+    "267668",
+    "264750"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

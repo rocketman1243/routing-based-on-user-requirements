@@ -1,0 +1,19 @@
+{
+  "as_number": "4600",
+  "geolocation": [
+    "US"
+  ],
+  "lat": "38",
+  "lon": "-97",
+  "connections": [
+    "11537",
+    "2153",
+    "3701",
+    "101"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

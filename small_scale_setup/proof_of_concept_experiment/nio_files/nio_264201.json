@@ -1,0 +1,18 @@
+{
+  "as_number": "264201",
+  "geolocation": [
+    "BR"
+  ],
+  "lat": "-8.28",
+  "lon": "-35.97",
+  "connections": [
+    "56246",
+    "149953"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

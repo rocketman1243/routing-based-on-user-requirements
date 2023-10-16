@@ -1,0 +1,50 @@
+{
+  "as_source": "206668",
+  "as_destination": "54691",
+  "requirements": {
+    "strict": [
+      4,
+      8,
+      9,
+      10,
+      13,
+      14,
+      15,
+      16,
+      17,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      28
+    ],
+    "best_effort": [
+      2,
+      5,
+      18,
+      19,
+      27,
+      30
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "AI",
+      "CR",
+      "DJ",
+      "KR",
+      "LS",
+      "NE",
+      "SS"
+    ]
+  },
+  "path_optimization": "minimize_total_latency",
+  "multipath": {
+    "target_amount_of_paths": 1,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "false"
+}

@@ -1,0 +1,27 @@
+{
+  "as_source": "205322",
+  "as_destination": "271927",
+  "requirements": {
+    "strict": [
+      "filtering"
+    ],
+    "best_effort": [
+      "anti_spoofing",
+      "routing_information"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "AD",
+      "DZ",
+      "HM"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 2,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

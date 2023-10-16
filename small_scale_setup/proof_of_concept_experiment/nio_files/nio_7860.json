@@ -1,0 +1,18 @@
+{
+  "as_number": "7860",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "46.26",
+  "lon": "-63.14",
+  "connections": [
+    "11260",
+    "6509"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

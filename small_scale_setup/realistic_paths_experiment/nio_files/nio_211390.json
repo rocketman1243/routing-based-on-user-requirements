@@ -1,0 +1,23 @@
+{
+  "as_number": "211390",
+  "geolocation": [
+    "AU",
+    "CA",
+    "CN",
+    "GB",
+    "HK",
+    "SG",
+    "TW",
+    "US"
+  ],
+  "lat": "60",
+  "lon": "-95",
+  "connections": [
+    "7438",
+    "36619"
+  ],
+  "features": [
+    "filtering",
+    "coordination"
+  ]
+}

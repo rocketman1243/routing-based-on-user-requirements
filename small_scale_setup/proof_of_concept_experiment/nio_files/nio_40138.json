@@ -1,0 +1,36 @@
+{
+  "as_number": "40138",
+  "geolocation": [
+    "AE",
+    "AT",
+    "AU",
+    "BE",
+    "BR",
+    "CA",
+    "CH",
+    "CZ",
+    "DE",
+    "DK",
+    "ES",
+    "FR",
+    "GB",
+    "HK",
+    "HU",
+    "IN",
+    "IT",
+    "NL",
+    "RO",
+    "SG",
+    "US"
+  ],
+  "lat": "38.3541055841793",
+  "lon": "-117.566433748309",
+  "connections": [
+    "47787"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

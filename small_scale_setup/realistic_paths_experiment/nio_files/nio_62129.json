@@ -1,0 +1,19 @@
+{
+  "as_number": "62129",
+  "geolocation": [
+    "IE"
+  ],
+  "lat": "53.0297311402232",
+  "lon": "-7.5349216852734",
+  "connections": [
+    "174",
+    "60501",
+    "39120"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

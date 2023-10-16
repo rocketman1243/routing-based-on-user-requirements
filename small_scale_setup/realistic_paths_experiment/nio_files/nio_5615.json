@@ -1,0 +1,18 @@
+{
+  "as_number": "5615",
+  "geolocation": [
+    "NL"
+  ],
+  "lat": "52.5",
+  "lon": "5.75",
+  "connections": [
+    "209844",
+    "269037"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

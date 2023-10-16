@@ -1,0 +1,28 @@
+{
+  "as_source": "397193",
+  "as_destination": "174",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      "filtering",
+      "coordination",
+      "routing_information"
+    ],
+    "best_effort_mode": "biggest_subset"
+  },
+  "geolocation": {
+    "exclude": [
+      "AD",
+      "EC",
+      "MN",
+      "MT",
+      "SY"
+    ]
+  },
+  "path_optimization": "none",
+  "multipath": {
+    "target_amount_of_paths": 5,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

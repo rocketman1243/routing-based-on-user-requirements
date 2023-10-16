@@ -1,0 +1,19 @@
+{
+  "as_number": "7015",
+  "geolocation": [
+    "US"
+  ],
+  "lat": "42.2802350171742",
+  "lon": "-71.7021423554943",
+  "connections": [
+    "3356",
+    "19704",
+    "7922"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

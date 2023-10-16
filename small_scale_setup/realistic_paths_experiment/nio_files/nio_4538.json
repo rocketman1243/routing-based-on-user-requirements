@@ -1,0 +1,29 @@
+{
+  "as_number": "4538",
+  "geolocation": [
+    "CN"
+  ],
+  "lat": "35.6494833581213",
+  "lon": "115.656142696659",
+  "connections": [
+    "174",
+    "1299",
+    "2914",
+    "3491",
+    "23764",
+    "7660",
+    "4608",
+    "4134",
+    "9002",
+    "2603",
+    "4826",
+    "39120",
+    "7497"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

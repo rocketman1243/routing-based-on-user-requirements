@@ -1,0 +1,20 @@
+{
+  "as_number": "139328",
+  "geolocation": [
+    "CN",
+    "EU",
+    "HK",
+    "JP"
+  ],
+  "lat": "35",
+  "lon": "105",
+  "connections": [
+    "36616",
+    "396551"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

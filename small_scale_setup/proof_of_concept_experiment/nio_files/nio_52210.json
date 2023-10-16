@@ -1,0 +1,19 @@
+{
+  "as_number": "52210",
+  "geolocation": [
+    "CA",
+    "US"
+  ],
+  "lat": "43.6359383974196",
+  "lon": "-82.5156739832766",
+  "connections": [
+    "174",
+    "399580"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

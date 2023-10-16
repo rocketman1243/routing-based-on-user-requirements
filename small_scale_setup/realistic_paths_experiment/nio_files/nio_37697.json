@@ -1,0 +1,20 @@
+{
+  "as_number": "37697",
+  "geolocation": [
+    "MZ"
+  ],
+  "lat": "-25.97",
+  "lon": "32.57",
+  "connections": [
+    "3491",
+    "37721",
+    "328512",
+    "39120",
+    "41327"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "as_number": "21219",
+  "geolocation": [
+    "EU",
+    "UA"
+  ],
+  "lat": "48.5420433303942",
+  "lon": "31.2456376578965",
+  "connections": [
+    "3326"
+  ],
+  "features": [
+    "filtering",
+    "anti_spoofing",
+    "coordination",
+    "routing_information"
+  ]
+}

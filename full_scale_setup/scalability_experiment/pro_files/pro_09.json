@@ -1,0 +1,43 @@
+{
+  "as_source": "51700",
+  "as_destination": "57718",
+  "requirements": {
+    "strict": [],
+    "best_effort": [
+      3,
+      5,
+      12,
+      17,
+      18,
+      19,
+      22,
+      23,
+      26,
+      29,
+      33,
+      36,
+      38,
+      39,
+      40,
+      43,
+      44,
+      45,
+      46,
+      50
+    ],
+    "best_effort_mode": "ordered_list"
+  },
+  "geolocation": {
+    "exclude": [
+      "HR",
+      "HT",
+      "LR"
+    ]
+  },
+  "path_optimization": "minimize_number_of_hops",
+  "multipath": {
+    "target_amount_of_paths": 3,
+    "minimum_number_of_paths": 1
+  },
+  "fallback_to_ebgp_if_no_path_found": "true"
+}

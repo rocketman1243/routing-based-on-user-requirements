@@ -1,0 +1,17 @@
+{
+  "as_number": "611",
+  "geolocation": [
+    "CA"
+  ],
+  "lat": "46.1449449836952",
+  "lon": "-66.0861382938698",
+  "connections": [
+    "11260",
+    "6509"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}

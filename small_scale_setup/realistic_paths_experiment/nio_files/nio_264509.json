@@ -1,0 +1,16 @@
+{
+  "as_number": "264509",
+  "geolocation": [
+    "BR"
+  ],
+  "lat": "15.5089396487335",
+  "lon": "-63.7396255165218",
+  "connections": [
+    "3356"
+  ],
+  "features": [
+    "filtering",
+    "coordination",
+    "routing_information"
+  ]
+}
