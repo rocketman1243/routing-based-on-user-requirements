@@ -167,3 +167,4 @@ cython_debug/
 */results/*
 *nio*.json
 *pro*.json
+.vscode
