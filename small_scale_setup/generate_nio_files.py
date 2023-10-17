@@ -9,28 +9,25 @@ import os
 
 experiment = "proof_of_concept_experiment"
 
+dry_run = False
 
 
-output_path = experiment + "/nio_files"
 
 
-# CLEANUP COMMENTED FOR EASY STATS. WHEN ACTUALLY RUNNING, UNCOMMENT CLEANUP
+
+
 
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
+if not dry_run:
+    output_path = "small_scale_setup/data/nio_files"
 
-# files = os.listdir(output_path)
-# for file in files:
-#     file_path = os.path.join(output_path, file)
-#     if os.path.isfile(file_path):
-#         os.remove(file_path)
-
-
-
-
-
-
+    files = os.listdir(output_path)
+    for file in files:
+        file_path = os.path.join(output_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
 ########################
 
@@ -218,8 +215,9 @@ for asn in participant_asns:
     # Commented for now so I can easily re-run this script for statistics.
     # Uncomment to re-generate the NIO files
 
-    with open(f"small_scale_setup/data/nio_files/nio_{asn}.json", "w") as file:
-        file.write(f"{json.dumps(nio, indent=2)}")
+    if not dry_run:
+        with open(f"small_scale_setup/data/nio_files/nio_{asn}.json", "w") as file:
+            file.write(f"{json.dumps(nio, indent=2)}")
 
 
 

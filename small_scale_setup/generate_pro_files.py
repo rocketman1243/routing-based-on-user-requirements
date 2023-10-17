@@ -1,10 +1,15 @@
 import random
 import json
 import copy
+import os
+
+
+
 
 
 experiment = "proof_of_concept_experiment"
 
+dry_run = False
 
 
 
@@ -14,10 +19,19 @@ experiment = "proof_of_concept_experiment"
 
 
 
+# Cleanup previous files in directory as the number of objects may be less than before, 
+# causing dead files from previous runs to still exist
 
+if not dry_run:
+    output_path = "small_scale_setup/nio_files"
 
-######################################################
+    files = os.listdir(output_path)
+    for file in files:
+        file_path = os.path.join(output_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
+########################
 
 # Lists of possible values
 
@@ -90,8 +104,10 @@ for _ in range(num_objects):
     
     output_objects.append(data)
 
+
 # Print the generated JSON objects
-for i, obj in enumerate(output_objects):
-    with open(f"small_scale_setup/{experiment}/pro_files/pro_{i:02}.json", "w") as file:
-        file.write(f"{json.dumps(obj, indent=2)}")
+if not dry_run:
+    for i, obj in enumerate(output_objects):
+        with open(f"small_scale_setup/{experiment}/pro_files/pro_{i:02}.json", "w") as file:
+            file.write(f"{json.dumps(obj, indent=2)}")
 

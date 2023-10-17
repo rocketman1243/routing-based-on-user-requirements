@@ -22,7 +22,7 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 number_of_features_in_distribution = 30
 output_path = "full_scale_setup/data/nio_files"
 
-
+dry_run = False
 
 
 
@@ -35,11 +35,12 @@ output_path = "full_scale_setup/data/nio_files"
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
-files = os.listdir(output_path)
-for file in files:
-    file_path = os.path.join(output_path, file)
-    if os.path.isfile(file_path):
-        os.remove(file_path)
+if not dry_run:
+    files = os.listdir(output_path)
+    for file in files:
+        file_path = os.path.join(output_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
 
 #######################3
@@ -146,10 +147,11 @@ for asn in nodes_copy:
         "features": node["features"],
     }
 
-    filename = f"{output_path}/nio_" + asn + ".json"
-    with open(filename, "w") as file:
-        output = json.dumps(nio, indent=2)
-        file.write(output)
+    if not dry_run:
+        filename = f"{output_path}/nio_" + asn + ".json"
+        with open(filename, "w") as file:
+            output = json.dumps(nio, indent=2)
+            file.write(output)
 
 # print("# bad nodes:", len(bad_nodes))
 print("#connected components", len(list(nx.connected_components(G))))

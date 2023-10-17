@@ -17,12 +17,20 @@ best_effort_min_amount = 0
 best_effort_max_amount = 5
 
 
+dry_run = False
+
+
+scalability_experiment = False
+
+
+
+
+
 
 
 
 
 ########## best effort requirements scalability experiment setup
-scalability_experiment = False
 
 
 # For scalability: Range that best effort requirements can take on, with number of elements per step
@@ -47,12 +55,15 @@ if scalability_experiment:
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
-output_path = f"full_scale_setup/{experiment}/pro_files"
-files = os.listdir(output_path)
-for file in files:
-    file_path = os.path.join(output_path, file)
-    if os.path.isfile(file_path):
-        os.remove(file_path)
+if not dry_run:
+    output_path = f"full_scale_setup/{experiment}/pro_files"
+    files = os.listdir(output_path)
+    for file in files:
+        file_path = os.path.join(output_path, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+##################################33
 
 ases = []
 with open("full_scale_setup/data/as_numbers.txt", "r") as file:
@@ -134,8 +145,9 @@ for index in range(num_objects):
     
     output_objects.append(data)
 
-# Print the generated JSON objects
-for i, obj in enumerate(output_objects):
-    with open(f"{output_path}/pro_{i:02}.json", "w") as file:
-        file.write(f"{json.dumps(obj, indent=2)}")
+if not dry_run:
+    # Print the generated JSON objects
+    for i, obj in enumerate(output_objects):
+        with open(f"{output_path}/pro_{i:02}.json", "w") as file:
+            file.write(f"{json.dumps(obj, indent=2)}")
 
