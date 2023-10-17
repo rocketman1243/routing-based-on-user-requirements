@@ -25,7 +25,7 @@ number_of_features_in_distribution = 30
 ###################
 
 
-output_path = "full_scale_setup/nio_files"
+output_path = "full_scale_setup/data/nio_files"
 
 
 

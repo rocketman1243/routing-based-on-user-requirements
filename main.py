@@ -33,7 +33,7 @@ for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths(f"{CHOSEN_PATH}/nio_files/", pro, "not_verbose")
+    output = calculate_paths(f"{CHOSEN_PATH}/../data/nio_files/", pro, "not_verbose")
     """ 
     Output format: 
 

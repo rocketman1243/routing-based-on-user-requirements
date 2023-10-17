@@ -38,7 +38,7 @@ output_path = experiment + "/nio_files"
 
 node_attributes = {}
 
-with open("data/node_attributes.csv") as file:
+with open("small_scale_setup/data/node_attributes.csv") as file:
     for full_line in file:
         line = full_line.split(",")
         asn = line[0]
@@ -53,7 +53,7 @@ with open("data/node_attributes.csv") as file:
         }
 
 country_to_latlon = {}
-with open("data/country_to_latlon.csv") as file:
+with open("small_scale_setup/data/country_to_latlon.csv") as file:
     for full_line in file:
         line = full_line.split(",")
         country = line[0][1:-1]
@@ -69,7 +69,7 @@ with open("data/country_to_latlon.csv") as file:
 participant_asns = []
 
 extra_node_info = {}
-with open("data/asn_info_caida.json") as caida_file:
+with open("small_scale_setup/data/asn_info_caida.json") as caida_file:
     caida_content = caida_file.read()
     caida_object = json.loads(caida_content, object_hook=lambda caida_content: SimpleNamespace(**caida_content))
     asns = caida_object.data.asns.edges
@@ -93,7 +93,7 @@ with open("data/asn_info_caida.json") as caida_file:
 
 node_features = {}
 
-with open("data/manrs.json") as file:
+with open("small_scale_setup/data/manrs.json") as file:
     content = file.read()
     object = json.loads(content, object_hook=lambda content: SimpleNamespace(**content))
     
@@ -139,6 +139,10 @@ with open("data/manrs.json") as file:
 # Remove duplicate asns
 participant_asns = list(set(participant_asns))
 
+with open("small_scale_setup/data/as_numbers.txt", "w") as file:
+    for asn in participant_asns:
+        file.write(asn + "\n")
+
 G = nx.Graph()
 G.add_nodes_from(participant_asns)
 nx.set_node_attributes(G, node_features)
@@ -149,7 +153,7 @@ nx.set_node_attributes(G, node_features)
 # 1. Add the real links from as-links.txt for which both endpoints are present in the graph
 links = []
 
-with open("data/as-links.txt") as file:
+with open("small_scale_setup/data/as-links.txt") as file:
     for full_line in file:
         line = full_line.split("|")
         a = line[0]
@@ -214,8 +218,8 @@ for asn in participant_asns:
     # Commented for now so I can easily re-run this script for statistics.
     # Uncomment to re-generate the NIO files
 
-    # with open(f"{experiment}/nio_files/nio_{asn}.json", "w") as file:
-    #     file.write(f"{json.dumps(nio, indent=2)}")
+    with open(f"small_scale_setup/data/nio_files/nio_{asn}.json", "w") as file:
+        file.write(f"{json.dumps(nio, indent=2)}")
 
 
 

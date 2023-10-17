@@ -1,6 +1,5 @@
 import random
 import json
-from find_feasible_paths import generate_valid_pro_data
 import copy
 
 
@@ -29,19 +28,20 @@ countries = [
 num_objects = 25
 output_objects = []
 
-all_features = [
+features = [
         "filtering",
         "anti_spoofing",
         "coordination",
         "routing_information"
     ] 
 
-for _ in range(num_objects):
-    valid_data = generate_valid_pro_data(f"{experiment}/nio_files/")
+ases = []
+with open("small_scale_setup/data/as_numbers.txt", "r") as file:
+    for line in file:
+        ases.append(line[:-1])
 
-    endpoints = valid_data[0]
-    features = valid_data[1]
-    countries_to_not_block = valid_data[2]
+for _ in range(num_objects):
+    endpoints = random.sample(ases, 2)
 
     as_source = endpoints[0]
     as_destination = endpoints[1]
@@ -50,16 +50,13 @@ for _ in range(num_objects):
     strict_requirements_amount = random.randint(0, len(features))
     strict_requirements = random.sample(features, strict_requirements_amount)
 
-    other_requirements = [i for i in all_features if i not in strict_requirements]
+    other_requirements = [i for i in features if i not in strict_requirements]
     best_effort_requirements_amount = random.randint(min(len(other_requirements), 1), len(other_requirements))
     best_effort_requirements = random.sample(other_requirements, best_effort_requirements_amount)
 
     best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
     
     geolocation_copy = copy.deepcopy(countries)
-    for country in countries_to_not_block:
-        if country in geolocation_copy:
-            geolocation_copy.remove(country)
 
     geolocation_amount = random.randint(0, min(10, len(geolocation_copy)))
     geolocation_exclude = random.sample(geolocation_copy, geolocation_amount)
@@ -95,6 +92,6 @@ for _ in range(num_objects):
 
 # Print the generated JSON objects
 for i, obj in enumerate(output_objects):
-    with open(f"{experiment}/pro_files/pro_{i:02}.json", "w") as file:
+    with open(f"small_scale_setup/{experiment}/pro_files/pro_{i:02}.json", "w") as file:
         file.write(f"{json.dumps(obj, indent=2)}")
 
