@@ -21,17 +21,11 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 
 number_of_features_in_distribution = 30
 
-experiment = "scalability_experiment"
-
-
-
-
-
 
 ###################
 
 
-output_path = experiment + "/nio_files"
+output_path = "full_scale_setup/nio_files"
 
 
 
@@ -52,7 +46,7 @@ G = nx.Graph()
 
 # LINKS
 
-links_file = open("data/as-links.txt")
+links_file = open("full_scale_setup/data/as-links.txt")
 edges = []
 # edge_info = {}
 
@@ -68,7 +62,7 @@ G.add_edges_from(edges)
 # Note: Nodes are added based on edges in connected graph
 node_info = {}
 
-node_info_file = open( "data/node_attributes.csv", "r")
+node_info_file = open( "full_scale_setup/data/node_attributes.csv", "r")
 for line in node_info_file:
     items = line.split(",")
 
@@ -100,6 +94,11 @@ for l in degrees:
 
 # After edges are inserted from connected dataset, we generate features based on this
 features = generate_features(number_of_features_in_distribution, ordered_asns)
+
+with open("./full_scale_setup/data/as_numbers.py", "a") as file:
+    for asn in ordered_asns:
+        file.write(asn)
+
 
 feature_info = {}
 for node in G.nodes:

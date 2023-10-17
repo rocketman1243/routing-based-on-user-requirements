@@ -1,7 +1,7 @@
 import random, math
 
 
-def generate_distribution(max_number_of_features: int, as_numbers: list[int]):
+def generate_distribution(max_number_of_features: int, as_numbers: list[str]):
     items_per_step = math.ceil(len(as_numbers) / max_number_of_features)
 
     distribution = {}
@@ -10,7 +10,7 @@ def generate_distribution(max_number_of_features: int, as_numbers: list[int]):
     current_number_of_elements = max_number_of_features
 
     for i in as_numbers:
-        distribution[i] = current_number_of_elements
+        distribution[int(i)] = current_number_of_elements
         counter += 1
 
         if counter >= items_per_step:
