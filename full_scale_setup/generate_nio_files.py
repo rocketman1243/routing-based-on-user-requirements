@@ -20,14 +20,17 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 """
 
 number_of_features_in_distribution = 30
-
-
-###################
-
-
 output_path = "full_scale_setup/data/nio_files"
 
 
+
+
+
+
+
+
+
+###################
 
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
@@ -82,6 +85,8 @@ for line in node_info_file:
 
 nx.set_node_attributes(G, node_info)
 
+
+
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
 degrees = list(nx.degree(G))
@@ -95,9 +100,9 @@ for l in degrees:
 # After edges are inserted from connected dataset, we generate features based on this
 features = generate_features(number_of_features_in_distribution, ordered_asns)
 
-with open("./full_scale_setup/data/as_numbers.py", "a") as file:
+with open("./full_scale_setup/data/as_numbers.txt", "w") as file:
     for asn in ordered_asns:
-        file.write(asn)
+        file.write(asn + "\n")
 
 
 feature_info = {}

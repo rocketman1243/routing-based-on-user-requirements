@@ -5,24 +5,35 @@ import os
 
 # Tuning values
 
-max_number_of_strict_requirements = 0
+num_objects = 25
 
-# Range that best effort requirements can take on, with number of elements per step
-best_effort_amount_ranges = [
-    [4, 4], 
-    [8, 8],
-    [12, 12],
-    [16, 16],
-    [20, 20]
-]
+max_number_of_strict_requirements = 5
 
-number_of_objects_per_best_effort_range = 2
+requirements = list(range(1, 31))
 
-requirements = range(1, 51)
+experiment = "proof_of_concept_experiment"
 
-experiment = "scalability_experiment"
+best_effort_min_amount = 0
+best_effort_max_amount = 5
 
 
+
+
+
+
+########## best effort requirements scalability experiment setup
+scalability_experiment = False
+
+
+# For scalability: Range that best effort requirements can take on, with number of elements per step
+# Current setup is 2 PROs with 4 BER, 2 pros with 8 BER, 2 PROs with 12 BER etc.
+scalability_best_effort_amounts = [4, 4, 8, 8, 12, 12, 16, 16, 20, 20]
+
+if scalability_experiment:
+    num_objects = len(scalability_best_effort_amounts)
+    max_number_of_strict_requirements = 0
+    scalability_best_effort_mode = "biggest_subset"
+    experiment = "scalability_experiment"
 
 
 
@@ -36,7 +47,7 @@ experiment = "scalability_experiment"
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
-output_path = experiment + "/pro_files"
+output_path = f"full_scale_setup/{experiment}/pro_files"
 files = os.listdir(output_path)
 for file in files:
     file_path = os.path.join(output_path, file)
@@ -46,7 +57,7 @@ for file in files:
 ases = []
 with open("full_scale_setup/data/as_numbers.txt", "r") as file:
     for line in file:
-        ases.append(line)
+        ases.append(line[:-1])
 
 # Lists of possible geolocation values
 countries = [
@@ -57,12 +68,8 @@ countries = [
 output_objects = []
 
 
-best_effort_ranges = []
-for i in range(len(best_effort_amount_ranges)):
-    for j in range(number_of_objects_per_best_effort_range):
-        best_effort_ranges.append(best_effort_amount_ranges[i])
 
-num_objects = len(best_effort_amount_ranges) * number_of_objects_per_best_effort_range
+
 
 for index in range(num_objects):
 
@@ -78,14 +85,20 @@ for index in range(num_objects):
     strict_requirements.sort()
 
     other_requirements = [i for i in requirements if i not in strict_requirements]
-    best_effort_min_amount = best_effort_ranges[index][0]
-    best_effort_max_amount = best_effort_ranges[index][1]
+
+    if scalability_experiment:
+        best_effort_min_amount = scalability_best_effort_amounts[index]
+        best_effort_max_amount = scalability_best_effort_amounts[index]
+
     best_effort_amount = random.randint(best_effort_min_amount, best_effort_max_amount)
 
     best_effort_requirements = random.sample(other_requirements, best_effort_amount)
     best_effort_requirements.sort()
 
     best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
+
+    if scalability_experiment:
+        best_effort_mode = scalability_best_effort_mode
     
     geolocation_amount = random.randint(0, 10)
     geolocation_copy = copy.deepcopy(countries)

@@ -4,13 +4,13 @@ import json
 from types import SimpleNamespace
 
 small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
-small_scale_real_life_paths_experiment = "small_scale_setup/realistic_paths_experiment"
+small_scale_realistic_paths_experiment = "small_scale_setup/realistic_paths_experiment"
 
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = small_scale_proof_of_concept_path
+CHOSEN_PATH = full_scale_proof_of_concept_experiment_path
 
 
 # Read in PRO objects   

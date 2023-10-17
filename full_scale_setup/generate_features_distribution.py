@@ -10,7 +10,7 @@ def generate_distribution(max_number_of_features: int, as_numbers: list[str]):
     current_number_of_elements = max_number_of_features
 
     for i in as_numbers:
-        distribution[int(i)] = current_number_of_elements
+        distribution[i] = current_number_of_elements
         counter += 1
 
         if counter >= items_per_step:
@@ -30,7 +30,7 @@ def generate_features(max_number_of_features: int, as_numbers: list[int]):
     mapping = {}
 
     for as_number in as_numbers:
-        nr_of_items = distribution[as_number]
+        nr_of_items = distribution[str(as_number)]
         sample = random.sample(features, nr_of_items)
         sample.sort()
         mapping[as_number] = sample

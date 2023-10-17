@@ -161,10 +161,11 @@ cython_debug/
 
 
 # Custom stuff
+.vscode
 *api*
 */nio_files/*
 */pro_files/*
 */results/*
 *nio*.json
 *pro*.json
-.vscode
+*output.csv
