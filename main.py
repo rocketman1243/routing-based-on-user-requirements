@@ -9,6 +9,10 @@ small_scale_realistic_paths_experiment = "small_scale_setup/realistic_paths_expe
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
 full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
+#######################
+
+initial_results = "full_scale_setup/initial_results_experiment"
+
 
 CHOSEN_PATH = full_scale_proof_of_concept_experiment_path
 
@@ -28,7 +32,6 @@ results_file = f"{CHOSEN_PATH}/results/output.csv"
 with open(results_file, "w") as file:
     file.write("")
 
-# TODO: For some reason it starts with PRO 04.... Fix and test scalability experiment
 for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
@@ -46,7 +49,7 @@ for i in range(len(pro_objects)):
     - time of best effort phase
     - time of optimization phase
     - total time from start to end
-    - one of the found paths
+    - The found paths and their latency, formatted as:   as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency
 
     """ 
     result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"

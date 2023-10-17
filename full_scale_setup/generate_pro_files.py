@@ -5,7 +5,7 @@ import os
 
 # Tuning values
 
-num_objects = 25
+num_objects = 150
 
 max_number_of_strict_requirements = 5
 
@@ -20,7 +20,6 @@ best_effort_max_amount = 5
 dry_run = False
 
 
-scalability_experiment = False
 
 
 
@@ -31,7 +30,7 @@ scalability_experiment = False
 
 
 ########## best effort requirements scalability experiment setup
-
+scalability_experiment = experiment == "scalability_experiment"
 
 # For scalability: Range that best effort requirements can take on, with number of elements per step
 # Current setup is 2 PROs with 4 BER, 2 pros with 8 BER, 2 PROs with 12 BER etc.
@@ -148,6 +147,6 @@ for index in range(num_objects):
 if not dry_run:
     # Print the generated JSON objects
     for i, obj in enumerate(output_objects):
-        with open(f"{output_path}/pro_{i:02}.json", "w") as file:
+        with open(f"{output_path}/pro_{(i+150):02}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
 

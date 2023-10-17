@@ -8,6 +8,7 @@ from geopy import distance
 import os
 import random
 import time
+import math
 
 def calculate_total_latency(graph, nio_objects, path):
     total = 0
@@ -270,15 +271,27 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         for path in multipath_selection:
             print(path)
 
-    # Generate ; separated example path
-    path_list = multipath_selection[0]
-    if isinstance(path_list[0], list):
-        path_list = path_list[0]
-    example_path = ""
-    for i in range(len(path_list) - 1):
+    # Generate pathstring formatted as: 
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency
+    paths_as_string = ""
+    path_list = optimized_paths
+    
+    for index, path in enumerate(path_list):
 
-        example_path += str(path_list[i]) + ";"
-    example_path += str(path_list[len(path_list) - 1])
+        while isinstance(path[0], list):
+            path = path[0]
+        path_string = ""
+        for i in range(len(path) - 1):
+            path_string += str(path[i]) + ";"
+        path_string += str(path[len(path) - 1]) + "-"
+        
+        # calculate latency
+        latency = calculate_total_latency(G_after_filter, nio_objects, path)
+        path_string += str(round(latency))
+
+        paths_as_string += path_string
+        if index < len(path_list) - 1:
+            paths_as_string += "|"
 
     return (
         len(optimized_paths), 
@@ -289,7 +302,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
         round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
         round(time_after_optimization_phase - time_start, round_decimals),
-        example_path)
+        paths_as_string)
 
 
 
