@@ -1,6 +1,7 @@
 from itertools import chain, combinations
 import networkx as nx
 import copy
+import time
 
 class Filterset():
 
@@ -29,11 +30,14 @@ class Filterset():
         self.geolocations_to_exclude = set(pro_object.geolocation.exclude)
 
         # Generate the subsets 
+        time_before_subset_generation = time.time()
         self.best_effort_subsets = []
         if pro_object.requirements.best_effort_mode == "biggest_subset":
             self.best_effort_subsets = self.powerset(pro_object.requirements.best_effort)
         else: # the mode is ordered_list
             self.best_effort_subsets = self.decreasing_lists(pro_object.requirements.best_effort)
+        
+        self.best_effort_subset_generation_time = time.time() - time_before_subset_generation
 
         # Initially set the best effort requirement sets to the biggest subset in the list of sets
         self.best_effort_requirements = self.best_effort_subsets[0]

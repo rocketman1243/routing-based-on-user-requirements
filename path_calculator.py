@@ -105,6 +105,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         print("\n### STRICT PHASE ###\n")
 
     filterset = Filterset(pro)
+    subset_generation_runtime = filterset.best_effort_subset_generation_time
 
     # Drop nodes that do not comply with strict requirements
     G_strict_phase = filterset.apply_strict_filters(G, pro, nio_objects)
@@ -273,7 +274,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
     ###################################################################################################################
     # Generate pathstring formatted as: 
-    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency#BestEffortSubsetGenerationTimeInSeconds
     paths_as_string = ""
     path_list = optimized_paths
     
@@ -325,6 +326,13 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
     paths_as_string += "-"
     paths_as_string += str(round(fastest_path_no_constraints_latency))
+
+    # Scalability experiment data
+    paths_as_string += "," + subset_generation_runtime
+
+    # TODO: Gather scalability data, update conversion script to grab the scalability data & make onderscheid between Biggest subset and Ordered list so I can plot them separately.
+
+    # TODO: Rewrite the awkward path_as_string thing to output proper csv where the only separator is csv. This is getting ridiculous and csv is perfectly able to deal with all these things even if I plemp it into one string.
     
 
     return (

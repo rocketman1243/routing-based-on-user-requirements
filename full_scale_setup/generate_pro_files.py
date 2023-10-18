@@ -6,7 +6,7 @@ import os
 # Tuning values
 
 num_objects = 50
-experiment = "initial_results_experiment"
+experiment = "scalability_experiment"
 
 
 
@@ -32,11 +32,13 @@ scalability_experiment = experiment == "scalability_experiment"
 # Current setup is 2 PROs with 4 BER, 2 pros with 8 BER, 2 PROs with 12 BER etc.
 scalability_best_effort_amounts = [4, 4, 8, 8, 12, 12, 16, 16, 20, 20]
 
+scalability_best_effort_mode_toggle_is_biggest_subset = True
 if scalability_experiment:
     num_objects = len(scalability_best_effort_amounts)
     max_number_of_strict_requirements = 0
     scalability_best_effort_mode = "biggest_subset"
     experiment = "scalability_experiment"
+
 
 
 
@@ -103,8 +105,12 @@ for index in range(num_objects):
 
     best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
 
-    if scalability_experiment:
-        best_effort_mode = scalability_best_effort_mode
+    if scalability_experiment and scalability_best_effort_mode_toggle_is_biggest_subset:
+        scalability_best_effort_mode_toggle_is_biggest_subset = False
+        best_effort_mode = "ordered_list"
+    elif scalability_experiment:
+        scalability_best_effort_mode_toggle_is_biggest_subset = True
+        best_effort_mode = "biggest_subset"
     
     geolocation_amount = random.randint(0, 10)
     geolocation_copy = copy.deepcopy(countries)
