@@ -10,7 +10,7 @@ import random
 import time
 import math
 
-def calculate_total_latency(graph, nio_objects, path):
+def calculate_total_latency(nio_objects, path):
     total = 0
     for i in range(len(path) - 1):
         node0 = path[i]
@@ -165,7 +165,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
         if pro.path_optimization == "minimize_total_latency":
             for path in all_disjoint_paths:
-                scored_paths.append([path, calculate_total_latency(G_after_filter, nio_objects, path)])
+                scored_paths.append([path, calculate_total_latency(nio_objects, path)])
         else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
             for path in all_disjoint_paths:
                 scored_paths.append([path, len(path) - 1])
@@ -271,8 +271,9 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         for path in multipath_selection:
             print(path)
 
+    ###################################################################################################################
     # Generate pathstring formatted as: 
-    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency
     paths_as_string = ""
     path_list = optimized_paths
     
@@ -286,12 +287,25 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         path_string += str(path[len(path) - 1]) + "-"
         
         # calculate latency
-        latency = calculate_total_latency(G_after_filter, nio_objects, path)
+        latency = calculate_total_latency(nio_objects, path)
         path_string += str(round(latency))
 
         paths_as_string += path_string
         if index < len(path_list) - 1:
             paths_as_string += "|"
+
+    # Add shortest path without any constraints for 'Cost of control' experiment
+    shortest_path_no_constraints = nx.shortest_path(G, pro.as_source, pro.as_destination)
+    paths_as_string += "#"
+    for index, asn in enumerate(shortest_path_no_constraints):
+        paths_as_string += asn
+        if index < len(shortest_path_no_constraints) - 1:
+            paths_as_string += ";"
+
+    latency = calculate_total_latency(nio_objects, shortest_path_no_constraints)
+    paths_as_string += str(round(latency))
+    
+    
 
     return (
         len(optimized_paths), 

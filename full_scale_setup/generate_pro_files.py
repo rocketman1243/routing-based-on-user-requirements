@@ -147,6 +147,6 @@ for index in range(num_objects):
 if not dry_run:
     # Print the generated JSON objects
     for i, obj in enumerate(output_objects):
-        with open(f"{output_path}/pro_{(i+150):02}.json", "w") as file:
+        with open(f"{output_path}/pro_{(i):02}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
 
