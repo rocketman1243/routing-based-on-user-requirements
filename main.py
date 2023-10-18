@@ -49,7 +49,7 @@ for i in range(len(pro_objects)):
     - time of best effort phase
     - time of optimization phase
     - total time from start to end
-    - The found paths and their latency, formatted as:   as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency
+    - The found paths and their latency, see formatting in path_calculator.py bottom of file
 
     """ 
     result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"

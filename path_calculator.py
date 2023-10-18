@@ -301,10 +301,30 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
         paths_as_string += asn
         if index < len(shortest_path_no_constraints) - 1:
             paths_as_string += ";"
-
-    latency = calculate_total_latency(nio_objects, shortest_path_no_constraints)
-    paths_as_string += str(round(latency))
     
+    paths_as_string += "-"
+    shortest_path_no_constraints_latency = calculate_total_latency(nio_objects, shortest_path_no_constraints)
+    paths_as_string += str(round(shortest_path_no_constraints_latency))
+    paths_as_string += "#"
+
+    # Add fastest path without any constraints for 'Cost of control' experiment
+    all_disjoint_paths = nx.edge_disjoint_paths(G, pro.as_source, pro.as_destination)
+
+    scored_paths = []
+    for path in all_disjoint_paths:
+        scored_paths.append([path, calculate_total_latency(nio_objects, path)])
+    
+    scored_paths.sort(key = lambda x: x[1])
+    fastest_path_no_constraints = scored_paths[0][0]
+    fastest_path_no_constraints_latency = scored_paths[0][1]
+
+    for index, asn in enumerate(fastest_path_no_constraints):
+        paths_as_string += asn
+        if index < len(fastest_path_no_constraints) - 1:
+            paths_as_string += ";"
+
+    paths_as_string += "-"
+    paths_as_string += str(round(fastest_path_no_constraints_latency))
     
 
     return (

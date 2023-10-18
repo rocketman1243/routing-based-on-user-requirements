@@ -5,21 +5,17 @@ import os
 
 # Tuning values
 
-num_objects = 150
+num_objects = 50
+experiment = "initial_results_experiment"
 
-max_number_of_strict_requirements = 5
 
-requirements = list(range(1, 31))
-
-experiment = "proof_of_concept_experiment"
-
-best_effort_min_amount = 0
-best_effort_max_amount = 5
 
 
 dry_run = False
-
-
+requirements = list(range(1, 31))
+best_effort_min_amount = 0
+best_effort_max_amount = 5
+max_number_of_strict_requirements = 5
 
 
 
