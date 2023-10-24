@@ -42,20 +42,15 @@ if scalability_experiment:
 
 ############ AS Path comparison setup ##########
 as_path_experiment = experiment == "as_path_experiment"
-start_locations = []
-end_locations = []
+as_paths = []
 
 if as_path_experiment:
-    with open("full_scale_setup/data/as_path_start_end.csv", "r") as file:
+    with open("full_scale_setup/data/clean_as_paths.csv", "r") as file:
         for line in file:
-            start = line.split(",")[0]
-            end = line.split(",")[1][:-1]
+            as_paths.append(line)
 
-            start_locations.append(start)
-            end_locations.append(end)
-
-
-
+    with open("full_scale_setup/data/chosen_as_paths.csv", "w") as file:
+        file.write("")
 
 ###################################33
 
@@ -99,9 +94,14 @@ for index in range(num_objects):
     as_destination = endpoints[1]
 
     if as_path_experiment:
-        entry = random.choice(list(range(len(start_locations))))
-        as_source = start_locations[entry]
-        as_destination = end_locations[entry]
+        entry = random.choice(list(range(len(as_paths))))
+        as_path = as_paths[entry]
+
+        as_source = as_path.split(",")[0]
+        as_destination = as_path.split(",")[-1][:-1]
+
+        with open("full_scale_setup/data/chosen_as_paths.csv", "a") as file:
+            file.write(as_path)
 
     # Requirements for privacy
     strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
@@ -135,6 +135,9 @@ for index in range(num_objects):
     geolocation_exclude.sort()
     
     path_optimization = random.choice(["minimize_total_latency", "minimize_number_of_hops", "none"])
+
+    if as_path_experiment:
+        path_optimization = "minimize_number_of_hops"
     
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
     minimum_number_of_paths = 1
