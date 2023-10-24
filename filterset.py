@@ -135,7 +135,9 @@ class Filterset():
             if not path_exists:
                 self.reduce_best_effort_constraints()
 
+        number_of_subsets = len(self.best_effort_subsets)
+
         if path_exists:
-            return (G_best_effort_phase, self.best_effort_requirements)
+            return (G_best_effort_phase, self.best_effort_requirements, number_of_subsets)
         else:
             return G

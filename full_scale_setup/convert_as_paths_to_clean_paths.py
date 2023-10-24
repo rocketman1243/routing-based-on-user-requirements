@@ -4,18 +4,32 @@
 
 filename = "1000_as_paths.txt"
 
+as_numbers = []
+with open("full_scale_setup/data/as_numbers.txt", "r") as file:
+    for line in file:
+        as_numbers.append(line[:-1])
+
 with open("full_scale_setup/data/" + filename, "r") as input:
     with open("full_scale_setup/data/clean_as_paths.csv", "w") as output:
         for line in input:
             path = line.split(" ")[1].split("|")
-            outline = ""
-            for i, asn in enumerate(path):
-                outline += asn
-                if i < len(path) - 1:
-                    outline += ","
 
-            outline += "\n"
-            output.write(outline)
+            skip = False
+            for asn in path:
+                if asn not in as_numbers:
+                    skip = True
+                    
+            if skip:
+                continue
+
+            output_line = ""
+            for i, asn in enumerate(path):
+                output_line += asn
+                if i < len(path) - 1:
+                    output_line += ","
+
+            output_line += "\n"
+            output.write(output_line)
 
 
 

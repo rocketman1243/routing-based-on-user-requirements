@@ -6,7 +6,7 @@ import os
 # Tuning values
 
 num_objects = 50
-experiment = "as_path_experiment"
+experiment = "initial_results_experiment"
 
 
 
@@ -30,9 +30,9 @@ scalability_experiment = experiment == "scalability_experiment"
 
 # For scalability: Range that best effort requirements can take on, with number of elements per step
 # Current setup is 2 PROs with 4 BER, 2 pros with 8 BER, 2 PROs with 12 BER etc.
-scalability_best_effort_amounts = [4, 4, 8, 8, 12, 12, 16, 16, 20, 20]
+scalability_best_effort_amounts = [0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10]
 
-scalability_best_effort_mode_toggle_is_biggest_subset = True
+scalability_best_effort_mode_toggle_is_biggest_subset = False # Starts at false s.t. first will be biggest subset
 if scalability_experiment:
     num_objects = len(scalability_best_effort_amounts)
     max_number_of_strict_requirements = 0
@@ -124,7 +124,7 @@ for index in range(num_objects):
     if scalability_experiment and scalability_best_effort_mode_toggle_is_biggest_subset:
         scalability_best_effort_mode_toggle_is_biggest_subset = False
         best_effort_mode = "ordered_list"
-    elif scalability_experiment:
+    elif scalability_experiment and not scalability_best_effort_mode_toggle_is_biggest_subset:
         scalability_best_effort_mode_toggle_is_biggest_subset = True
         best_effort_mode = "biggest_subset"
     
@@ -140,7 +140,7 @@ for index in range(num_objects):
         path_optimization = "minimize_number_of_hops"
     
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
-    minimum_number_of_paths = 1
+    minimum_number_of_paths = random.randint(1, target_amount_of_paths)
 
     fallback_to_ebgp = random.choice(["true", "false"])
     

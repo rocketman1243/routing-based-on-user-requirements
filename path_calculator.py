@@ -11,6 +11,9 @@ import time
 import math
 
 def calculate_total_latency(nio_objects, path):
+    if len(path) == 0:
+        return 0
+
     total = 0
     for i in range(len(path) - 1):
         node0 = path[i]
@@ -24,7 +27,7 @@ def calculate_total_latency(nio_objects, path):
         latency = spit_latency(lat0, lon0, lat1, lon1)
         total += latency
 
-    return total
+    return round(total)
 
 # Utility method for checking path existence that does not explode if source or dest are removed due to 
 # insufficiently supported features
@@ -53,7 +56,7 @@ def fallback_to_ebgp(we_fallback_to_ebgp, verbose, reason_for_failure):
             print("No path is found, and the PRO specifies that the request should NOT be forwarded to EBGP. Thus, it ends here. Bye!")
     return (0, 0, reason_for_failure, 0, 0, 0, 0, 0, 0)
 
-def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
+def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"):
 
     time_start = time.time()
 
@@ -68,16 +71,20 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     as_numbers = []
     edges = []
 
-    counter = 0
     for _,_,files in os.walk(path_to_nio_files):
         for file in files:
             with open(path_to_nio_files + file, "r") as nio_file:
                 nio_content = nio_file.read()
                 nio_object = json.loads(nio_content, object_hook=lambda nio_content: SimpleNamespace(**nio_content))
-                nio_objects[nio_object.as_number] = nio_object
 
                 as_numbers.append(nio_object.as_number)
-                counter += 1
+
+                if "scalability_experiment" in path_to_nio_files:
+                    nio_object.features = []
+
+
+                nio_objects[nio_object.as_number] = nio_object
+                    
 
                 for index, outgoing_edge in enumerate(nio_object.connections):
 
@@ -133,6 +140,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
     G_best_effort_phase = result[0]
     satisfied_requirements = result[1]
+    number_of_subsets = result[2]
 
     if verbose:
         if len(satisfied_requirements) > 0:
@@ -274,7 +282,7 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
 
     ###################################################################################################################
     # Generate pathstring formatted as: 
-    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency#BestEffortSubsetGenerationTimeInSeconds
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops
     paths_as_string = ""
     path_list = optimized_paths
     
@@ -328,7 +336,20 @@ def calculate_paths(path_to_nio_files: str, pro, print_all = "no_pls"):
     paths_as_string += str(round(fastest_path_no_constraints_latency))
 
     # Scalability experiment data
-    paths_as_string += "," + subset_generation_runtime
+    paths_as_string += "," + str(len(pro.requirements.best_effort)) + "," + str(round(subset_generation_runtime, 3)) + "," + str(round(number_of_subsets, 3))
+
+
+    # As path experiment:
+    with open("full_scale_setup/data/chosen_as_paths.csv", "r") as file:
+        chosen_paths = file.readlines()
+        c_path = chosen_paths[pro_index][:-1]
+        chosen_path = c_path.split(",")
+        chosen_path_latency = round(calculate_total_latency(nio_objects, chosen_path))
+        chosen_path_nr_hops = len(chosen_path)
+
+        paths_as_string += "," + str(chosen_path_latency) + "," + str(chosen_path_nr_hops)
+
+
 
     # TODO: Gather scalability data, update conversion script to grab the scalability data & make onderscheid between Biggest subset and Ordered list so I can plot them separately.
 

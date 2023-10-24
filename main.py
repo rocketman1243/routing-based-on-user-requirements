@@ -7,14 +7,17 @@ small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experime
 small_scale_realistic_paths_experiment = "small_scale_setup/realistic_paths_experiment"
 
 full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
-full_scale_scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 #######################
 
-initial_results = "full_scale_setup/initial_results_experiment"
+
+initial_results_path = "full_scale_setup/initial_results_experiment"
+cost_of_control_experiment_path =  "full_scale_setup/cost_of_control_experiment"
+as_path_experiment_path = "full_scale_setup/as_path_experiment"
+scalability_experiment_path = "full_scale_setup/scalability_experiment"
 
 
-CHOSEN_PATH = full_scale_proof_of_concept_experiment_path
+CHOSEN_PATH = initial_results_path
 
 
 # Read in PRO objects   
@@ -36,7 +39,7 @@ for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = calculate_paths(f"{CHOSEN_PATH}/../data/nio_files/", pro, "not_verbose")
+    output = calculate_paths(f"{CHOSEN_PATH}/../data/nio_files/", pro, i, "not_verbose")
     """ 
     Output format: 
 
