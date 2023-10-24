@@ -6,7 +6,7 @@ import os
 # Tuning values
 
 num_objects = 50
-experiment = "scalability_experiment"
+experiment = "as_path_experiment"
 
 
 
@@ -40,9 +40,19 @@ if scalability_experiment:
     experiment = "scalability_experiment"
 
 
+############ AS Path comparison setup ##########
+as_path_experiment = experiment == "as_path_experiment"
+start_locations = []
+end_locations = []
 
+if as_path_experiment:
+    with open("full_scale_setup/data/as_path_start_end.csv", "r") as file:
+        for line in file:
+            start = line.split(",")[0]
+            end = line.split(",")[1][:-1]
 
-
+            start_locations.append(start)
+            end_locations.append(end)
 
 
 
@@ -52,6 +62,7 @@ if scalability_experiment:
 # Cleanup previous files in directory as the number of objects may be less than before, 
 # causing dead files from previous runs to still exist
 
+output_path = ""
 if not dry_run:
     output_path = f"full_scale_setup/{experiment}/pro_files"
     files = os.listdir(output_path)
@@ -86,6 +97,11 @@ for index in range(num_objects):
 
     as_source = endpoints[0]   
     as_destination = endpoints[1]
+
+    if as_path_experiment:
+        entry = random.choice(list(range(len(start_locations))))
+        as_source = start_locations[entry]
+        as_destination = end_locations[entry]
 
     # Requirements for privacy
     strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
