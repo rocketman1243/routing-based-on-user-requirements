@@ -38,7 +38,7 @@ def spit_stats(input: list, name: str, xlabel: str, y_values_for_plot = [], ylab
 # - estimated total latency
 # - number of paths
 
-experiment = "cost_of_control_experiment"
+experiment = "initial_results_experiment"
 csv_path = f"full_scale_setup/{experiment}/results/output.csv"
 
 number_of_paths = []
@@ -63,6 +63,9 @@ ordered_list_number_of_subsets = []
 
 best_effort_mode_is_biggest_subset = True
 
+less_hops_due_to_optimization = []
+less_latency_due_to_optimization = []
+optimization_phase_runtimes = []
 
 with open(csv_path, "r") as file:
     for line in file:
@@ -144,6 +147,13 @@ with open(csv_path, "r") as file:
             as_path_latency_deltas.append(int(chosen_as_path_latency) - best_latency)
             as_path_nr_hops_deltas.append(int(chosen_as_path_nr_hops) - best_hopcount)
 
+        # Cost of control experiment
+        default_path_nr_hops = items[15]
+        default_path_latency = items[16]
+        less_hops_due_to_optimization.append(min_nr_hops_with_requirements - default_path_nr_hops)
+        less_latency_due_to_optimization.append(min_latency_with_requirements - default_path_latency)
+        optimization_phase_runtimes.append(items[6])
+
         
 
 
@@ -167,3 +177,7 @@ spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort: Number
 
 spit_stats(as_path_latency_deltas, "Extra latency of AS path compared to path calculator path", "Extra Latency (ms)")
 spit_stats(as_path_nr_hops_deltas, "Extra number of hops of AS path compared to path calculator path", "Extra #hops")
+
+spit_stats(less_hops_due_to_optimization, "Reduction in #hops due to optimization", "#hops")
+spit_stats(less_latency_due_to_optimization, "Reduction in latency due to optimization", "Latency (ms)")
+spit_stats(optimization_phase_runtimes, "Distribution of optimization phase runtimes", "Runtime (seconds)")

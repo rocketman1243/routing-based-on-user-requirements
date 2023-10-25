@@ -165,6 +165,8 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     # Find all available link-disjoint paths
     all_disjoint_paths = nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination)
 
+    default_path = all_disjoint_paths[0]
+
     # SKIP IF STRATEGY IS NONE
     if pro.path_optimization != "none":
 
@@ -282,7 +284,8 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
 
     ###################################################################################################################
     # Generate pathstring formatted as: 
-    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops,default_path_nr_hops,default_path_latency
+
     paths_as_string = ""
     path_list = optimized_paths
     
@@ -338,7 +341,6 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     # Scalability experiment data
     paths_as_string += "," + str(len(pro.requirements.best_effort)) + "," + str(round(subset_generation_runtime, 3)) + "," + str(round(number_of_subsets, 3))
 
-
     # As path experiment:
     with open("full_scale_setup/data/chosen_as_paths.csv", "r") as file:
         chosen_paths = file.readlines()
@@ -349,7 +351,11 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
 
         paths_as_string += "," + str(chosen_path_latency) + "," + str(chosen_path_nr_hops)
 
+    # Cost of optimization experiment
+    nr_hops_default_path = len(default_path)
+    latency_of_default_path = round(calculate_total_latency(nio_objects, default_path))
 
+    paths_as_string += "," + nr_hops_default_path + "," + latency_of_default_path
 
     # TODO: Gather scalability data, update conversion script to grab the scalability data & make onderscheid between Biggest subset and Ordered list so I can plot them separately.
 
