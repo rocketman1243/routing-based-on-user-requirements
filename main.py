@@ -15,9 +15,10 @@ initial_results_path = "full_scale_setup/initial_results_experiment"
 cost_of_control_experiment_path =  "full_scale_setup/cost_of_control_experiment"
 as_path_experiment_path = "full_scale_setup/as_path_experiment"
 scalability_experiment_path = "full_scale_setup/scalability_experiment"
+cost_of_optimization_path = "full_scale_setup/cost_of_optimization_experiment"
 
 
-CHOSEN_PATH = initial_results_path
+CHOSEN_PATH = cost_of_optimization_path
 
 
 # Read in PRO objects   
@@ -35,7 +36,7 @@ results_file = f"{CHOSEN_PATH}/results/output.csv"
 with open(results_file, "w") as file:
     file.write("")
 
-for i in range(len(pro_objects)):
+for i in range(50, len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 

@@ -163,7 +163,7 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     G_after_filter = copy.deepcopy(G_best_effort_phase)
 
     # Find all available link-disjoint paths
-    all_disjoint_paths = nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination)
+    all_disjoint_paths = list(nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination))
 
     default_path = all_disjoint_paths[0]
 
@@ -245,6 +245,8 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
             print("We skipped optimization phase since the optimization strategy was: none")
         optimized_paths = list(all_disjoint_paths)
 
+    
+    time_after_optimization_phase = time.time()
 
     #######################################################################
     ######## Multipath stage ##############################################
@@ -272,9 +274,6 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
               min_nr_of_paths, ", so the request cannot be satisfied :'(")
         return fallback_to_ebgp(we_fallback_to_ebgp, verbose, "not enough paths for multipath setting")
 
-
-    time_after_optimization_phase = time.time()
-
     round_decimals = 2
 
     if verbose:
@@ -284,7 +283,7 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
 
     ###################################################################################################################
     # Generate pathstring formatted as: 
-    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops,default_path_nr_hops,default_path_latency
+    #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency#fastest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops,default_path_nr_hops,default_path_latency
 
     paths_as_string = ""
     path_list = optimized_paths
@@ -320,10 +319,10 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     paths_as_string += "#"
 
     # Add fastest path without any constraints for 'Cost of control' experiment
-    all_disjoint_paths = nx.edge_disjoint_paths(G, pro.as_source, pro.as_destination)
+    all_disjoint_paths_no_constraints = nx.edge_disjoint_paths(G, pro.as_source, pro.as_destination)
 
     scored_paths = []
-    for path in all_disjoint_paths:
+    for path in all_disjoint_paths_no_constraints:
         scored_paths.append([path, calculate_total_latency(nio_objects, path)])
     
     scored_paths.sort(key = lambda x: x[1])
@@ -341,26 +340,24 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     # Scalability experiment data
     paths_as_string += "," + str(len(pro.requirements.best_effort)) + "," + str(round(subset_generation_runtime, 3)) + "," + str(round(number_of_subsets, 3))
 
-    # As path experiment:
-    with open("full_scale_setup/data/chosen_as_paths.csv", "r") as file:
-        chosen_paths = file.readlines()
-        c_path = chosen_paths[pro_index][:-1]
-        chosen_path = c_path.split(",")
-        chosen_path_latency = round(calculate_total_latency(nio_objects, chosen_path))
-        chosen_path_nr_hops = len(chosen_path)
+    if pro_index < 50:
+        # As path experiment:
+        with open("full_scale_setup/data/chosen_as_paths.csv", "r") as file:
+            chosen_paths = file.readlines()
+            c_path = chosen_paths[pro_index][:-1]
+            chosen_path = c_path.split(",")
+            chosen_path_latency = round(calculate_total_latency(nio_objects, chosen_path))
+            chosen_path_nr_hops = len(chosen_path)
 
-        paths_as_string += "," + str(chosen_path_latency) + "," + str(chosen_path_nr_hops)
+            paths_as_string += "," + str(chosen_path_latency) + "," + str(chosen_path_nr_hops)
+    else:
+        path_as_string += ",0,0"
 
     # Cost of optimization experiment
     nr_hops_default_path = len(default_path)
     latency_of_default_path = round(calculate_total_latency(nio_objects, default_path))
 
-    paths_as_string += "," + nr_hops_default_path + "," + latency_of_default_path
-
-    # TODO: Gather scalability data, update conversion script to grab the scalability data & make onderscheid between Biggest subset and Ordered list so I can plot them separately.
-
-    # TODO: Rewrite the awkward path_as_string thing to output proper csv where the only separator is csv. This is getting ridiculous and csv is perfectly able to deal with all these things even if I plemp it into one string.
-    
+    paths_as_string += "," + str(nr_hops_default_path) + "," + str(latency_of_default_path)
 
     return (
         len(optimized_paths), 
