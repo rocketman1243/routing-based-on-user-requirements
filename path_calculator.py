@@ -184,57 +184,12 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
         # sort scored_paths list by score
         scored_paths.sort(key = lambda x: x[1])
 
-        # TIE BREAKER: Total degree of path
-        # Create dict that maps score to paths. If one score has multiple paths, sort these on descending total degree. 
-        # Then reconstruct path ordering from dict
-        tied_paths = {} # 
-        for path_and_score in scored_paths:
-            path = path_and_score[0]
-            score = path_and_score[1]
-            if score in tied_paths:
-                entry = tied_paths[score]
-                entry.append(path)
-            else:
-                entry = [path]
-
-            tied_paths[score] = entry
-
-        tie_is_broken = False
-        for score in tied_paths:
-            if len(tied_paths[score]) > 1:
-                tie_is_broken = True
-                path_and_total_degree = []
-                # Calculate total degree for each path
-                paths = tied_paths[score]
-                for path in paths:
-                    totalDegree = 0
-                    for asn in path:
-                        totalDegree += G.degree[asn]
-                    path_and_total_degree.append([path, totalDegree])
-
-                # sort and update in dict
-                path_and_total_degree.sort(key = lambda x: x[1]) 
-                path_and_total_degree.reverse()
-                tied_paths[score] = path_and_total_degree
-
-        # Reconstruct path list
-        scored_paths = []
-        for key in tied_paths:
-            for path in tied_paths[key]:
-                scored_paths.append([path, key])
-
         if verbose:
             if pro.path_optimization == "none":
-                print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was none, so defaulting to minimize_number_of_hops) and the total degree of the path as a tie-breaker if needed:")
-
-                if tie_is_broken:
-                    print("\n( Path, TotalDegree , Number of Hops)")
+                print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was none, so defaulting to minimize_number_of_hops):")
 
             else:
-                print("Here are all possible link-disjoint paths, scored based on the selected scoring strategy (which was", pro.path_optimization + "), and the total degree of the path as a tie-breaker if needed: ")
-
-                if tie_is_broken:
-                    print("\n( Path, TotalDegree , Number of Hops)")
+                print("Here are all possible link-disjoint paths, scored based on the selected scoring strategy (which was", pro.path_optimization + "):")
 
         for path in scored_paths:
             if verbose:
