@@ -163,7 +163,12 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     G_after_filter = copy.deepcopy(G_best_effort_phase)
 
     # Find all available link-disjoint paths
-    all_disjoint_paths = list(nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination))
+    all_disjoint_paths = []
+    if pro.path_optimization == "none":
+        all_disjoint_paths = list(nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination, cutoff=pro.multipath.target_amount_of_paths))
+    else:
+        all_disjoint_paths = list(nx.edge_disjoint_paths(G_after_filter, pro.as_source, pro.as_destination))
+
 
     default_path = all_disjoint_paths[0]
 
