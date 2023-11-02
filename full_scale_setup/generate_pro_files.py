@@ -140,7 +140,7 @@ for index in range(num_objects):
         path_optimization = "minimize_number_of_hops"
     
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
-    minimum_number_of_paths = random.randint(1, target_amount_of_paths)
+    minimum_number_of_paths = 1
 
     fallback_to_ebgp = random.choice(["true", "false"])
     

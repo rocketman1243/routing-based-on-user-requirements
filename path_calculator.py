@@ -255,24 +255,17 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     if verbose:
         print("\n### MULTIPATH PHASE ###\n")
 
-    min_nr_of_paths = pro.multipath.minimum_number_of_paths
     target_nr_of_paths = pro.multipath.target_amount_of_paths
 
     multipath_selection = []
-    until = 0
-    if len(optimized_paths) >= min_nr_of_paths:
-        if len(optimized_paths) <= target_nr_of_paths:
-            until = len(optimized_paths)
-        else:
-            until = target_nr_of_paths
-
-
-    if until > 0:
-        multipath_selection.extend(optimized_paths[:until])
+    until = 1
+    if len(optimized_paths) <= target_nr_of_paths:
+        until = len(optimized_paths)
     else:
-        print("There were only", len(optimized_paths), "link-disjoint paths available that comply with the requirements. The minimum was", \
-              min_nr_of_paths, ", so the request cannot be satisfied :'(")
-        return fallback_to_ebgp(we_fallback_to_ebgp, verbose, "not enough paths for multipath setting")
+        until = target_nr_of_paths
+
+
+    multipath_selection.extend(optimized_paths[:until])
 
     round_decimals = 2
 

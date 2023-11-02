@@ -178,7 +178,7 @@ print(average, " average degree")
 print("#connected components:", nx.number_connected_components(G))
 
 print(len(G.edges), " edges")
-print(len(G.nodes), " nodes")
+print(len(G.nodes), " nodes"Yes, we iterate through all nodes, because in theory in the beginning you don't know what nodes are needed to form a path. Maybe all nodes are filtered out except nodes all along the edge of the network that provide a very long path (but still a path), which you would miss if you focused only on the nodes relatively close to the start and end (for example). )
 
 
 
