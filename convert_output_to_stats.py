@@ -38,7 +38,7 @@ def spit_stats(input: list, name: str, xlabel: str, y_values_for_plot = [], ylab
 # - estimated total latency
 # - number of paths
 
-experiment = "cost_of_optimization_experiment"
+experiment = "scalability_experiment"
 csv_path = f"full_scale_setup/{experiment}/results/output.csv"
 
 number_of_paths = []
@@ -182,8 +182,8 @@ if experiment == "cost_of_control_experiment":
     spit_stats(extra_latency_due_to_requirements, "Extra latency caused by having to fulfill user requirements", "Extra Latency (ms)")
 
 if experiment == "scalability_experiment":
-    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort mode runtimes\n(biggest subset mode)", "Runtime of best effort mode (seconds)", biggest_subset_best_effort_runtimes)
-    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort: Number of subsets \n(biggest subset mode)", "Runtime of generating the subsets (seconds)", biggest_subset_number_of_subsets)
+    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort mode runtimes\n(biggest subset mode)", "Runtime of best effort mode (seconds)", biggest_subset_best_effort_runtimes, "# Best effort requirements")
+    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort: Number of subsets \n(biggest subset mode)", "Runtime of generating the subsets (seconds)", biggest_subset_number_of_subsets, "# Best effort requirements")
 
     spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort mode runtimes\n(ordered list mode)", "Runtime of best effort mode (seconds)", ordered_list_best_effort_runtimes, "# Best effort requirements")
     spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort: Number of subsets \n(ordered list mode)", "Runtime of generating the subsets (seconds)", ordered_list_number_of_subsets, "# Best effort requirements")

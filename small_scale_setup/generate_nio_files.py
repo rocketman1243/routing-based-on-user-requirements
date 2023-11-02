@@ -9,7 +9,7 @@ import os
 
 experiment = "proof_of_concept_experiment"
 
-dry_run = False
+dry_run = True
 
 
 

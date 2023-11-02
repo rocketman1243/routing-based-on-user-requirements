@@ -22,7 +22,7 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 number_of_features_in_distribution = 30
 output_path = "full_scale_setup/data/nio_files"
 
-dry_run = False
+dry_run = True
 
 
 
