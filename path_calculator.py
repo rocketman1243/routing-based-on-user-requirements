@@ -154,11 +154,11 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     time_after_best_effort_phase = time.time()
 
     #######################################################################
-    ######## Optimization phase ###########################################
+    ######## Scoring phase ###########################################
     #######################################################################
 
     if verbose:
-        print("\n### OPTIMIZATION PHASE ###\n")
+        print("\n### SCORING PHASE ###\n")
 
     G_after_filter = copy.deepcopy(G_best_effort_phase)
 
@@ -177,7 +177,7 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
         if pro.path_optimization == "minimize_total_latency":
             for path in all_disjoint_paths:
                 scored_paths.append([path, calculate_total_latency(nio_objects, path)])
-        else: # optimization strategy is minimize nr of hops or none, in which case we also minimize hops
+        else: # scoring strategy is minimize nr of hops or none, in which case we also minimize hops
             for path in all_disjoint_paths:
                 scored_paths.append([path, len(path) - 1])
 
@@ -218,10 +218,10 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
                 tied_paths[score] = path_and_total_degree
 
         # Reconstruct path list
-        optimized_paths = []
+        scored_paths = []
         for key in tied_paths:
             for path in tied_paths[key]:
-                optimized_paths.append([path, key])
+                scored_paths.append([path, key])
 
         if verbose:
             if pro.path_optimization == "none":
@@ -231,22 +231,22 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
                     print("\n( Path, TotalDegree , Number of Hops)")
 
             else:
-                print("Here are all possible link-disjoint paths, scored based on the selected optimization strategy (which was", pro.path_optimization + "), and the total degree of the path as a tie-breaker if needed: ")
+                print("Here are all possible link-disjoint paths, scored based on the selected scoring strategy (which was", pro.path_optimization + "), and the total degree of the path as a tie-breaker if needed: ")
 
                 if tie_is_broken:
                     print("\n( Path, TotalDegree , Number of Hops)")
 
-        for path in optimized_paths:
+        for path in scored_paths:
             if verbose:
                 print(path)
 
     else:
         if verbose:
-            print("We skipped optimization phase since the optimization strategy was: none")
-        optimized_paths = list(all_disjoint_paths)
+            print("We skipped scoring phase since the scoring strategy was: none")
+        scored_paths = list(all_disjoint_paths)
 
     
-    time_after_optimization_phase = time.time()
+    time_after_scoring_phase = time.time()
 
     #######################################################################
     ######## Multipath stage ##############################################
@@ -258,16 +258,16 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     target_nr_of_paths = pro.multipath.target_amount_of_paths
 
     multipath_selection = []
-    until = 1
-    if len(optimized_paths) <= target_nr_of_paths:
-        until = len(optimized_paths)
+    until = 1 # Take one path if not adjusted
+
+    if target_nr_of_paths == 0:
+        until = len(scored_paths)
+    elif len(scored_paths) <= target_nr_of_paths:
+        until = len(scored_paths)
     else:
         until = target_nr_of_paths
 
-
-    multipath_selection.extend(optimized_paths[:until])
-
-    round_decimals = 2
+    multipath_selection.extend(scored_paths[:until])
 
     if verbose:
         print("Here are the", len(multipath_selection), "best paths:")
@@ -279,7 +279,7 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
     #    as1;as2;...;asn-latency|as1;as2;...;asn-latency|...|as1;as2;...;asn-latency#shortest;path;no;constraints-latency#fastest;path;no;constraints-latency,NumberOfBestEffortRequirements,BestEffortSubsetGenerationTimeInSeconds,runtime_of_filter,chosen_as_path_latency,chosen_as_path_nr_hops,default_path_nr_hops,default_path_latency
 
     paths_as_string = ""
-    path_list = optimized_paths
+    path_list = scored_paths
     
     for index, path in enumerate(path_list):
 
@@ -352,15 +352,16 @@ def calculate_paths(path_to_nio_files: str, pro, pro_index, print_all = "no_pls"
 
     paths_as_string += "," + str(nr_hops_default_path) + "," + str(latency_of_default_path)
 
+    round_decimals = 2
     return (
-        len(optimized_paths), 
+        len(scored_paths), 
         len(multipath_selection), 
         "success", 
         round(time_after_building_graph - time_start, round_decimals),
         round(time_after_strict_phase - time_after_building_graph, round_decimals),
         round(time_after_best_effort_phase - time_after_strict_phase, round_decimals),
-        round(time_after_optimization_phase - time_after_best_effort_phase, round_decimals),
-        round(time_after_optimization_phase - time_start, round_decimals),
+        round(time_after_scoring_phase - time_after_best_effort_phase, round_decimals),
+        round(time_after_scoring_phase - time_start, round_decimals),
         paths_as_string)
 
 

@@ -151,7 +151,7 @@ with open(csv_path, "r") as file:
             as_path_nr_hops_deltas.append(int(chosen_as_path_nr_hops) - best_hopcount)
 
         # Cost of optimization experiment
-        if experiment == "cost_of_optimization_experiment":
+        if experiment == "optimization_trade_off_experiment":
             default_path_nr_hops = int(items[15])
             default_path_latency = int(items[16])
 
@@ -192,7 +192,7 @@ if experiment == "as_path_experiment":
     spit_stats(as_path_latency_deltas, "Extra latency of AS path compared to path calculator path", "Extra Latency (ms)")
     spit_stats(as_path_nr_hops_deltas, "Extra number of hops of AS path compared to path calculator path", "Extra #hops")
 
-if experiment == "cost_of_optimization_experiment":
+if experiment == "optimization_trade_off_experiment":
     spit_stats(less_latency_due_to_optimization, "Difference in latency between default path and optimal path", "Latency (ms)")
     spit_stats(optimization_phase_min_latency_runtimes, "Distribution of optimization phase runtimes\n(Goal: Minimizing latency)", "Runtime (seconds)")
     spit_stats(less_hops_due_to_optimization, "Difference in #hops between default path and optimal path", "#hops")
