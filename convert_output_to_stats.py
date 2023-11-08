@@ -183,10 +183,10 @@ if experiment == "cost_of_control_experiment":
 
 if experiment == "scalability_experiment":
     spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort mode runtimes\n(biggest subset mode)", "Runtime of best effort mode (seconds)", biggest_subset_best_effort_runtimes, "# Best effort requirements")
-    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort: Number of subsets \n(biggest subset mode)", "Runtime of generating the subsets (seconds)", biggest_subset_number_of_subsets, "# Best effort requirements")
+    spit_stats(biggest_subset_number_of_best_effort_requirements, "Best effort: Number of subsets \n(biggest subset mode)", "Number of Subsets", biggest_subset_number_of_subsets, "# Best effort requirements")
 
     spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort mode runtimes\n(ordered list mode)", "Runtime of best effort mode (seconds)", ordered_list_best_effort_runtimes, "# Best effort requirements")
-    spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort: Number of subsets \n(ordered list mode)", "Runtime of generating the subsets (seconds)", ordered_list_number_of_subsets, "# Best effort requirements")
+    spit_stats(ordered_list_number_of_best_effort_requirements, "Best effort: Number of subsets \n(ordered list mode)", "Number of Subsets", ordered_list_number_of_subsets, "# Best effort requirements")
 
 if experiment == "as_path_experiment":
     spit_stats(as_path_latency_deltas, "Extra latency of AS path compared to path calculator path", "Extra Latency (ms)")
