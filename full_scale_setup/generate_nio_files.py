@@ -7,7 +7,8 @@ from generate_features_distribution import generate_features
 from copy import deepcopy
 import os
 import pprint
-
+from geopy import distance
+import random
 
 """ 
 CONTENTS
@@ -22,11 +23,20 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 number_of_features_in_distribution = 30
 output_path = "full_scale_setup/data/nio_files"
 
-dry_run = True
+dry_run = False
 
 
 
+def spit_latency(lat0, lon0, lat1, lon1):
+    result = distance.distance((lat0, lon0), (lat1, lon1))
+    miles = result.miles
 
+    # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
+    # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
+    # https://wintelguy.com/wanlat.html 
+    latency = round((miles * 1.1 + 200) * 2 / 124 + 0.5, 2)
+    
+    return latency
 
 
 
@@ -52,7 +62,6 @@ G = nx.Graph()
 
 links_file = open("full_scale_setup/data/as-links.txt")
 edges = []
-# edge_info = {}
 
 for line in links_file:
     splitted = line.split("|")
@@ -61,7 +70,6 @@ for line in links_file:
     edges.append([node0, node1])
 
 G.add_edges_from(edges)
-# nx.set_edge_attributes(G, edge_info)
 
 # Note: Nodes are added based on edges in connected graph
 node_info = {}
@@ -72,21 +80,12 @@ for line in node_info_file:
 
     asn = items[0]
     country = items[1]
-    lat = items[2]
-    lon = items[3]
-
-    if (lon[-1:] == "\n"):
-        lon = lon[:-1]
 
     node_info[asn] = {
-        "geolocation": [ country ],
-        "lat": lat,
-        "lon": lon
+        "geolocation": [ country ]
     }
 
 nx.set_node_attributes(G, node_info)
-
-
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
@@ -134,16 +133,19 @@ for asn in nodes_copy:
     #     continue
 
     node = G.nodes[asn]
-    edges = []
+    edges_local = []
+    latencies = []
     for e in G.edges(asn):
-        edges.append(e[1])
+
+        latency = random.randint(2, 100)
+        edges_local.append(e[1])
+        latencies.append(latency)
 
     nio = {
         "as_number": asn,
         "geolocation": node["geolocation"],
-        "lat": node["lat"],
-        "lon": node["lon"],
-        "connections": edges,
+        "connections": edges_local,
+        "latency": latencies,
         "features": node["features"],
     }
 
