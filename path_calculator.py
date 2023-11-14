@@ -125,7 +125,6 @@ def find_detours(G, x, y, path, levels):
         detours.append([i])
 
     # second level
-    # a should be connected with a, and
     for aa in na:
         prefix = [aa]
         for bb in nb:
@@ -133,15 +132,12 @@ def find_detours(G, x, y, path, levels):
             if aa != bb and aa not in path and bb not in path:
                 naa = set(nx.neighbors(G, aa))
                 nbb = set(nx.neighbors(G, bb))
-                print(aa, naa, bb, nbb)
-
                 reachables = naa.intersection(nbb).difference(set(path))
-                print(reachables)
 
                 for r in reachables:
                     detours.append(prefix + [r] + postfix)
                     
-                if bb in na:
+                if bb in naa:
                     detours.append([aa, bb])
 
     return detours
