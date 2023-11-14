@@ -37,6 +37,7 @@ def MP(G, pro, maxDepth):
         return None
 
     path = nx.shortest_path(G, start, end)
+    # path = ['1', '2', '6', '5']
     augment_path_to_biggest_subset(G, pro, path)
 
 def augment_path_to_biggest_subset(G, pro, path):
@@ -47,49 +48,103 @@ def augment_path_to_biggest_subset(G, pro, path):
     # print(path)    
 
     ber = set(pro.requirements.best_effort)
+
     before_ber = copy.deepcopy(ber)
+
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
-    print("ber before optimization:", before_ber)
+
     print("path before: ", path)
 
     for i in range(len(path) - 2):
         a = path[i]
         b = path[i + 2]
 
-        find_detours(G, a, b, path, 2)
+        detours = find_detours(G, a, b, path, 2)
+        
+        clean_ber = copy.deepcopy(ber)
+        for c in path[:i+1] + path[i+2:]:
+            clean_ber = clean_ber.intersection(G.nodes[c]["features"])
+        print("clean ber:", clean_ber)
+
+        best_ber = {}
+
+        # TODO: Fix BER calculation and path replacement
+
+        print(detours)
+        replace_detour = False
+        replacement_detour = []
+
+        for detour in detours:
+
+            potential_ber = copy.deepcopy(clean_ber)
+            max_ber = copy.deepcopy(best_ber)
+
+            for j in detour:
+                potential_ber = potential_ber.intersection(G.nodes[j]["features"])
+
+            if len(potential_ber) > len(max_ber):
+                print(potential_ber, ">", max_ber)
+                max_ber = copy.deepcopy(potential_ber)
+
+            if len(best_ber) < len(max_ber):
+                replace_detour = True
+                replacement_detour = detour
+                best_ber = copy.deepcopy(max_ber)
+
+        if replace_detour:
+            # Replace bad node with detour
+            path = path[:i+1] + replacement_detour + path[i+2:]
+
+
+
+
+
+        after_ber = copy.deepcopy(ber)
+        for i in path:
+            after_ber = after_ber.intersection(G.nodes[i]["features"])
+        print("ber after optimization:", after_ber)
+
+        print("path after: ", path)
+
+
 
 
 
 # Find all node sequences that we can use to replace node z from a to b
-def find_detours(G, a, b, path, levels):
+def find_detours(G, x, y, path, levels):
 
     detours = []
 
-    na = set(nx.neighbors(G, a))
-    nb = set(nx.neighbors(G, b))
+    na = set(nx.neighbors(G, x))
+    nb = set(nx.neighbors(G, y))
 
     # first level
     shared_neighbours = na.intersection(nb).difference(set(path))
     for i in shared_neighbours:
-        detours.append(i)
+        detours.append([i])
 
     # second level
-    for a in na:
-        prefix = [a]
-        for b in nb:
-            postfix = [b]
-            if a != b:
-                na = set(nx.neighbors(G, a))
-                nb = set(nx.neighbors(G, b))
-                reachables = na.intersection(nb).difference(set(path))
+    # a should be connected with a, and
+    for aa in na:
+        prefix = [aa]
+        for bb in nb:
+            postfix = [bb]
+            if aa != bb and aa not in path and bb not in path:
+                naa = set(nx.neighbors(G, aa))
+                nbb = set(nx.neighbors(G, bb))
+                print(aa, naa, bb, nbb)
+
+                reachables = naa.intersection(nbb).difference(set(path))
+                print(reachables)
+
                 for r in reachables:
                     detours.append(prefix + [r] + postfix)
                     
-                if b in na:
-                    detours.append([a, b])
+                if bb in na:
+                    detours.append([aa, bb])
 
-    print(detours)
+    return detours
 
 
 
@@ -104,30 +159,6 @@ def find_detours(G, a, b, path, levels):
 
 
 
-
-
-    # shared_neighbours = set(nx.neighbors(G, a)).intersection(set(nx.neighbors(G, b))).difference(set(path))
-
-    # max_ber_size = len(before_ber)
-    # max_j = -1
-    # max_ber = before_ber
-    # for j in shared_neighbours:
-    #     potential_ber = ber.intersection(G.nodes[j]["features"])
-    #     if len(potential_ber) > max_ber_size:
-    #         # print(potential_ber, ">", before_ber)
-    #         max_j = j
-    #         max_ber_size = len(potential_ber)
-
-    # current_ber_size = len(ber.intersection(G.nodes[path[i+1]]["features"]))
-    # if current_ber_size < max_ber_size:
-    #     path[i+1] = max_j
-
-    # after_ber = copy.deepcopy(ber)
-    # for i in path:
-    #     after_ber = after_ber.intersection(G.nodes[i]["features"])
-    # print("ber after optimization:", after_ber)
-
-    # print("path after: ", path)
 
 
 
