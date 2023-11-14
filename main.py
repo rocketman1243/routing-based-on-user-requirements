@@ -19,11 +19,15 @@ scalability_experiment_path = "full_scale_setup/scalability_experiment"
 optimization_trade_off_experiment = "full_scale_setup/optimization_trade_off_experiment"
 
 test_path = "test_files"
+test_nio_path = "test_files/nio_files/"
 
-maxDepth = 10
+maxDepth = 5
 
 
 CHOSEN_PATH = test_path
+path_to_nio_files = test_nio_path
+# CHOSEN_PATH = cost_of_control_experiment_path
+# path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
 
 
 # Read in PRO objects   
@@ -39,11 +43,6 @@ for _, _, filenames in os.walk(f"{CHOSEN_PATH}/pro_files/"):
 
 
 # Read NIO objects & build graph
-path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
-
-# For test: 
-path_to_nio_files = "test_files/nio_files/"
-
 nio_objects = []
 as_numbers = []
 node_info = {}
