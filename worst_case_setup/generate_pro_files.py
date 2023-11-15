@@ -6,7 +6,7 @@ import os
 # Tuning values
 
 num_objects = 50
-experiment = "max_best_effort_experiment"
+# experiment = "max_best_effort_experiment"
 
 
 
@@ -14,44 +14,10 @@ experiment = "max_best_effort_experiment"
 dry_run = False
 
 requirements = list(range(1, 31))
-best_effort_min_amount = 20
-best_effort_max_amount = 25
+best_effort_min_amount = 30
+best_effort_max_amount = 30
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
-
-
-
-
-
-
-
-
-########## best effort requirements scalability experiment setup
-scalability_experiment = experiment == "scalability_experiment"
-
-# For scalability: Range that best effort requirements can take on, with number of elements per step
-# Current setup is 2 PROs with 4 BER, 2 pros with 8 BER, 2 PROs with 12 BER etc.
-scalability_best_effort_amounts = [0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10]
-
-scalability_best_effort_mode_toggle_is_biggest_subset = False # Starts at false s.t. first will be biggest subset
-if scalability_experiment:
-    num_objects = len(scalability_best_effort_amounts)
-    max_number_of_strict_requirements = 0
-    scalability_best_effort_mode = "biggest_subset"
-    experiment = "scalability_experiment"
-
-
-############ AS Path comparison setup ##########
-as_path_experiment = experiment == "as_path_experiment"
-as_paths = []
-
-if as_path_experiment:
-    with open("full_scale_setup/data/clean_as_paths.csv", "r") as file:
-        for line in file:
-            as_paths.append(line)
-
-    with open("full_scale_setup/data/chosen_as_paths.csv", "w") as file:
-        file.write("")
 
 ###################################33
 
@@ -60,7 +26,7 @@ if as_path_experiment:
 
 output_path = ""
 if not dry_run:
-    output_path = f"full_scale_setup/{experiment}/pro_files"
+    output_path = f"worst_case_setup/pro_files"
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -70,7 +36,7 @@ if not dry_run:
 ##################################33
 
 ases = []
-with open("full_scale_setup/data/as_numbers.txt", "r") as file:
+with open("worst_case_setup/data/as_numbers.txt", "r") as file:
     for line in file:
         ases.append(line[:-1])
 
@@ -94,26 +60,12 @@ for index in range(num_objects):
     as_source = endpoints[0]   
     as_destination = endpoints[1]
 
-    if as_path_experiment:
-        entry = random.choice(list(range(len(as_paths))))
-        as_path = as_paths[entry]
-
-        as_source = as_path.split(",")[0]
-        as_destination = as_path.split(",")[-1][:-1]
-
-        with open("full_scale_setup/data/chosen_as_paths.csv", "a") as file:
-            file.write(as_path)
-
     # Requirements for privacy
     strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
     strict_requirements = random.sample(features, strict_amount)
     strict_requirements.sort()
 
     other_requirements = [i for i in requirements if i not in strict_requirements]
-
-    if scalability_experiment:
-        best_effort_min_amount = scalability_best_effort_amounts[index]
-        best_effort_max_amount = scalability_best_effort_amounts[index]
 
     best_effort_amount = random.randint(best_effort_min_amount, best_effort_max_amount)
 
@@ -122,13 +74,6 @@ for index in range(num_objects):
 
     best_effort_mode = random.choice(["biggest_subset", "ordered_list"])
 
-    if scalability_experiment and scalability_best_effort_mode_toggle_is_biggest_subset:
-        scalability_best_effort_mode_toggle_is_biggest_subset = False
-        best_effort_mode = "ordered_list"
-    elif scalability_experiment and not scalability_best_effort_mode_toggle_is_biggest_subset:
-        scalability_best_effort_mode_toggle_is_biggest_subset = True
-        best_effort_mode = "biggest_subset"
-    
     geolocation_amount = random.randint(0, max_nr_geolocations)
     geolocation_copy = copy.deepcopy(countries)
 
@@ -137,9 +82,6 @@ for index in range(num_objects):
     
     path_optimization = random.choice(["minimize_total_latency", "minimize_number_of_hops", "none"])
 
-    if as_path_experiment:
-        path_optimization = "minimize_number_of_hops"
-    
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
     minimum_number_of_paths = 1
 

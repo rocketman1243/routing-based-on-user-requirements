@@ -17,16 +17,23 @@ cost_of_control_experiment_path =  "full_scale_setup/cost_of_control_experiment"
 as_path_experiment_path = "full_scale_setup/as_path_experiment"
 scalability_experiment_path = "full_scale_setup/scalability_experiment"
 optimization_trade_off_experiment = "full_scale_setup/optimization_trade_off_experiment"
+max_best_effort_experiment = "full_scale_setup/max_best_effort_experiment"
+
+worst_case_setup_path = "worst_case_setup"
 
 test_path = "test_files"
 test_nio_path = "test_files/nio_files/"
 
-maxDepth = 5
+maxDepth = 8
 
 
-CHOSEN_PATH = test_path
-path_to_nio_files = test_nio_path
-# CHOSEN_PATH = cost_of_control_experiment_path
+# CHOSEN_PATH = test_path
+# path_to_nio_files = test_nio_path
+
+CHOSEN_PATH = worst_case_setup_path
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
+
+# CHOSEN_PATH = max_best_effort_experiment
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
 
 

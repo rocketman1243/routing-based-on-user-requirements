@@ -21,6 +21,7 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 """
 
 number_of_features_in_distribution = 30
+min_nr_of_features = 25
 output_path = "full_scale_setup/data/nio_files"
 
 dry_run = False
@@ -98,7 +99,7 @@ for l in degrees:
     ordered_asns.append(l[0])
 
 # After edges are inserted from connected dataset, we generate features based on this
-features = generate_features(number_of_features_in_distribution, ordered_asns)
+features = generate_features(number_of_features_in_distribution, min_nr_of_features, ordered_asns)
 
 with open("./full_scale_setup/data/as_numbers.txt", "w") as file:
     for asn in ordered_asns:

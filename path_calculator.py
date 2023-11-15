@@ -13,9 +13,10 @@ import queue
 import heapq
 
 # TODO:
-# - Set up toy network for testing
-# - Run MP on toy network, fix (obvious) bugs
-# - Run on whole graph
+# - Set up worst case setup
+# - Show that it is indeed worst case setup
+# - Go supa fast
+
 
 def fulfills_strict_requirements(S, F, user_exclude_geolocation, as_geolocations):
     if set(S).issubset(set(F)):
@@ -36,25 +37,178 @@ def MP(G, pro, maxDepth):
         print("strict too strict")
         return None
 
-    path = nx.shortest_path(G, start, end)
-    # path = ['1', '2', '6', '5']
-    augment_path_to_biggest_subset(G, pro, path)
+    # path = nx.shortest_path(G, start, end)
+    # augment_path_to_biggest_subset(G, pro, path)
+
+    smartDFS(G, pro, maxDepth)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def smartDFS(G, pro, maxDepth):
+
+    # MaxHeap, achieved by multiplying |B| * -1
+    AllResults = []
+
+    # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
+    Q = []
+    Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
+
+    while not len(Q) == 0:
+        vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
+        # print(vp, vc, Pp, Bp)
+
+        Pc = copy.deepcopy(Pp)
+        Pc.append(vc)
+
+        Bc = copy.deepcopy(Bp)
+        Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
+        Lc = Lp
+        if vc != vp:
+            Lc = Lp + G.edges[vp, vc]["latency"]
+
+        if vc == pro.as_destination:
+            heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, Lc, hopsLeft))
+            continue
+        if hopsLeft == 0:
+            continue
+
+        neighbours_sorted_on_degree = sorted(G.degree(list(nx.neighbors(G, vc))), key=lambda x: x[1], reverse=False)
+        neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
+
+        for vi in neighbours_low_to_high:
+            satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"]) 
+            if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
+                newHopsLeft = hopsLeft - 1
+                Q.append((vi, vc, Pc, Bc, Lc, newHopsLeft))
+
+    print(AllResults)
+
+    # TODO: Optimization part
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def filtered_bfs_tree(G, pro, maxDepth):
+
+    # magic number, tweak as you go
+    currentDepth = 2
+
+    tree = nx.bfs_tree(G, pro.as_source, True, currentDepth)
+    dest_found_in_tree = False
+    
+    while dest_found_in_tree is False and currentDepth < maxDepth:
+        if pro.as_destination in tree.nodes:
+            dest_found_in_tree = True
+        else:
+            currentDepth += 1
+            tree = nx.bfs_tree(G, pro.as_source, currentDepth)
+
+    tree = nx.bfs_tree(G, pro.as_source, currentDepth + 2)
+    reverse_tree = nx.bfs_tree(G, pro.as_destination, currentDepth + 2)
+    complying_nodes = []
+    for n in list(tree.nodes) + list(reverse_tree.nodes):
+        if fulfills_strict_requirements(pro.requirements.strict, G.nodes[n]["features"], pro.geolocation.exclude, G.nodes[n]["geolocation"]):
+            complying_nodes.append(n)
+
+    subgraph = G.subgraph(complying_nodes)
+    if nx.has_path(subgraph, pro.as_source, pro.as_destination):
+        # smartDFS(subgraph, pro, pro.as_source, pro.as_destination, currentDepth)
+        path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
+        # print(path)
+        # print(len(G.nodes))
+        augment_path_to_biggest_subset(subgraph, pro, path)
+
+    else:
+        print("strict was too strict")
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def augment_path_to_biggest_subset(G, pro, path):
 
     if len(path) < 3:
+        print("path too short to optimize")
         return path 
 
-    # print(path)    
 
     ber = set(pro.requirements.best_effort)
+
+    if(len(ber) == 0):
+        print("no BER so no improvement possible")
+        return
+
+    original_path = copy.deepcopy(path)
 
     before_ber = copy.deepcopy(ber)
 
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
-
-    print("path before: ", path)
 
     for i in range(len(path) - 2):
         a = path[i]
@@ -65,13 +219,15 @@ def augment_path_to_biggest_subset(G, pro, path):
         clean_ber = copy.deepcopy(ber)
         for c in path[:i+1] + path[i+2:]:
             clean_ber = clean_ber.intersection(G.nodes[c]["features"])
-        print("clean ber:", clean_ber)
+        if len(clean_ber) == len(before_ber):
+            continue
+        # print("clean ber:", clean_ber)
 
         best_ber = {}
 
         # TODO: Fix BER calculation and path replacement
 
-        print(detours)
+        # print(detours)
         replace_detour = False
         replacement_detour = []
 
@@ -84,7 +240,7 @@ def augment_path_to_biggest_subset(G, pro, path):
                 potential_ber = potential_ber.intersection(G.nodes[j]["features"])
 
             if len(potential_ber) > len(max_ber):
-                print(potential_ber, ">", max_ber)
+                # print(potential_ber, ">", max_ber)
                 max_ber = copy.deepcopy(potential_ber)
 
             if len(best_ber) < len(max_ber):
@@ -100,12 +256,17 @@ def augment_path_to_biggest_subset(G, pro, path):
 
 
 
-        after_ber = copy.deepcopy(ber)
-        for i in path:
-            after_ber = after_ber.intersection(G.nodes[i]["features"])
-        print("ber after optimization:", after_ber)
+    after_ber = copy.deepcopy(ber)
+    for i in path:
+        after_ber = after_ber.intersection(G.nodes[i]["features"])
 
+    if before_ber != after_ber:
+        print("ber before:", before_ber)
+        print("path before:", original_path)
+        print("ber after optimization:", after_ber)
         print("path after: ", path)
+    else:
+        print("while we tried there was no improvement possible over:", before_ber)
 
 
 
@@ -140,106 +301,15 @@ def find_detours(G, x, y, path, levels):
                 if bb in naa:
                     detours.append([aa, bb])
 
+    # third level
+    # TODO
+
+
     return detours
 
 
 
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def filtered_bfs_tree(G, pro, maxDepth):
-
-    # magic number, tweak as you go
-    currentDepth = 2
-
-    tree = nx.bfs_tree(G, pro.as_source, True, currentDepth)
-    dest_found_in_tree = False
-    
-    while dest_found_in_tree is False:
-        if pro.as_destination in tree.nodes:
-            dest_found_in_tree = True
-        else:
-            currentDepth += 1
-            tree = nx.bfs_tree(G, pro.as_source, currentDepth)
-
-    print("found dfs-tree with depth ", currentDepth)
-    print("here's increased tree by 2 steps:")
-    tree = nx.bfs_tree(G, pro.as_source, currentDepth + 2)
-    print(tree.edges)
-
-    subgraph = G.subgraph(tree.nodes)
-    # end and start are reversed to search from the end node to reduce search space
-    smartDFS(subgraph, pro, pro.as_destination, pro.as_source, currentDepth)
-        
-
-
-def smartDFS(G, pro, start, end, maxDepth):
-
-    # MaxHeap, achieved by multiplying |B| * -1
-    AllResults = []
-
-    # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
-    Q = []
-    Q.append((start, start, [], pro.requirements.best_effort, 0, maxDepth))
-
-    while not len(Q) == 0:
-        vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
-        # print(vp, vc, Pp, Bp)
-
-        Pc = copy.deepcopy(Pp)
-        Pc.append(vc)
-
-        Bc = copy.deepcopy(Bp)
-        Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
-        Lc = Lp
-        if vc != vp:
-            Lc = Lp + G.edges[vp, vc]["latency"]
-
-        if vc == end:
-            heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, Lc, hopsLeft))
-            continue
-        if hopsLeft == 0:
-            continue
-
-        neighbours_sorted_on_degree = sorted(G.degree(list(nx.neighbors(G, vc))), key=lambda x: x[1], reverse=False)
-        neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
-
-        for vi in neighbours_low_to_high:
-            satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"]) 
-            if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
-                newHopsLeft = hopsLeft - 1
-                Q.append((vi, vc, Pc, Bc, Lc, newHopsLeft))
-
-    print(AllResults)
-
-    # TODO: Optimization part
-
-
-
-
 
 
 
