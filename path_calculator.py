@@ -196,7 +196,7 @@ def augment_path_to_biggest_subset(G, pro, path):
         print("path too short to optimize")
         return path 
 
-    print(path)
+    # print(path)
 
     ber = set(pro.requirements.best_effort)
 
@@ -216,53 +216,57 @@ def augment_path_to_biggest_subset(G, pro, path):
     distances = [2, 3, 4]
     for distance in distances:
         for i in range(len(path) - distance):
-            a = path[i]
-            b = path[i + distance]
+            if i + distance + 1 <= len(path):
+                a = path[i]
+                b = path[i + distance]
 
-            detours = find_detours(G, a, b, path, 3)
-            print(a, b)
-            print(detours)
-            
-            clean_ber = copy.deepcopy(ber)
-            for c in path[:i+1] + path[i+distance:]:
-                clean_ber = clean_ber.intersection(G.nodes[c]["features"])
+                # levels = length of prefix and postfix, aka how far do you stray from the path?
+                # detour length can be at most 2 * levels + 1
+                levels = 2
+                detours = find_detours(G, a, b, path, levels)
+                # print(a, b)
+                # print(detours)
+                
+                clean_ber = copy.deepcopy(ber)
+                for c in path[:i+1] + path[i+distance:]:
+                    clean_ber = clean_ber.intersection(G.nodes[c]["features"])
 
-            current_ber = copy.deepcopy(ber)
-            for c in path:
-                current_ber = current_ber.intersection(G.nodes[c]["features"])
+                current_ber = copy.deepcopy(ber)
+                for c in path:
+                    current_ber = current_ber.intersection(G.nodes[c]["features"])
 
 
-            if len(clean_ber) <= len(current_ber):
-                # Nothing to improve here, skip this detour
-                continue
+                if len(clean_ber) <= len(current_ber):
+                    # Nothing to improve here, skip this detour
+                    continue
 
-            ber_to_beat = copy.deepcopy(current_ber)
+                ber_to_beat = copy.deepcopy(current_ber)
 
-            replace_path_segment_with_detour = False
-            replacement_detour = []
+                replace_path_segment_with_detour = False
+                replacement_detour = []
 
-            for detour in detours:
+                for detour in detours:
 
-                potential_ber = copy.deepcopy(clean_ber)
+                    potential_ber = copy.deepcopy(clean_ber)
 
-                # Update potential ber with detour
-                for j in detour:
-                    potential_ber = potential_ber.intersection(G.nodes[j]["features"])
+                    # Update potential ber with detour
+                    for j in detour:
+                        potential_ber = potential_ber.intersection(G.nodes[j]["features"])
 
-                if len(potential_ber) > len(ber_to_beat):
-                    replace_path_segment_with_detour = True
-                    replacement_detour = detour
-                    ber_to_beat = copy.deepcopy(potential_ber)
+                    if len(potential_ber) > len(ber_to_beat):
+                        replace_path_segment_with_detour = True
+                        replacement_detour = detour
+                        ber_to_beat = copy.deepcopy(potential_ber)
 
-            # Replace bad node with detour
-            if replace_path_segment_with_detour:
-                potential_path = path[:i+1] + replacement_detour + path[i+distance:]
+                # Replace bad node with detour
+                if replace_path_segment_with_detour:
+                    potential_path = path[:i+1] + replacement_detour + path[i+distance:]
 
-                # Ensure no silly mistakes were made
-                if nx.is_simple_path(G, potential_path):
-                    path = potential_path
-                    # print("path replaced, new ber:", path, ber_after_replacement, ber_to_beat)
-                    ber_after_replacement = ber_to_beat
+                    # Ensure no silly mistakes were made
+                    if nx.is_simple_path(G, potential_path):
+                        path = potential_path
+                        # print("path replaced, new ber:", path, ber_after_replacement, ber_to_beat)
+                        ber_after_replacement = ber_to_beat
 
 
 
