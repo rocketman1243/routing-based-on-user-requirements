@@ -189,15 +189,6 @@ def filtered_bfs_tree(G, pro, maxDepth):
 
 
 
-"""
-TODO:
-- Handle updating an updated path --> Does this work out??
-- Verify that I currently make 4-node detours (pro 8/50)
-
-- Extend this to support longer detours
- 
-"""
-
 
 def augment_path_to_biggest_subset(G, pro, path):
 
@@ -227,6 +218,7 @@ def augment_path_to_biggest_subset(G, pro, path):
         b = path[i + distance]
 
         detours = find_detours(G, a, b, path, 2)
+        print(detours)
         
         clean_ber = copy.deepcopy(ber)
         for c in path[:i+1] + path[i+distance:]:
@@ -243,7 +235,6 @@ def augment_path_to_biggest_subset(G, pro, path):
 
         ber_to_beat = copy.deepcopy(current_ber)
 
-        print(detours)
         replace_path_segment_with_detour = False
         replacement_detour = []
 
@@ -278,21 +269,27 @@ def augment_path_to_biggest_subset(G, pro, path):
     for i in path:
         after_ber = after_ber.intersection(G.nodes[i]["features"])
 
-    # if before_ber != after_ber:
-    #     print("ber before:", before_ber)
-    #     print("path before:", original_path)
-    #     print("ber after optimization:", after_ber)
-    #     print("path after: ", path)
+    if before_ber != after_ber:
+        print("ber before:", before_ber)
+        print("path before:", original_path)
+        print("ber after optimization:", after_ber)
+        print("path after: ", path)
     # else:
     #     print("while we tried there was no improvement possible over:", before_ber)
 
+
+"""
+TODO:
+- Extend this to support longer detours (to n levels with n input)
+- Extend this to skip more than one node (first 2, then 3, then n)
+ 
+"""
 
 
 
 
 # Find all node sequences that we can use to replace node z from a to b
 def find_detours(G, x, y, path, levels):
-    print(path)
 
     detours = []
 
@@ -321,31 +318,54 @@ def find_detours(G, x, y, path, levels):
                 # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
                 if bb in naa:
                     detours.append([aa, bb])
-
-
-                # third level
-                for aaa in naa:
-                    for bbb in nbb:
-                        if aaa != bbb and aaa not in path and bbb not in path:
-                            prefix = toplevel_prefix + [aaa]
-                            postfix = [bbb] + toplevel_postfix
-
-                            if len(set(prefix).intersection(set(postfix))) != 0:
-                                continue
-
-                            naaa = set(nx.neighbors(G, aaa))
-                            nbbb = set(nx.neighbors(G, bbb))
-                            reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
-
-                            for r in reachables:
-                                detours.append(prefix + [r] + postfix)
-                                
-                            # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
-                            if bbb in naaa:
-                                detours.append(prefix + postfix)
-
+                    
+                extra_detours = find_detours_one_level(G, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, 5)
+                detours += extra_detours
 
     return detours
+
+def find_detours_one_level(G, aa, bb, toplevel_prefix, toplevel_postfix, path, currentLevel, maxLevel):
+
+    currentLevel += 1
+    if currentLevel > maxLevel:
+        return []
+
+    detours = []
+
+    naa = set(nx.neighbors(G, aa))
+    nbb = set(nx.neighbors(G, bb))
+
+    # third level
+    for aaa in naa:
+        for bbb in nbb:
+            if aaa != bbb and aaa not in path + toplevel_prefix and bbb not in path + toplevel_postfix:
+                prefix = toplevel_prefix + [aaa]
+                postfix = [bbb] + toplevel_postfix
+                new_detours = []
+
+                if len(set(prefix).intersection(set(postfix))) != 0:
+                    continue
+
+                naaa = set(nx.neighbors(G, aaa))
+                nbbb = set(nx.neighbors(G, bbb))
+                reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+
+                for r in reachables:
+                    new_detours.append(prefix + [r] + postfix)
+                    
+                # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
+                if bbb in naaa:
+                    new_detours.append(prefix + postfix)
+
+
+                # print(prefix, postfix, new_detours)
+                detours += new_detours
+                detours += find_detours_one_level(G, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel)
+    
+    return detours
+
+
+
 
 
 
