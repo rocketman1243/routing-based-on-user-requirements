@@ -41,7 +41,20 @@ if not dry_run:
 
 #######################3
 
-G = nx.complete_graph(number_of_nodes)
+# See https://networkx.org/documentation/stable/reference/generated/networkx.generators.internet_as_graphs.random_internet_as_graph.html#networkx.generators.internet_as_graphs.random_internet_as_graph for the source of this wonderful item
+G = nx.random_internet_as_graph(number_of_nodes)
+
+# Statistics
+total_degree = 0
+for node in G.nodes:
+    total_degree += nx.degree(G, node)
+average = total_degree / len(G.nodes)
+print(average, " average degree")
+print("#connected components", len(list(nx.connected_components(G))))
+
+
+
+# Rename nodes to string to work with the rest of the system
 mapping = {}
 for n in G.nodes:
     mapping[n] = str(n)

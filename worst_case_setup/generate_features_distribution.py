@@ -21,7 +21,7 @@ def generate_features(number_of_features_per_as: int, as_numbers):
     mapping = {}
 
     for as_number in as_numbers:
-        mapping[as_number] = features
+        mapping[as_number] = random.sample(features, random.randint(0, len(features)))
 
     return mapping
 
