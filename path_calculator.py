@@ -196,6 +196,7 @@ def augment_path_to_biggest_subset(G, pro, path):
         print("path too short to optimize")
         return path 
 
+    print(path)
 
     ber = set(pro.requirements.best_effort)
 
@@ -209,57 +210,59 @@ def augment_path_to_biggest_subset(G, pro, path):
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
 
-    # nr of hops between anchor points of detour to path
+    # distance = nr of hops between anchor points of detour to path
     # distance 2 means detour around 1 node
     # distance 3 means detour around 2 nodes, etc.
-    distance = 2
-    for i in range(len(path) - distance):
-        a = path[i]
-        b = path[i + distance]
+    distances = [2, 3, 4]
+    for distance in distances:
+        for i in range(len(path) - distance):
+            a = path[i]
+            b = path[i + distance]
 
-        detours = find_detours(G, a, b, path, 2)
-        print(detours)
-        
-        clean_ber = copy.deepcopy(ber)
-        for c in path[:i+1] + path[i+distance:]:
-            clean_ber = clean_ber.intersection(G.nodes[c]["features"])
+            detours = find_detours(G, a, b, path, 3)
+            print(a, b)
+            print(detours)
+            
+            clean_ber = copy.deepcopy(ber)
+            for c in path[:i+1] + path[i+distance:]:
+                clean_ber = clean_ber.intersection(G.nodes[c]["features"])
 
-        current_ber = copy.deepcopy(ber)
-        for c in path:
-            current_ber = current_ber.intersection(G.nodes[c]["features"])
+            current_ber = copy.deepcopy(ber)
+            for c in path:
+                current_ber = current_ber.intersection(G.nodes[c]["features"])
 
 
-        if len(clean_ber) <= len(current_ber):
-            # Nothing to improve here, skip this detour
-            continue
+            if len(clean_ber) <= len(current_ber):
+                # Nothing to improve here, skip this detour
+                continue
 
-        ber_to_beat = copy.deepcopy(current_ber)
+            ber_to_beat = copy.deepcopy(current_ber)
 
-        replace_path_segment_with_detour = False
-        replacement_detour = []
+            replace_path_segment_with_detour = False
+            replacement_detour = []
 
-        for detour in detours:
+            for detour in detours:
 
-            potential_ber = copy.deepcopy(clean_ber)
+                potential_ber = copy.deepcopy(clean_ber)
 
-            # Update potential ber with detour
-            for j in detour:
-                potential_ber = potential_ber.intersection(G.nodes[j]["features"])
+                # Update potential ber with detour
+                for j in detour:
+                    potential_ber = potential_ber.intersection(G.nodes[j]["features"])
 
-            if len(potential_ber) > len(ber_to_beat):
-                replace_path_segment_with_detour = True
-                replacement_detour = detour
-                ber_to_beat = copy.deepcopy(potential_ber)
+                if len(potential_ber) > len(ber_to_beat):
+                    replace_path_segment_with_detour = True
+                    replacement_detour = detour
+                    ber_to_beat = copy.deepcopy(potential_ber)
 
-        # Replace bad node with detour
-        if replace_path_segment_with_detour:
-            potential_path = path[:i+1] + replacement_detour + path[i+distance:]
+            # Replace bad node with detour
+            if replace_path_segment_with_detour:
+                potential_path = path[:i+1] + replacement_detour + path[i+distance:]
 
-            # Ensure no silly mistakes were made
-            if nx.is_simple_path(G, potential_path):
-                path = potential_path
-                # print("path replaced, new ber:", path, ber_after_replacement, ber_to_beat)
-                ber_after_replacement = ber_to_beat
+                # Ensure no silly mistakes were made
+                if nx.is_simple_path(G, potential_path):
+                    path = potential_path
+                    # print("path replaced, new ber:", path, ber_after_replacement, ber_to_beat)
+                    ber_after_replacement = ber_to_beat
 
 
 
@@ -319,7 +322,7 @@ def find_detours(G, x, y, path, levels):
                 if bb in naa:
                     detours.append([aa, bb])
                     
-                extra_detours = find_detours_one_level(G, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, 5)
+                extra_detours = find_detours_one_level(G, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels)
                 detours += extra_detours
 
     return detours
