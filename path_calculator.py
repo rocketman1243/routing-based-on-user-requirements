@@ -43,7 +43,7 @@ def MP(G, pro):
     max_tree_depth = 1
     buffer_depth = 0
     neighbour_depth_limit = 1
-    neighbour_limit = 10
+    neighbour_limit = 5
 
     # detour limit = 0 means don't limit just add
     nr_detours_limit = 0
@@ -339,15 +339,18 @@ def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
         detours.append(detour)
         return detours, scores
 
-    new_score = score_detour(G, pro, detour)
-    if len(scores) < nr_detours_limit:
+    if len(detours) < nr_detours_limit:
         detours.append(detour)
-        scores.append(new_score)
-    else:
-        for i, score in enumerate(scores):
-            if new_score > score:
-                detours[i] = detour
-                scores[i] = score
+
+    # new_score = score_detour(G, pro, detour)
+    # if len(scores) < nr_detours_limit:
+    #     detours.append(detour)
+    #     scores.append(new_score)
+    # else:
+    #     for i, score in enumerate(scores):
+    #         if new_score > score:
+    #             detours[i] = detour
+    #             scores[i] = score
 
 
     # print("new detour:", detour, new_score, detours, scores)
