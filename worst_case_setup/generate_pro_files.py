@@ -13,9 +13,9 @@ num_objects = 50
 
 dry_run = False
 
-requirements = list(range(1, 31))
-best_effort_min_amount = 30
-best_effort_max_amount = 30
+requirements = list(range(1, 101))
+best_effort_min_amount = 100
+best_effort_max_amount = 100
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 

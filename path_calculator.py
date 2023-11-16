@@ -40,7 +40,8 @@ def MP(G, pro):
         return 0, 0
 
     # Tweaking values
-    max_tree_depth = 1
+    tree_start_depth = 1
+    max_tree_depth = 7
     buffer_depth = 0
     neighbour_depth_limit = 1
     neighbour_limit = 5
@@ -48,17 +49,17 @@ def MP(G, pro):
     # detour limit = 0 means don't limit just add
     nr_detours_limit = 0
     
-    path, ber, improvement = filtered_bidirectional_bfs_tree(G, pro, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+    path, ber, improvement, tree_time, detour_time, augment_time = filtered_bidirectional_bfs_tree(G, pro, tree_start_depth, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
 
     # print(path)
     # print(ber)
-    print(improvement)
+    # print(improvement)
 
     toc = time.time()
     runtime = toc - tic
-    print("runtime: ", toc - tic)
+    # print("runtime: ", toc - tic)
 
-    return improvement, runtime
+    return improvement, runtime, tree_time, detour_time, augment_time
 
 
     # augment_path_to_biggest_subset(G, pro, path)
@@ -149,42 +150,61 @@ def smartDFS(G, pro, maxDepth):
 
 
 
-def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+def filtered_bidirectional_bfs_tree(G, pro, startDepth, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
 
+    tic = time.time()
+
+    
 
     # magic number, tweak as you go
-    currentDepth = 1
+    currentDepth = startDepth
 
-    tree = nx.bfs_tree(G, pro.as_source, True, currentDepth)
-    dest_found_in_tree = False
+    # tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth)
+    # tree = nx.bfs_tree(G, source=pro.as_source)
+
+    # dest_found_in_tree = False
     
-    while dest_found_in_tree is False and currentDepth <= maxDepth:
-        if pro.as_destination in tree.nodes:
-            dest_found_in_tree = True
-        else:
-            currentDepth += 1
-            tree = nx.bfs_tree(G, pro.as_source, currentDepth)
+    # while dest_found_in_tree is False and currentDepth <= maxDepth:
+    #     if pro.as_destination in tree.nodes:
+    #         dest_found_in_tree = True
+    #     else:
+    #         print("bigger!")
+    #         currentDepth += 1
+    #         tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth)
 
-    tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth + bufferDepth)
-    reverse_tree = nx.bfs_tree(G, source=pro.as_destination, depth_limit=currentDepth + bufferDepth)
+
+    # tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth + bufferDepth)
+
+    # reverse_tree = nx.bfs_tree(G, source=pro.as_destination, depth_limit=currentDepth + bufferDepth)
+    # reverse_tree = nx.Graph()
+
+
     # print("tree/reverse_tree nodes: ", tree.nodes, reverse_tree.nodes)
 
+
     complying_nodes = []
-    # print("currentDepth:", currentDepth)
-    # print("subtree node counts: ", len(tree.nodes), len(reverse_tree.nodes))
-    for n in list(tree.nodes) + list(reverse_tree.nodes):
+
+    # for n in list(tree.nodes) + list(reverse_tree.nodes):
+    # for n in list(tree.nodes):
+
+    # node_list = copy.deepcopy(list(G.nodes))
+    for n in list(G.nodes):
         if fulfills_strict_requirements(pro.requirements.strict, G.nodes[n]["features"], pro.geolocation.exclude, G.nodes[n]["geolocation"]):
             complying_nodes.append(n)
 
     subgraph = G.subgraph(complying_nodes)
+    # subgraph = G
 
-    if nx.has_path(subgraph, pro.as_source, pro.as_destination):
-        # smartDFS(subgraph, pro, pro.as_source, pro.as_destination, currentDepth)
+    if nx.has_path(G, pro.as_source, pro.as_destination):
         path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
-        return augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+        toc = time.time() - tic
+
+        a, b, c, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+        return a, b, c, toc, detour_time, augment_time
     else:
-        # print("strict was too strict (or depth too low)")
-        return [], {}, 0
+        print("strict was too strict (or depth too low)")
+        toc = time.time() - tic
+        return [], {}, 0, toc, 0, 0
         
 
 
@@ -218,6 +238,7 @@ def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_dep
 
 
 def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+    tic = time.time()
 
     if len(path) < 3:
         # print("path too short to optimize")
@@ -249,7 +270,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
                 # levels = length of prefix and postfix, aka how far do you stray from the path?
                 # detour length can be at most 2 * levels + 1
-                detours = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+                detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print(detours)
@@ -311,7 +332,8 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     # else:
     #     print("----")
 
-    return path, after_ber, len(after_ber) - len(before_ber)
+    toc = time.time() - tic
+    return path, after_ber, len(after_ber) - len(before_ber), detours_time, toc
 
 
 
@@ -359,6 +381,9 @@ def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
 
 # Find all node sequences that we can use to replace node z from a to b
 def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
+
+    tic = time.time()
+
     detours = []
     scores = []
 
@@ -399,7 +424,8 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
                 # print("to third level")
                 detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores, nr_detours_limit)
 
-    return detours
+    toc = time.time() - tic
+    return detours, toc
 
 # TODO: 11, 12, 13, not used for detours. FIX!
 
@@ -444,8 +470,6 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
                     detour = prefix + postfix
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
 
-
-                print("find detours", aaa, bbb)
                 detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit)
     
     return detours, scores

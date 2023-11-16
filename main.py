@@ -33,7 +33,7 @@ maxDepth = 8
 CHOSEN_PATH = worst_case_setup_path
 path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
 
-# CHOSEN_PATH = initial_results_path
+# CHOSEN_PATH = max_best_effort_experiment
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
 
 
@@ -85,21 +85,36 @@ G.add_edges_from(edges)
 
 improvement_total = 0
 runtime_total = 0
+tree_time_total = 0
+detour_time_total = 0
+augment_time_total = 0
 
 for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    improvement, runtime = MP(G, pro)
+    improvement, runtime, tree_time, detour_time, augment_time = MP(G, pro)
 
     improvement_total += improvement
     runtime_total += runtime
+    tree_time_total += tree_time
+    detour_time_total += detour_time
+    augment_time_total += (augment_time - detour_time)
+
 
 avg_improvement = improvement_total / len(pro_objects)
 avg_runtime = runtime_total / len(pro_objects)
+avg_treetime = tree_time_total / len(pro_objects)
+avg_detour_time = detour_time_total / len(pro_objects)
+avg_augment_time = augment_time_total / len(pro_objects)
 
+print("-----------------------------")
 print("avg improvement:", avg_improvement)
 print("avg runtime:", avg_runtime)
+print("avg tree time:", avg_treetime)
+print("avg detour time:", avg_detour_time)
+print("avg augment time:", avg_augment_time)
+
 
 
 
