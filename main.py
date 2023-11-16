@@ -27,13 +27,13 @@ test_nio_path = "test_files/nio_files/"
 maxDepth = 8
 
 
-# CHOSEN_PATH = test_path
-# path_to_nio_files = test_nio_path
+CHOSEN_PATH = test_path
+path_to_nio_files = test_nio_path
 
-CHOSEN_PATH = worst_case_setup_path
-path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
+# CHOSEN_PATH = worst_case_setup_path
+# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
 
-# CHOSEN_PATH = max_best_effort_experiment
+# CHOSEN_PATH = initial_results_path
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
 
 
@@ -83,11 +83,23 @@ nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
 
+improvement_total = 0
+runtime_total = 0
+
 for i in range(len(pro_objects)):
     print("pro", i + 1, "/", len(pro_objects))
     pro = pro_objects[i]
 
-    output = MP(G, pro, maxDepth)
+    improvement, runtime = MP(G, pro)
+
+    improvement_total += improvement
+    runtime_total += runtime
+
+avg_improvement = improvement_total / len(pro_objects)
+avg_runtime = runtime_total / len(pro_objects)
+
+print("avg improvement:", avg_improvement)
+print("avg runtime:", avg_runtime)
 
 
 
@@ -105,29 +117,27 @@ for i in range(len(pro_objects)):
 
 
 
+""" 
+Output format: 
 
+- index of pro
+- Total number of paths found
+- Number of selected paths according to multipath settings
+- Reason for failure
+- time of building graph
+- time of strict phase
+- time of best effort phase
+- time of optimization phase
+- total time from start to end
+- The found paths and their latency, see formatting in path_calculator.py bottom of file
 
-    """ 
-    Output format: 
+# """ 
+# result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
 
-    - index of pro
-    - Total number of paths found
-    - Number of selected paths according to multipath settings
-    - Reason for failure
-    - time of building graph
-    - time of strict phase
-    - time of best effort phase
-    - time of optimization phase
-    - total time from start to end
-    - The found paths and their latency, see formatting in path_calculator.py bottom of file
+# results_file = f"{CHOSEN_PATH}/results/output.csv"
+# with open(results_file, "w") as file:
+#     file.write("")
 
-    # """ 
-    # result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
-
-    # results_file = f"{CHOSEN_PATH}/results/output.csv"
-    # with open(results_file, "w") as file:
-    #     file.write("")
-
-    # with open(results_file, "a") as file:
-    #     file.write(result)
+# with open(results_file, "a") as file:
+#     file.write(result)
 

@@ -18,7 +18,7 @@ to be consumed by main.py
 
 """
 
-number_of_nodes = 1000
+number_of_nodes = 30000
 number_of_features_in_distribution = 30
 output_path = "worst_case_setup/data/nio_files"
 
