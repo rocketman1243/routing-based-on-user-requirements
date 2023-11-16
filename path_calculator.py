@@ -12,19 +12,11 @@ import math
 import queue
 import heapq
 
-# TODO:
-# - Set up worst case setup
-# - Show that it is indeed worst case setup
-# - Go supa fast
-
-
 def fulfills_strict_requirements(S, F, user_exclude_geolocation, as_geolocations):
     if set(S).issubset(set(F)):
         if len(set(user_exclude_geolocation).intersection(set(as_geolocations))) == 0:
             return True
     return False
-
-
 
 
 
@@ -43,13 +35,17 @@ def MP(G, pro):
     tree_start_depth = 1
     max_tree_depth = 7
     buffer_depth = 0
-    neighbour_depth_limit = 1
+
     neighbour_limit = 5
+
+    # neigh_depth_limit = length of prefix and postfix, aka how far do you stray from the path?
+    # detour length can be at most 2 * neigh_depth_limit + 1
+    neighbour_depth_limit = 1
 
     # detour limit = 0 means don't limit just add
     nr_detours_limit = 0
     
-    path, ber, improvement, tree_time, detour_time, augment_time = filtered_bidirectional_bfs_tree(G, pro, tree_start_depth, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, tree_start_depth, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
 
     # print(path)
     # print(ber)
@@ -150,50 +146,16 @@ def smartDFS(G, pro, maxDepth):
 
 
 
-def filtered_bidirectional_bfs_tree(G, pro, startDepth, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+def filter_graph(G, pro, startDepth, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
 
     tic = time.time()
 
-    
-
-    # magic number, tweak as you go
-    currentDepth = startDepth
-
-    # tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth)
-    # tree = nx.bfs_tree(G, source=pro.as_source)
-
-    # dest_found_in_tree = False
-    
-    # while dest_found_in_tree is False and currentDepth <= maxDepth:
-    #     if pro.as_destination in tree.nodes:
-    #         dest_found_in_tree = True
-    #     else:
-    #         print("bigger!")
-    #         currentDepth += 1
-    #         tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth)
-
-
-    # tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth + bufferDepth)
-
-    # reverse_tree = nx.bfs_tree(G, source=pro.as_destination, depth_limit=currentDepth + bufferDepth)
-    # reverse_tree = nx.Graph()
-
-
-    # print("tree/reverse_tree nodes: ", tree.nodes, reverse_tree.nodes)
-
-
     complying_nodes = []
-
-    # for n in list(tree.nodes) + list(reverse_tree.nodes):
-    # for n in list(tree.nodes):
-
-    # node_list = copy.deepcopy(list(G.nodes))
     for n in list(G.nodes):
         if fulfills_strict_requirements(pro.requirements.strict, G.nodes[n]["features"], pro.geolocation.exclude, G.nodes[n]["geolocation"]):
             complying_nodes.append(n)
 
     subgraph = G.subgraph(complying_nodes)
-    # subgraph = G
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
         path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
@@ -236,6 +198,7 @@ def filtered_bidirectional_bfs_tree(G, pro, startDepth, maxDepth, bufferDepth, n
 
 
 
+# TODO: Make this supa fast!
 
 def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
     tic = time.time()
@@ -250,10 +213,10 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
     if(len(ber) == 0):
         # print("no BER so no improvement possible")
-        return path, {}, 0
+        return path, {}, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
-    original_path = copy.deepcopy(path)
+    # original_path = copy.deepcopy(path)
     before_ber = copy.deepcopy(ber)
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
@@ -268,8 +231,6 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 a = path[i]
                 b = path[i + distance]
 
-                # levels = length of prefix and postfix, aka how far do you stray from the path?
-                # detour length can be at most 2 * levels + 1
                 detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
                 # print(a, b)
                 # print("#detours", len(detours))
@@ -296,8 +257,6 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 for detour in detours:
 
                     potential_ber = copy.deepcopy(clean_ber)
-
-                    # Update potential ber with detour
                     for j in detour:
                         potential_ber = potential_ber.intersection(G.nodes[j]["features"])
 
@@ -313,8 +272,6 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                     # Ensure no silly mistakes were made
                     if nx.is_simple_path(G, potential_path):
                         path = potential_path
-                        # print("path replaced, new ber:", path, ber_after_replacement, ber_to_beat)
-                        ber_after_replacement = ber_to_beat
 
 
 
