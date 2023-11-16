@@ -36,16 +36,19 @@ def MP(G, pro):
     end = pro.as_destination
 
     if not fulfills_strict_requirements(pro.requirements.strict, G.nodes[start]["features"], pro.geolocation.exclude, G.nodes[start]["geolocation"]) or not fulfills_strict_requirements(pro.requirements.strict, G.nodes[end]["features"], pro.geolocation.exclude, G.nodes[end]["geolocation"]):
-        print("strict too strict")
+        # print("strict too strict")
         return 0, 0
 
     # Tweaking values
-    max_tree_depth = 10
+    max_tree_depth = 1
     buffer_depth = 0
+    neighbour_depth_limit = 1
     neighbour_limit = 10
-    nr_detours_limit = 100
+
+    # detour limit = 0 means don't limit just add
+    nr_detours_limit = 0
     
-    path, ber, improvement = filtered_bidirectional_bfs_tree(G, pro, max_tree_depth, buffer_depth, neighbour_limit, nr_detours_limit)
+    path, ber, improvement = filtered_bidirectional_bfs_tree(G, pro, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
 
     # print(path)
     # print(ber)
@@ -146,7 +149,8 @@ def smartDFS(G, pro, maxDepth):
 
 
 
-def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_limit, nr_detours_limit):
+def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+
 
     # magic number, tweak as you go
     currentDepth = 1
@@ -163,6 +167,7 @@ def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_lim
 
     tree = nx.bfs_tree(G, source=pro.as_source, depth_limit=currentDepth + bufferDepth)
     reverse_tree = nx.bfs_tree(G, source=pro.as_destination, depth_limit=currentDepth + bufferDepth)
+    # print("tree/reverse_tree nodes: ", tree.nodes, reverse_tree.nodes)
 
     complying_nodes = []
     # print("currentDepth:", currentDepth)
@@ -176,7 +181,7 @@ def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_lim
     if nx.has_path(subgraph, pro.as_source, pro.as_destination):
         # smartDFS(subgraph, pro, pro.as_source, pro.as_destination, currentDepth)
         path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
-        return augment_path_to_biggest_subset(subgraph, pro, path, neighbour_limit, nr_detours_limit)
+        return augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
     else:
         # print("strict was too strict (or depth too low)")
         return [], {}, 0
@@ -212,7 +217,7 @@ def filtered_bidirectional_bfs_tree(G, pro, maxDepth, bufferDepth, neighbour_lim
 
 
 
-def augment_path_to_biggest_subset(G, pro, path, neighbour_limit, nr_detours_limit):
+def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
 
     if len(path) < 3:
         # print("path too short to optimize")
@@ -244,11 +249,10 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_limit, nr_detours_lim
 
                 # levels = length of prefix and postfix, aka how far do you stray from the path?
                 # detour length can be at most 2 * levels + 1
-                levels = 1
-                detours = find_detours(G, a, b, pro, path, levels, neighbour_limit, nr_detours_limit)
+                detours = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
                 # print(a, b)
-                print("#detours", len(detours))
-                print(detours)
+                # print("#detours", len(detours))
+                # print(detours)
                 
                 clean_ber = copy.deepcopy(ber)
                 for c in path[:i+1] + path[i+distance:]:
@@ -331,6 +335,10 @@ def score_detour(G, pro, detour):
 
 
 def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
+    if nr_detours_limit == 0:
+        detours.append(detour)
+        return detours, scores
+
     new_score = score_detour(G, pro, detour)
     if len(scores) < nr_detours_limit:
         detours.append(detour)
@@ -341,6 +349,8 @@ def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
                 detours[i] = detour
                 scores[i] = score
 
+
+    # print("new detour:", detour, new_score, detours, scores)
     return detours, scores
 
 
@@ -352,7 +362,9 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
     na = set(nx.neighbors(G, x))
     nb = set(nx.neighbors(G, y))
 
+    # print("na, nb before limit", na, nb)
     na, nb = limit_neighbours(G, pro, na, nb, neighbour_limit)
+    # print("na, nb after limit", na, nb)
 
     # first level
     shared_neighbours = na.intersection(nb).difference(set(path))
@@ -381,15 +393,20 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
                     detour = [aa, bb]
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
                     
+                # print("to third level")
                 detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores, nr_detours_limit)
 
     return detours
+
+# TODO: 11, 12, 13, not used for detours. FIX!
 
 def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit):
 
     currentLevel += 1
     if currentLevel > maxLevel:
         return detours, scores
+
+    # print("in third level")
 
     naa = set(nx.neighbors(G, aa))
     nbb = set(nx.neighbors(G, bb))
@@ -402,12 +419,18 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
                 postfix = [bbb] + toplevel_postfix
 
                 if len(set(prefix).intersection(set(postfix))) != 0:
+                    # print("prefix and postfix overlap: ", prefix, postfix)
                     continue
+
 
                 naaa = set(nx.neighbors(G, aaa))
                 nbbb = set(nx.neighbors(G, bbb))
 
+
                 reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+
+                # print("in third level: ", aaa, bbb, naaa, nbbb, prefix, postfix, reachables)
+
 
                 for r in reachables:
                     detour = prefix + [r] + postfix
@@ -419,8 +442,8 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
 
 
-                # print(prefix, postfix, new_detours)
-                detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel)
+                print("find detours", aaa, bbb)
+                detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit)
     
     return detours, scores
 

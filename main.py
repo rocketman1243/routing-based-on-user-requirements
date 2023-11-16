@@ -27,11 +27,11 @@ test_nio_path = "test_files/nio_files/"
 maxDepth = 8
 
 
-CHOSEN_PATH = test_path
-path_to_nio_files = test_nio_path
+# CHOSEN_PATH = test_path
+# path_to_nio_files = test_nio_path
 
-# CHOSEN_PATH = worst_case_setup_path
-# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
+CHOSEN_PATH = worst_case_setup_path
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
 
 # CHOSEN_PATH = initial_results_path
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
