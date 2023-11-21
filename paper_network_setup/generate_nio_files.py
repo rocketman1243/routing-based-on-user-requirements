@@ -10,7 +10,7 @@ import pprint
 from geopy import distance
 import random
 
-""" 
+"""
 CONTENTS
 This script creates a worst case network and turns it into a collection of NIO files
 to be consumed by main.py
@@ -18,9 +18,9 @@ to be consumed by main.py
 
 """
 
-number_of_nodes = 30000
+number_of_nodes = 75000
 number_of_features_in_distribution = 100
-output_path = "worst_case_setup/data/nio_files"
+output_path = "paper_network_setup/data/nio_files"
 
 dry_run = False
 
@@ -28,7 +28,7 @@ dry_run = False
 
 ###################
 
-# Cleanup previous files in directory as the number of objects may be less than before, 
+# Cleanup previous files in directory as the number of objects may be less than before,
 # causing dead files from previous runs to still exist
 
 if not dry_run:
@@ -68,7 +68,7 @@ node_info = {}
 # After edges are inserted from connected dataset, we generate features based on this
 features = generate_features(number_of_features_in_distribution, list(G.nodes))
 
-with open("./worst_case_setup/data/as_numbers.txt", "w") as file:
+with open("./paper_network_setup/data/as_numbers.txt", "w") as file:
     for asn in list(G.nodes):
         file.write(asn + "\n")
 

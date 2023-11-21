@@ -21,12 +21,12 @@ max_nr_geolocations = 0
 
 ###################################33
 
-# Cleanup previous files in directory as the number of objects may be less than before, 
+# Cleanup previous files in directory as the number of objects may be less than before,
 # causing dead files from previous runs to still exist
 
 output_path = ""
 if not dry_run:
-    output_path = f"worst_case_setup/pro_files"
+    output_path = f"worst_case_network_setup/pro_files"
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -36,7 +36,7 @@ if not dry_run:
 ##################################33
 
 ases = []
-with open("worst_case_setup/data/as_numbers.txt", "r") as file:
+with open("worst_case_network_setup/data/as_numbers.txt", "r") as file:
     for line in file:
         ases.append(line[:-1])
 
@@ -55,9 +55,9 @@ output_objects = []
 for index in range(num_objects):
 
     endpoints = random.sample(ases, 2)
-    features = list(range(1,31))    
+    features = list(range(1,31))
 
-    as_source = endpoints[0]   
+    as_source = endpoints[0]
     as_destination = endpoints[1]
 
     # Requirements for privacy
@@ -79,14 +79,14 @@ for index in range(num_objects):
 
     geolocation_exclude = random.sample(geolocation_copy, geolocation_amount)
     geolocation_exclude.sort()
-    
+
     path_optimization = random.choice(["minimize_total_latency", "minimize_number_of_hops", "none"])
 
     target_amount_of_paths = random.choice([1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6])
     minimum_number_of_paths = 1
 
     fallback_to_ebgp = random.choice(["true", "false"])
-    
+
     data = {
         "as_source": as_source,
         "as_destination": as_destination,
@@ -105,7 +105,7 @@ for index in range(num_objects):
         },
         "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp
     }
-    
+
     output_objects.append(data)
 
 if not dry_run:

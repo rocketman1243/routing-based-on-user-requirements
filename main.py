@@ -19,13 +19,14 @@ scalability_experiment_path = "full_scale_setup/scalability_experiment"
 optimization_trade_off_experiment = "full_scale_setup/optimization_trade_off_experiment"
 max_best_effort_experiment = "full_scale_setup/max_best_effort_experiment"
 
-worst_case_setup_path = "worst_case_setup"
+paper_network_setup_path = "paper_network_setup"
 
 test_path = "test_files"
 test_nio_path = "test_files/nio_files/"
 
-neighbour_depth_limit = [1, 1, 1, 1, 1, 1]
-neighbour_limit = [5, 6, 7, 8, 9, 10]
+neighbour_depth_limit = [1, 1, 1, 2, 2, 2]
+neighbour_limit = [2, 4, 6, 1, 2, 3]
+detour_distance_limit = [2, 2, 2, 2, 2, 2]
 
 
 
@@ -33,7 +34,7 @@ neighbour_limit = [5, 6, 7, 8, 9, 10]
 # CHOSEN_PATH = test_path
 # path_to_nio_files = test_nio_path
 
-CHOSEN_PATH = worst_case_setup_path
+CHOSEN_PATH = paper_network_setup_path
 path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 # CHOSEN_PATH = max_best_effort_experiment
@@ -48,7 +49,7 @@ if len(neighbour_depth_limit) != len(neighbour_limit):
 
 limits = []
 for i in range(len(neighbour_depth_limit)):
-    limits.append([neighbour_depth_limit[i], neighbour_limit[i]])
+    limits.append([neighbour_depth_limit[i], neighbour_limit[i], detour_distance_limit[i]])
 
 # Read in PRO objects
 pro_objects = []
@@ -95,13 +96,15 @@ G.add_nodes_from(as_numbers)
 nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
+# Reset results file
+open(f'{CHOSEN_PATH}/results/output.csv', 'w')
 
 for l in range(len(limits)):
     improvement_total = 0
     runtime_total = 0
-    # tree_time_total = 0
-    # detour_time_total = 0
-    # augment_time_total = 0
+    tree_time_total = 0
+    detour_time_total = 0
+    augment_time_total = 0
 
     current_limits = limits[l]
     print("current limits:", current_limits)
@@ -114,26 +117,31 @@ for l in range(len(limits)):
 
         improvement_total += improvement
         runtime_total += runtime
-        # tree_time_total += tree_time
-        # detour_time_total += detour_time
-        # augment_time_total += (augment_time - detour_time)
+        tree_time_total += tree_time
+        detour_time_total += detour_time
+        augment_time_total += (augment_time - detour_time)
 
 
-    avg_improvement = improvement_total / len(pro_objects)
-    avg_runtime = runtime_total / len(pro_objects)
-    # avg_treetime = tree_time_total / len(pro_objects)
-    # avg_detour_time = detour_time_total / len(pro_objects)
-    # avg_augment_time = augment_time_total / len(pro_objects)
+    avg_improvement = round(improvement_total / len(pro_objects), 3)
+    avg_runtime = round(runtime_total / len(pro_objects), 3)
+    avg_treetime = round(tree_time_total / len(pro_objects), 3)
+    avg_detour_time = round(detour_time_total / len(pro_objects), 3)
+    avg_augment_time = round(augment_time_total / len(pro_objects), 3)
 
-    print("avg improvement:", avg_improvement)
-    print("avg runtime:", avg_runtime)
-    # print("avg tree time:", avg_treetime)
-    # print("avg detour time:", avg_detour_time)
-    # print("avg augment time:", avg_augment_time)
+    print("avg improvement: ", avg_improvement)
+    print("avg runtime:     ", avg_runtime)
+    print("avg tree time:   ", avg_treetime)
+    print("avg detour time: ", avg_detour_time)
+    print("avg augment time:", avg_augment_time)
     print("-----------------------------")
 
 
     # TODO: Spit this into file
+    result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_runtime}\n"
+    with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
+        # for line in results:
+        file.writelines(result_string)
+
 
 
 

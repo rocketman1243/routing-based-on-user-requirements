@@ -36,11 +36,9 @@ def MP(G, pro, limits):
     # detour length can be at most 2 * neigh_depth_limit + 1
     neighbour_depth_limit = limits[0]
     neighbour_limit = limits[1]
+    detour_distance_limit = limits[2]
 
-    # detour limit = 0 means don't limit just add
-    nr_detours_limit = 0
-
-    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
 
     # print(path)
     # print(ber)
@@ -65,7 +63,7 @@ def MP(G, pro, limits):
 
 
 
-def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance_limit):
 
     tic = time.time()
 
@@ -80,7 +78,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limi
         path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
         toc = time.time() - tic
 
-        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
         return a, b, improvement, toc, detour_time, augment_time
     else:
         print("strict was too strict (or depth too low)")
@@ -90,7 +88,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limi
 
 # TODO: Make this supa fast!
 
-def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit):
     tic = time.time()
 
     if len(path) < 3:
@@ -106,22 +104,20 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
         return path, {}, 0, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
-    original_path = copy.deepcopy(path)
+    # original_path = copy.deepcopy(path)
     before_ber = copy.deepcopy(ber)
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
 
-    # distance = nr of hops between anchor points of detour to path
-    # distance 2 means detour around 1 node
-    # distance 3 means detour around 2 nodes, etc.
-    distances = [2, 3, 4]
+    # +1 to ensure that the lowest value is possible and not cut off
+    distances = range(2, min(detour_distance_limit, len(path)) + 1)
     for distance in distances:
         for i in range(len(path) - distance):
             if i + distance + 1 <= len(path):
                 a = path[i]
                 b = path[i + distance]
 
-                detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+                detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit)
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print(detours)
@@ -203,13 +199,13 @@ def score_detour(G, pro, detour):
     return len(ber)
 
 
-def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
-    if nr_detours_limit == 0:
-        detours.append(detour)
-        return detours, scores
+# def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
+#     if nr_detours_limit == 0:
+#         detours.append(detour)
+#         return detours, scores
 
-    if len(detours) < nr_detours_limit:
-        detours.append(detour)
+#     if len(detours) < nr_detours_limit:
+#         detours.append(detour)
 
     # new_score = score_detour(G, pro, detour)
     # if len(scores) < nr_detours_limit:
@@ -223,11 +219,11 @@ def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
 
 
     # print("new detour:", detour, new_score, detours, scores)
-    return detours, scores
+    # return detours, scores
 
 
 # Find all node sequences that we can use to replace node z from a to b
-def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
+def find_detours(G, x, y, pro, path, levels, neighbour_limit):
 
     tic = time.time()
 
@@ -244,7 +240,7 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
     # first level
     shared_neighbours = na.intersection(nb).difference(set(path))
     for i in shared_neighbours:
-        detours, scores = add_detour(detours, scores, nr_detours_limit, [i], G, pro)
+        detours.append([i])
 
     # second level and onwards
     for aa in na:
@@ -260,23 +256,21 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
 
                 for r in reachables:
                     detour = toplevel_prefix + [r] + toplevel_postfix
-                    detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
+                    detours.append(detour)
 
 
                 # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
                 if bb in naa:
                     detour = [aa, bb]
-                    detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
+                    detours.append(detour)
 
                 # print("to third level")
-                detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores, nr_detours_limit)
+                detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores)
 
     toc = time.time() - tic
     return detours, toc
 
-# TODO: 11, 12, 13, not used for detours. FIX!
-
-def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit):
+def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores):
 
     currentLevel += 1
     if currentLevel > maxLevel:
@@ -310,14 +304,14 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
 
                 for r in reachables:
                     detour = prefix + [r] + postfix
-                    detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
+                    detours.append(detour)
 
                 # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
                 if bbb in naaa:
                     detour = prefix + postfix
-                    detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
+                    detours.append(detour)
 
-                detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit)
+                detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores)
 
     return detours, scores
 
