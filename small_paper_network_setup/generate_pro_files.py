@@ -6,17 +6,15 @@ import os
 # Tuning values
 
 num_objects = 50
-nr_of_features = 100
-# experiment = "max_best_effort_experiment"
-
+nr_of_features = 30
 
 
 
 dry_run = False
 
-requirements = list(range(1, 101))
-best_effort_min_amount = 50
-best_effort_max_amount = 100
+requirements = list(range(1, nr_of_features + 1))
+best_effort_min_amount = nr_of_features - 5
+best_effort_max_amount = nr_of_features
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 
@@ -27,7 +25,7 @@ max_nr_geolocations = 0
 
 output_path = ""
 if not dry_run:
-    output_path = f"paper_network_setup/pro_files"
+    output_path = f"small_paper_network_setup/pro_files"
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -37,7 +35,7 @@ if not dry_run:
 ##################################33
 
 ases = []
-with open("paper_network_setup/data/as_numbers.txt", "r") as file:
+with open("small_paper_network_setup/data/as_numbers.txt", "r") as file:
     for line in file:
         ases.append(line[:-1])
 

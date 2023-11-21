@@ -28,32 +28,18 @@ def MP(G, pro, limits):
     end = pro.as_destination
 
     if not fulfills_strict_requirements(pro.requirements.strict, G.nodes[start]["features"], pro.geolocation.exclude, G.nodes[start]["geolocation"]) or not fulfills_strict_requirements(pro.requirements.strict, G.nodes[end]["features"], pro.geolocation.exclude, G.nodes[end]["geolocation"]):
-        # print("strict too strict")
         return 0, 0, 0, 0, 0
 
-
-    # neigh_depth_limit = length of prefix and postfix, aka how far do you stray from the path?
-    # detour length can be at most 2 * neigh_depth_limit + 1
     neighbour_depth_limit = limits[0]
     neighbour_limit = limits[1]
     detour_distance_limit = limits[2]
 
     path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
 
-    # print(path)
-    # print(ber)
-    # print(improvement)
-
     toc = time.time()
     runtime = toc - tic
-    # print("runtime: ", toc - tic)
-
     return improvement, runtime, tree_time, detour_time, augment_time
 
-
-    # augment_path_to_biggest_subset(G, pro, path)
-
-    # smartDFS(G, pro, maxDepth)
 
 
 
@@ -322,29 +308,44 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
 
 
 def smartDFS(G, pro, maxDepth):
+    tic = time.time()
 
     # MaxHeap, achieved by multiplying |B| * -1
-    AllResults = []
+    # AllResults = []
 
     # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
     Q = []
     Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
 
+    global_best_score = -1
+    global_best_path = (0, 0)
+
     while not len(Q) == 0:
         vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
-        # print(vp, vc, Pp, Bp)
 
         Pc = copy.deepcopy(Pp)
         Pc.append(vc)
 
         Bc = copy.deepcopy(Bp)
         Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
-        Lc = Lp
-        if vc != vp:
-            Lc = Lp + G.edges[vp, vc]["latency"]
+
+        if len(Bc) < global_best_score:
+            # We can never become the best path, so might as well exit
+            continue
+
+
+        # Lc = Lp
+        # if vc != vp:
+        #     Lc = Lp + G.edges[vp, vc]["latency"]
 
         if vc == pro.as_destination:
-            heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, Lc, hopsLeft))
+            # heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, 0, hopsLeft))
+
+            if len(Bc) > global_best_score:
+                global_best_score = len(Bc)
+                global_best_path = (len(Bc), len(Pc))
+
+
             continue
         if hopsLeft == 0:
             continue
@@ -356,11 +357,12 @@ def smartDFS(G, pro, maxDepth):
             satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"])
             if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
                 newHopsLeft = hopsLeft - 1
-                Q.append((vi, vc, Pc, Bc, Lc, newHopsLeft))
+                Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
 
+    print(global_best_path)
     # print(AllResults)
 
-    # TODO: Optimization part
+    return time.time() - tic
 
 
 

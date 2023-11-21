@@ -6,6 +6,7 @@ import os
 # Tuning values
 
 num_objects = 50
+nr_of_features = 100
 # experiment = "max_best_effort_experiment"
 
 
@@ -14,7 +15,7 @@ num_objects = 50
 dry_run = False
 
 requirements = list(range(1, 101))
-best_effort_min_amount = 100
+best_effort_min_amount = 50
 best_effort_max_amount = 100
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
@@ -55,7 +56,7 @@ output_objects = []
 for index in range(num_objects):
 
     endpoints = random.sample(ases, 2)
-    features = list(range(1,31))
+    features = list(range(1, nr_of_features))
 
     as_source = endpoints[0]
     as_destination = endpoints[1]

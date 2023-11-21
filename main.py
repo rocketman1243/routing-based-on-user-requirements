@@ -1,4 +1,4 @@
-from path_calculator import MP
+from path_calculator import MP, smartDFS
 import os
 import json
 from types import SimpleNamespace
@@ -20,36 +20,47 @@ optimization_trade_off_experiment = "full_scale_setup/optimization_trade_off_exp
 max_best_effort_experiment = "full_scale_setup/max_best_effort_experiment"
 
 paper_network_setup_path = "paper_network_setup"
+small_paper_network_setup_path = "small_paper_network_setup"
+worst_case_network_path = "worst_case_network_setup"
 
 test_path = "test_files"
 test_nio_path = "test_files/nio_files/"
 
-neighbour_depth_limit = [1, 1, 1, 2, 2, 2]
-neighbour_limit = [2, 4, 6, 1, 2, 3]
-detour_distance_limit = [2, 2, 2, 2, 2, 2]
+##############################################################################3
 
 
+
+neighbour_depth_limit = [1]
+neighbour_limit = [1, 2, 4, 6]
+detour_distance_limit = [2, 3, 4, 5, 6, 7, 8]
+limits = [
+    neighbour_depth_limit,
+    neighbour_limit,
+    detour_distance_limit
+]
 
 
 # CHOSEN_PATH = test_path
 # path_to_nio_files = test_nio_path
 
-CHOSEN_PATH = paper_network_setup_path
-path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
-
 # CHOSEN_PATH = max_best_effort_experiment
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/"
 
+
+
+# CHOSEN_PATH = worst_case_network_path
+# CHOSEN_PATH = paper_network_setup_path
+CHOSEN_PATH = small_paper_network_setup_path
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
+
 ########################################################################33
 
-# Generate limit pairs
-if len(neighbour_depth_limit) != len(neighbour_limit):
-    print("dumbass yo limits do not match. go fix :D")
-    exit(0)
-
-limits = []
-for i in range(len(neighbour_depth_limit)):
-    limits.append([neighbour_depth_limit[i], neighbour_limit[i], detour_distance_limit[i]])
+# Generate limit entries
+limit_entries = []
+for i in range(len(limits[0])):
+    for j in range(len(limits[1])):
+        for k in range(len(limits[2])):
+            limit_entries.append([limits[0][i], limits[1][j], limits[2][k]])
 
 # Read in PRO objects
 pro_objects = []
@@ -96,17 +107,26 @@ G.add_nodes_from(as_numbers)
 nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
+
+# Find full path
+for i in range(len(pro_objects)):
+    print("pro:", i)
+    runtime = smartDFS(G, pro_objects[i], len(G.nodes))
+    print("runtime:", runtime)
+exit(0)
+
+
+
 # Reset results file
 open(f'{CHOSEN_PATH}/results/output.csv', 'w')
 
-for l in range(len(limits)):
+for current_limits in limit_entries:
     improvement_total = 0
     runtime_total = 0
     tree_time_total = 0
     detour_time_total = 0
     augment_time_total = 0
 
-    current_limits = limits[l]
     print("current limits:", current_limits)
 
     for i in range(len(pro_objects)):
@@ -137,50 +157,8 @@ for l in range(len(limits)):
 
 
     # TODO: Spit this into file
-    result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_runtime}\n"
+    result_string = f"{current_limits[0]},{current_limits[1]},{current_limits[2]},{avg_improvement},{avg_runtime}\n"
     with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
         # for line in results:
         file.writelines(result_string)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-Output format:
-
-- index of pro
-- Total number of paths found
-- Number of selected paths according to multipath settings
-- Reason for failure
-- time of building graph
-- time of strict phase
-- time of best effort phase
-- time of optimization phase
-- total time from start to end
-- The found paths and their latency, see formatting in path_calculator.py bottom of file
-
-# """
-# result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
-
-# results_file = f"{CHOSEN_PATH}/results/output.csv"
-# with open(results_file, "w") as file:
-#     file.write("")
-
-# with open(results_file, "a") as file:
-#     file.write(result)
 

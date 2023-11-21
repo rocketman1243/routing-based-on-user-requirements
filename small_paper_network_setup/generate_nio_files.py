@@ -18,9 +18,10 @@ to be consumed by main.py
 
 """
 
-number_of_nodes = 5000
-number_of_features_in_distribution = 100
-output_path = "worst_case_network_setup/data/nio_files"
+number_of_nodes = 50
+number_of_features_in_distribution = 30
+min_nr_of_features = 25
+output_path = "small_paper_network_setup/data/nio_files"
 
 dry_run = False
 
@@ -41,7 +42,9 @@ if not dry_run:
 
 #######################3
 
-G = nx.complete_graph(number_of_nodes)
+# See https://networkx.org/documentation/stable/reference/generated/networkx.generators.internet_as_graphs.random_internet_as_graph.html#networkx.generators.internet_as_graphs.random_internet_as_graph for the source of this wonderful item
+G = nx.random_internet_as_graph(number_of_nodes)
+# G = nx.path_graph(number_of_nodes)
 
 # Statistics
 total_degree = 0
@@ -65,16 +68,18 @@ node_info = {}
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
 # After edges are inserted from connected dataset, we generate features based on this
-features = generate_features(number_of_features_in_distribution, list(G.nodes))
+features = generate_features(number_of_features_in_distribution, min_nr_of_features, list(G.nodes))
 
-with open("./worst_case_network_setup/data/as_numbers.txt", "w") as file:
+with open("./small_paper_network_setup/data/as_numbers.txt", "w") as file:
     for asn in list(G.nodes):
         file.write(asn + "\n")
 
 feature_info = {}
 for node in G.nodes:
     feature_info[node] = {}
-    feature_info[node]["features"] = features[node]
+    f_list = features[node]
+    f_list.sort()
+    feature_info[node]["features"] = f_list
 
 nx.set_node_attributes(G, feature_info)
 
