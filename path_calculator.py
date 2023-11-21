@@ -20,7 +20,7 @@ def fulfills_strict_requirements(S, F, user_exclude_geolocation, as_geolocations
 
 
 
-def MP(G, pro):
+def MP(G, pro, limits):
 
     tic = time.time()
 
@@ -29,23 +29,18 @@ def MP(G, pro):
 
     if not fulfills_strict_requirements(pro.requirements.strict, G.nodes[start]["features"], pro.geolocation.exclude, G.nodes[start]["geolocation"]) or not fulfills_strict_requirements(pro.requirements.strict, G.nodes[end]["features"], pro.geolocation.exclude, G.nodes[end]["geolocation"]):
         # print("strict too strict")
-        return 0, 0
+        return 0, 0, 0, 0, 0
 
-    # Tweaking values
-    tree_start_depth = 1
-    max_tree_depth = 7
-    buffer_depth = 0
-
-    neighbour_limit = 5
 
     # neigh_depth_limit = length of prefix and postfix, aka how far do you stray from the path?
     # detour length can be at most 2 * neigh_depth_limit + 1
-    neighbour_depth_limit = 1
+    neighbour_depth_limit = limits[0]
+    neighbour_limit = limits[1]
 
     # detour limit = 0 means don't limit just add
     nr_detours_limit = 0
-    
-    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, tree_start_depth, max_tree_depth, buffer_depth, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+
+    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
 
     # print(path)
     # print(ber)
@@ -70,83 +65,7 @@ def MP(G, pro):
 
 
 
-
-
-
-
-
-
-def smartDFS(G, pro, maxDepth):
-
-    # MaxHeap, achieved by multiplying |B| * -1
-    AllResults = []
-
-    # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
-    Q = []
-    Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
-
-    while not len(Q) == 0:
-        vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
-        # print(vp, vc, Pp, Bp)
-
-        Pc = copy.deepcopy(Pp)
-        Pc.append(vc)
-
-        Bc = copy.deepcopy(Bp)
-        Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
-        Lc = Lp
-        if vc != vp:
-            Lc = Lp + G.edges[vp, vc]["latency"]
-
-        if vc == pro.as_destination:
-            heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, Lc, hopsLeft))
-            continue
-        if hopsLeft == 0:
-            continue
-
-        neighbours_sorted_on_degree = sorted(G.degree(list(nx.neighbors(G, vc))), key=lambda x: x[1], reverse=False)
-        neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
-
-        for vi in neighbours_low_to_high:
-            satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"]) 
-            if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
-                newHopsLeft = hopsLeft - 1
-                Q.append((vi, vc, Pc, Bc, Lc, newHopsLeft))
-
-    # print(AllResults)
-
-    # TODO: Optimization part
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def filter_graph(G, pro, startDepth, maxDepth, bufferDepth, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
+def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, nr_detours_limit):
 
     tic = time.time()
 
@@ -161,41 +80,12 @@ def filter_graph(G, pro, startDepth, maxDepth, bufferDepth, neighbour_depth_limi
         path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
         toc = time.time() - tic
 
-        a, b, c, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
-        return a, b, c, toc, detour_time, augment_time
+        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, nr_detours_limit)
+        return a, b, improvement, toc, detour_time, augment_time
     else:
         print("strict was too strict (or depth too low)")
         toc = time.time() - tic
         return [], {}, 0, toc, 0, 0
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # TODO: Make this supa fast!
@@ -205,7 +95,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
     if len(path) < 3:
         # print("path too short to optimize")
-        return path 
+        return path, {}, 0, 0, time.time() - tic
 
     # print(path)
 
@@ -213,10 +103,10 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
     if(len(ber) == 0):
         # print("no BER so no improvement possible")
-        return path, {}, 0, time.time() - tic
+        return path, {}, 0, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
-    # original_path = copy.deepcopy(path)
+    original_path = copy.deepcopy(path)
     before_ber = copy.deepcopy(ber)
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
@@ -235,7 +125,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print(detours)
-                
+
                 clean_ber = copy.deepcopy(ber)
                 for c in path[:i+1] + path[i+distance:]:
                     clean_ber = clean_ber.intersection(G.nodes[c]["features"])
@@ -372,12 +262,12 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit, nr_detours_limit):
                     detour = toplevel_prefix + [r] + toplevel_postfix
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
 
-                    
+
                 # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
                 if bb in naa:
                     detour = [aa, bb]
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
-                    
+
                 # print("to third level")
                 detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores, nr_detours_limit)
 
@@ -421,22 +311,68 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
                 for r in reachables:
                     detour = prefix + [r] + postfix
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
-                    
+
                 # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
                 if bbb in naaa:
                     detour = prefix + postfix
                     detours, scores = add_detour(detours, scores, nr_detours_limit, detour, G, pro)
 
                 detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores, nr_detours_limit)
-    
+
     return detours, scores
 
 
 
+###################################################################
 
 
 
-        
+def smartDFS(G, pro, maxDepth):
+
+    # MaxHeap, achieved by multiplying |B| * -1
+    AllResults = []
+
+    # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
+    Q = []
+    Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
+
+    while not len(Q) == 0:
+        vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
+        # print(vp, vc, Pp, Bp)
+
+        Pc = copy.deepcopy(Pp)
+        Pc.append(vc)
+
+        Bc = copy.deepcopy(Bp)
+        Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
+        Lc = Lp
+        if vc != vp:
+            Lc = Lp + G.edges[vp, vc]["latency"]
+
+        if vc == pro.as_destination:
+            heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, Lc, hopsLeft))
+            continue
+        if hopsLeft == 0:
+            continue
+
+        neighbours_sorted_on_degree = sorted(G.degree(list(nx.neighbors(G, vc))), key=lambda x: x[1], reverse=False)
+        neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
+
+        for vi in neighbours_low_to_high:
+            satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"])
+            if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
+                newHopsLeft = hopsLeft - 1
+                Q.append((vi, vc, Pc, Bc, Lc, newHopsLeft))
+
+    # print(AllResults)
+
+    # TODO: Optimization part
+
+
+
+
+
+
 
 
 

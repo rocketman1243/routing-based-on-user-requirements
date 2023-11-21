@@ -10,7 +10,7 @@ import pprint
 from geopy import distance
 import random
 
-""" 
+"""
 CONTENTS
 This script gets all the links from as-links.txt and converts it into a connected graph
 The nodes in this graph form the basis for my internet model
@@ -21,7 +21,7 @@ This is done from the info in node_attributes.csv, where I combined the info fro
 """
 
 number_of_features_in_distribution = 30
-min_nr_of_features = 25
+min_nr_of_features = 1
 output_path = "full_scale_setup/data/nio_files"
 
 dry_run = False
@@ -34,16 +34,16 @@ def spit_latency(lat0, lon0, lat1, lon1):
 
     # Method used: https://www.oneneck.com/blog/estimating-wan-latency-requirements/
     # Added 0.5 instead of 2 as this resulted in results closer to this calculator:
-    # https://wintelguy.com/wanlat.html 
+    # https://wintelguy.com/wanlat.html
     latency = round((miles * 1.1 + 200) * 2 / 124 + 0.5, 2)
-    
+
     return latency
 
 
 
 ###################
 
-# Cleanup previous files in directory as the number of objects may be less than before, 
+# Cleanup previous files in directory as the number of objects may be less than before,
 # causing dead files from previous runs to still exist
 
 if not dry_run:

@@ -24,20 +24,33 @@ worst_case_setup_path = "worst_case_setup"
 test_path = "test_files"
 test_nio_path = "test_files/nio_files/"
 
-maxDepth = 8
+neighbour_depth_limit = [1, 1, 1, 1, 1, 1]
+neighbour_limit = [5, 6, 7, 8, 9, 10]
+
+
 
 
 # CHOSEN_PATH = test_path
 # path_to_nio_files = test_nio_path
 
 CHOSEN_PATH = worst_case_setup_path
-path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/" 
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 # CHOSEN_PATH = max_best_effort_experiment
-# path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/" 
+# path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/"
 
+########################################################################33
 
-# Read in PRO objects   
+# Generate limit pairs
+if len(neighbour_depth_limit) != len(neighbour_limit):
+    print("dumbass yo limits do not match. go fix :D")
+    exit(0)
+
+limits = []
+for i in range(len(neighbour_depth_limit)):
+    limits.append([neighbour_depth_limit[i], neighbour_limit[i]])
+
+# Read in PRO objects
 pro_objects = []
 
 for _, _, filenames in os.walk(f"{CHOSEN_PATH}/pro_files/"):
@@ -83,46 +96,44 @@ nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
 
-improvement_total = 0
-runtime_total = 0
-tree_time_total = 0
-detour_time_total = 0
-augment_time_total = 0
+for l in range(len(limits)):
+    improvement_total = 0
+    runtime_total = 0
+    # tree_time_total = 0
+    # detour_time_total = 0
+    # augment_time_total = 0
 
-for i in range(len(pro_objects)):
-    print("pro", i + 1, "/", len(pro_objects))
-    pro = pro_objects[i]
+    current_limits = limits[l]
+    print("current limits:", current_limits)
 
-    improvement, runtime, tree_time, detour_time, augment_time = MP(G, pro)
+    for i in range(len(pro_objects)):
+        # print("pro", i + 1, "/", len(pro_objects))
+        pro = pro_objects[i]
 
-    improvement_total += improvement
-    runtime_total += runtime
-    tree_time_total += tree_time
-    detour_time_total += detour_time
-    augment_time_total += (augment_time - detour_time)
+        improvement, runtime, tree_time, detour_time, augment_time = MP(G, pro, current_limits)
 
-
-avg_improvement = improvement_total / len(pro_objects)
-avg_runtime = runtime_total / len(pro_objects)
-avg_treetime = tree_time_total / len(pro_objects)
-avg_detour_time = detour_time_total / len(pro_objects)
-avg_augment_time = augment_time_total / len(pro_objects)
-
-print("-----------------------------")
-print("avg improvement:", avg_improvement)
-print("avg runtime:", avg_runtime)
-print("avg tree time:", avg_treetime)
-print("avg detour time:", avg_detour_time)
-print("avg augment time:", avg_augment_time)
+        improvement_total += improvement
+        runtime_total += runtime
+        # tree_time_total += tree_time
+        # detour_time_total += detour_time
+        # augment_time_total += (augment_time - detour_time)
 
 
+    avg_improvement = improvement_total / len(pro_objects)
+    avg_runtime = runtime_total / len(pro_objects)
+    # avg_treetime = tree_time_total / len(pro_objects)
+    # avg_detour_time = detour_time_total / len(pro_objects)
+    # avg_augment_time = augment_time_total / len(pro_objects)
+
+    print("avg improvement:", avg_improvement)
+    print("avg runtime:", avg_runtime)
+    # print("avg tree time:", avg_treetime)
+    # print("avg detour time:", avg_detour_time)
+    # print("avg augment time:", avg_augment_time)
+    print("-----------------------------")
 
 
-
-
-
-
-
+    # TODO: Spit this into file
 
 
 
@@ -132,8 +143,17 @@ print("avg augment time:", avg_augment_time)
 
 
 
-""" 
-Output format: 
+
+
+
+
+
+
+
+
+
+"""
+Output format:
 
 - index of pro
 - Total number of paths found
@@ -146,7 +166,7 @@ Output format:
 - total time from start to end
 - The found paths and their latency, see formatting in path_calculator.py bottom of file
 
-# """ 
+# """
 # result = f"{i},{output[0]},{output[1]},{output[2]},{output[3]},{output[4]},{output[5]},{output[6]},{output[7]},{output[8]}\n"
 
 # results_file = f"{CHOSEN_PATH}/results/output.csv"
