@@ -103,7 +103,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 a = path[i]
                 b = path[i + distance]
 
-                detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit)
+                detours, detours_time = find_detours_with_timer(G, a, b, pro, path, neighbour_limit, neighbour_depth_limit, [], [])
                 # print(a, b)
                 # print("#detours", len(detours))
                 print("detours:", detours)
@@ -166,23 +166,32 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
 
 
-def limit_neighbours(G, pro, na, nb, neighbour_limit):
-    if len(na) > neighbour_limit:
-        sorted_na = sorted(list(na), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
-        na = set(sorted_na[:neighbour_limit])
-    if len(nb) > neighbour_limit:
-        sorted_nb = sorted(list(nb), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
-        nb = set(sorted_nb[:neighbour_limit])
+def limit_neighbours(G, neighbours, PRO, neighbourLimit):
+    if len(neighbours) <= neighbourLimit:
+        return neighbours
+
+    sortedNeighbours = sorted(list(neighbours), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(PRO.requirements.best_effort))), reverse=True)
+    neighbours = set(sortedNeighbours[:neighbourLimit])
+
+    return neighbours
+
+# def old_limit_neighbours(G, pro, na, nb, neighbour_limit):
+#     if len(na) > neighbour_limit:
+#         sorted_na = sorted(list(na), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
+#         na = set(sorted_na[:neighbour_limit])
+#     if len(nb) > neighbour_limit:
+#         sorted_nb = sorted(list(nb), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
+#         nb = set(sorted_nb[:neighbour_limit])
 
     return na, nb
 
 
-def score_detour(G, pro, detour):
-    ber = set(pro.requirements.best_effort)
-    for n in detour:
-        ber = ber.intersection(set(G.nodes[n]["features"]))
+# def score_detour(G, pro, detour):
+#     ber = set(pro.requirements.best_effort)
+#     for n in detour:
+#         ber = ber.intersection(set(G.nodes[n]["features"]))
 
-    return len(ber)
+#     return len(ber)
 
 
 # def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
@@ -207,9 +216,67 @@ def score_detour(G, pro, detour):
     # print("new detour:", detour, new_score, detours, scores)
     # return detours, scores
 
+def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
+    tic = time.time()
+
+    detours = find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
+
+    toc = time.time() - tic
+    return detours, toc
+
+def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
+    print(detourStart, detourEnd)
+
+    if depthLimit == 0:
+        return []
+
+    detours = []
+
+    startNeighbours = set(nx.neighbors(G, detourStart)).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+    endNeighbours = set(nx.neighbors(G, detourEnd)).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+
+    print("na, nb before limit", startNeighbours, endNeighbours)
+
+    startNeighbours = limit_neighbours(G, startNeighbours, PRO, neighbourLimit)
+    endNeighbours = limit_neighbours(G, endNeighbours, PRO, neighbourLimit)
+
+    print("na, nb after limit", startNeighbours, endNeighbours)
+
+    shared_neighbours = startNeighbours.intersection(endNeighbours)
+
+    for i in shared_neighbours:
+        if fulfills_strict_requirements(G, PRO, i):
+            detours.append(prefix + [i] + postfix)
+
+    print("sharedN", shared_neighbours)
+    print("detours, s, e", detours)
+
+    # second level and onwards
+    for s in startNeighbours:
+        print("A detours, s, e", detours)
+        if s not in path + prefix + postfix and fulfills_strict_requirements(G, PRO, s):
+            for e in endNeighbours:
+                print("B detours, s, e", detours)
+                if e not in path + prefix + postfix and fulfills_strict_requirements(G, PRO, e):
+                    if s != e:
+
+                        # If the prefix and postfix are connected, they form a 2-node detour
+                        print("X detours, s, e", detours)
+                        if (s, e) in G.edges:
+                            detours.append([s, e])
+
+                        prefix = prefix + [s]
+                        postfix = [e] + postfix
+                        depthLimit = depthLimit - 1
+
+                        detours = detours + find_detours(G, s, e, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
+
+    return detours
+
+
 
 # Find all node sequences that we can use to replace node z from a to b
-def find_detours(G, x, y, pro, path, levels, neighbour_limit):
+def old_find_detours(G, x, y, pro, path, levels, neighbour_limit):
 
     tic = time.time()
 
@@ -219,8 +286,7 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit):
     na = set(nx.neighbors(G, x))
     nb = set(nx.neighbors(G, y))
 
-    # print("na, nb before limit", na, nb)
-    print("limit", neighbour_limit)
+    print("na, nb before limit", na, nb)
     na, nb = limit_neighbours(G, pro, na, nb, neighbour_limit)
     print("na, nb after limit", na, nb)
 

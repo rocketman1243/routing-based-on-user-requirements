@@ -20,18 +20,21 @@ When proving the exactness/effectiveness of my algorithm:
 # TODO
 
 0. Upgrade code:
-   1. Update detour finding to check whether nodes satisfy strict requirements
+   1. Rewrite code to match report pseudocode
    2. Exclude 1st level neighbours from the second level of detours, etc. To avoid neighbours being considered (and scored) twice
    3. After the previous: Make sure nodes are only checked once, go through the alg logically & check....
    4. If still flaky: Fix flaky behaviour where results are not exactly the same with the same input.....
 
-1. Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
+1. Update pseudocode to reflect code changes:
+   1. No graph filtering at the beginning but when adding detours when when looping for prefixes
 
-2. Setup evaluations:
+2. Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
+
+3. Setup evaluations:
    1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
    2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
 
-3. Proof as much as possible the exactness or applicability of my approach
+4. Proof as much as possible the exactness or applicability of my approach
 
 # Planning
 
