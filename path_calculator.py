@@ -60,7 +60,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
         # path = nx.shortest_path(G, pro.as_source, pro.as_destination)
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
-        print(path)
+        print("path:", path)
 
 
         toc = time.time() - tic
@@ -79,10 +79,8 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     tic = time.time()
 
     if len(path) < 3:
-        # print("path too short to optimize")
+        print("path too short to optimize")
         return path, {}, 0, 0, time.time() - tic
-
-    # print(path)
 
     ber = set(pro.requirements.best_effort)
 
@@ -98,6 +96,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
     # +1 to ensure that the lowest value is possible and not cut off
     distances = range(2, min(detour_distance_limit, len(path)) + 1)
+    print("distances:", distances)
     for distance in distances:
         for i in range(len(path) - distance):
             if i + distance + 1 <= len(path):
@@ -107,7 +106,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 detours, detours_time = find_detours(G, a, b, pro, path, neighbour_depth_limit, neighbour_limit)
                 # print(a, b)
                 # print("#detours", len(detours))
-                # print(detours)
+                print("detours:", detours)
 
                 clean_ber = copy.deepcopy(ber)
                 for c in path[:i+1] + path[i+distance:]:
@@ -221,38 +220,43 @@ def find_detours(G, x, y, pro, path, levels, neighbour_limit):
     nb = set(nx.neighbors(G, y))
 
     # print("na, nb before limit", na, nb)
+    print("limit", neighbour_limit)
     na, nb = limit_neighbours(G, pro, na, nb, neighbour_limit)
-    # print("na, nb after limit", na, nb)
+    print("na, nb after limit", na, nb)
 
     # first level
     shared_neighbours = na.intersection(nb).difference(set(path))
     for i in shared_neighbours:
-        detours.append([i])
+        if fulfills_strict_requirements(G, pro, i):
+            detours.append([i])
 
     # second level and onwards
     for aa in na:
-        for bb in nb:
-            if aa != bb and aa not in path and bb not in path:
-                toplevel_prefix = [aa]
-                toplevel_postfix = [bb]
+        if aa not in path and fulfills_strict_requirements(G, pro, aa):
+            for bb in nb:
+                if bb not in path and fulfills_strict_requirements(G, pro, bb):
+                    if aa != bb:
+                        toplevel_prefix = [aa]
+                        toplevel_postfix = [bb]
 
-                naa = set(nx.neighbors(G, aa))
-                nbb = set(nx.neighbors(G, bb))
+                        naa = set(nx.neighbors(G, aa))
+                        nbb = set(nx.neighbors(G, bb))
 
-                reachables = naa.intersection(nbb).difference(set(path))
+                        reachables = naa.intersection(nbb).difference(set(path))
 
-                for r in reachables:
-                    detour = toplevel_prefix + [r] + toplevel_postfix
-                    detours.append(detour)
+                        for r in reachables:
+                            if fulfills_strict_requirements(G, pro, r):
+                                detour = toplevel_prefix + [r] + toplevel_postfix
+                                detours.append(detour)
 
 
-                # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
-                if bb in naa:
-                    detour = [aa, bb]
-                    detours.append(detour)
+                        # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
+                        if bb in naa and aa in nbb:
+                            detour = [aa, bb]
+                            detours.append(detour)
 
-                # print("to third level")
-                detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores)
+                        # print("to third level")
+                        detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores)
 
     toc = time.time() - tic
     return detours, toc
@@ -270,35 +274,38 @@ def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, pa
 
     # nth level
     for aaa in naa:
-        for bbb in nbb:
-            if aaa != bbb and aaa not in path + toplevel_prefix and bbb not in path + toplevel_postfix:
-                prefix = toplevel_prefix + [aaa]
-                postfix = [bbb] + toplevel_postfix
+        if fulfills_strict_requirements(G, pro, aaa) and aaa not in path + toplevel_prefix:
+            for bbb in nbb:
+                if fulfills_strict_requirements(G, pro, bbb) and bbb not in path + toplevel_postfix:
+                    if aaa != bbb:
+                        prefix = toplevel_prefix + [aaa]
+                        postfix = [bbb] + toplevel_postfix
 
-                if len(set(prefix).intersection(set(postfix))) != 0:
-                    # print("prefix and postfix overlap: ", prefix, postfix)
-                    continue
-
-
-                naaa = set(nx.neighbors(G, aaa))
-                nbbb = set(nx.neighbors(G, bbb))
+                        if len(set(prefix).intersection(set(postfix))) != 0:
+                            # print("prefix and postfix overlap: ", prefix, postfix)
+                            continue
 
 
-                reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+                        naaa = set(nx.neighbors(G, aaa))
+                        nbbb = set(nx.neighbors(G, bbb))
 
-                # print("in third level: ", aaa, bbb, naaa, nbbb, prefix, postfix, reachables)
+
+                        reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+
+                        # print("in third level: ", aaa, bbb, naaa, nbbb, prefix, postfix, reachables)
 
 
-                for r in reachables:
-                    detour = prefix + [r] + postfix
-                    detours.append(detour)
+                        for r in reachables:
+                            if fulfills_strict_requirements(G, pro, r):
+                                detour = prefix + [r] + postfix
+                                detours.append(detour)
 
-                # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
-                if bbb in naaa:
-                    detour = prefix + postfix
-                    detours.append(detour)
+                        # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
+                        if bbb in naaa:
+                            detour = prefix + postfix
+                            detours.append(detour)
 
-                detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores)
+                        detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores)
 
     return detours, scores
 
@@ -355,7 +362,7 @@ def smartDFS(G, pro, maxDepth):
         neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
 
         for vi in neighbours_low_to_high:
-            satisfies_strict_requirements = fulfills_strict_requirements(pro.requirements.strict, G.nodes[vi]["features"], pro.geolocation.exclude, G.nodes[vi]["geolocation"])
+            satisfies_strict_requirements = fulfills_strict_requirements(G, pro, vi)
             if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
                 newHopsLeft = hopsLeft - 1
                 Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
