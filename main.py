@@ -40,18 +40,21 @@ limits = [
 ]
 
 
-# CHOSEN_PATH = test_path
-# path_to_nio_files = test_nio_path
+CHOSEN_PATH = test_path
+path_to_nio_files = test_nio_path
 
 # CHOSEN_PATH = max_best_effort_experiment
 # path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/"
 
 
 
+
+
 # CHOSEN_PATH = worst_case_network_path
+
 # CHOSEN_PATH = paper_network_setup_path
-CHOSEN_PATH = small_paper_network_setup_path
-path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
+# # CHOSEN_PATH = small_paper_network_setup_path
+# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
 
@@ -92,7 +95,8 @@ for _,_,files in os.walk(path_to_nio_files):
                 as_numbers.append(nio_object.as_number)
                 node_info[nio_object.as_number] = {
                     "geolocation": nio_object.geolocation,
-                    "features": nio_object.features
+                    "features": nio_object.features,
+                    "filtered": False
                 }
                 here = nio_object.as_number
                 for index, other in enumerate(nio_object.connections):
@@ -108,14 +112,16 @@ nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
 
-# Find full path
-for i in range(len(pro_objects)):
-    print("pro:", i)
-    runtime = smartDFS(G, pro_objects[i], len(G.nodes))
-    print("runtime:", runtime)
-exit(0)
+# # Find full path
+# print("Note: FINDING FULL PATH with SMARTDFS. SO settle in cos this is going to take some time.....")
+# for i in range(len(pro_objects)):
+#     print("pro:", i)
+#     runtime = smartDFS(G, pro_objects[i], len(G.nodes))
+#     print("runtime:", runtime)
+# exit(0)
 
 
+print("Finding paths using speedy boiiiiiiiiii")
 
 # Reset results file
 open(f'{CHOSEN_PATH}/results/output.csv', 'w')

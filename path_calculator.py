@@ -11,24 +11,18 @@ import time
 import math
 import queue
 import heapq
-
-def fulfills_strict_requirements(S, F, user_exclude_geolocation, as_geolocations):
-    if set(S).issubset(set(F)):
-        if len(set(user_exclude_geolocation).intersection(set(as_geolocations))) == 0:
-            return True
-    return False
-
-
+from custom_shortest_path import bidirectional_shortest_path_including_filter, fulfills_strict_requirements
 
 def MP(G, pro, limits):
 
     tic = time.time()
 
-    start = pro.as_source
-    end = pro.as_destination
+    start = str(pro.as_source)
+    end = str(pro.as_destination)
 
-    if not fulfills_strict_requirements(pro.requirements.strict, G.nodes[start]["features"], pro.geolocation.exclude, G.nodes[start]["geolocation"]) or not fulfills_strict_requirements(pro.requirements.strict, G.nodes[end]["features"], pro.geolocation.exclude, G.nodes[end]["geolocation"]):
+    if not fulfills_strict_requirements(G, pro, start) or not fulfills_strict_requirements(G, pro, end):
         return 0, 0, 0, 0, 0
+
 
     neighbour_depth_limit = limits[0]
     neighbour_limit = limits[1]
@@ -53,18 +47,24 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
     tic = time.time()
 
-    complying_nodes = []
-    for n in list(G.nodes):
-        if fulfills_strict_requirements(pro.requirements.strict, G.nodes[n]["features"], pro.geolocation.exclude, G.nodes[n]["geolocation"]):
-            complying_nodes.append(n)
+    # complying_nodes = []
+    # for n in list(G.nodes):
+    #     if fulfills_strict_requirements(G, pro, n):
+    #         complying_nodes.append(n)
 
-    subgraph = G.subgraph(complying_nodes)
+    # subgraph = G.subgraph(complying_nodes)
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
-        path = nx.shortest_path(subgraph, pro.as_source, pro.as_destination)
+
+
+        # path = nx.shortest_path(G, pro.as_source, pro.as_destination)
+        path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
+
+
+
         toc = time.time() - tic
 
-        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(subgraph, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
+        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
         return a, b, improvement, toc, detour_time, augment_time
     else:
         print("strict was too strict (or depth too low)")

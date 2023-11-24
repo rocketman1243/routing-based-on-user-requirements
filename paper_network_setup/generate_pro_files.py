@@ -15,7 +15,7 @@ nr_of_features = 100
 dry_run = False
 
 requirements = list(range(1, 101))
-best_effort_min_amount = 50
+best_effort_min_amount = 80
 best_effort_max_amount = 100
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
