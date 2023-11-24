@@ -21,6 +21,7 @@ def MP(G, pro, limits):
     end = str(pro.as_destination)
 
     if not fulfills_strict_requirements(G, pro, start) or not fulfills_strict_requirements(G, pro, end):
+        print("Either start or end did not fulfill the strict requirements, so no path could be found.")
         return 0, 0, 0, 0, 0
 
 
@@ -59,7 +60,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
         # path = nx.shortest_path(G, pro.as_source, pro.as_destination)
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
-
+        print(path)
 
 
         toc = time.time() - tic
@@ -67,7 +68,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
         a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
         return a, b, improvement, toc, detour_time, augment_time
     else:
-        print("strict was too strict (or depth too low)")
+        print("Graph is not connected and no path could be found")
         toc = time.time() - tic
         return [], {}, 0, toc, 0, 0
 

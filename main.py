@@ -30,9 +30,15 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-neighbour_depth_limit = [1]
-neighbour_limit = [1, 2, 4, 6]
-detour_distance_limit = [2, 3, 4, 5, 6, 7, 8]
+
+neighbour_depth_limit = [2]
+neighbour_limit = [2]
+detour_distance_limit = [2]
+# neighbour_depth_limit = [1]
+# neighbour_limit = [1, 2, 4, 6]
+# detour_distance_limit = [2, 3, 4, 5, 6, 7, 8]
+
+
 limits = [
     neighbour_depth_limit,
     neighbour_limit,
