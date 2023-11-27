@@ -30,37 +30,31 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-
-neighbour_depth_limit = [4]
-neighbour_limit = [4]
-detour_distance_limit = [4]
-# neighbour_depth_limit = [1]
-# neighbour_limit = [1, 2, 4, 6]
-# detour_distance_limit = [2, 3, 4, 5, 6, 7, 8]
+# depthLimits = [1]
+# neighbourLimits = [2]
+# detour_distance_limit = [3]
+depthLimits = [2, 3, 4]
+neighbourLimits = [6, 8, 10]
+detour_distance_limit = [6, 7, 8]
 
 
 limits = [
-    neighbour_depth_limit,
-    neighbour_limit,
+    depthLimits,
+    neighbourLimits,
     detour_distance_limit
 ]
 
 
-CHOSEN_PATH = test_path
-path_to_nio_files = test_nio_path
-
-# CHOSEN_PATH = max_best_effort_experiment
-# path_to_nio_files = f"{CHOSEN_PATH}/../data/nio_files/"
+# CHOSEN_PATH = test_path
+# path_to_nio_files = test_nio_path
 
 
 
 
 
-# CHOSEN_PATH = worst_case_network_path
-
-# CHOSEN_PATH = paper_network_setup_path
-# # CHOSEN_PATH = small_paper_network_setup_path
-# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
+CHOSEN_PATH = paper_network_setup_path
+# CHOSEN_PATH = small_paper_network_setup_path
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
 

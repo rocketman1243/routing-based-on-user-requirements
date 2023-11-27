@@ -25,28 +25,9 @@ def MP(G, pro, limits):
         return 0, 0, 0, 0, 0
 
 
-    neighbour_depth_limit = limits[0]
-    neighbour_limit = limits[1]
-    detour_distance_limit = limits[2]
-
-    path, ber, improvement, tree_time, detour_time, augment_time = filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
-
-    toc = time.time()
-    runtime = toc - tic
-    return improvement, runtime, tree_time, detour_time, augment_time
-
-
-
-
-
-
-
-
-
-
-def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance_limit):
-
-    tic = time.time()
+    depthLimit = limits[0]
+    neighbourLimit = limits[1]
+    detourDistanceLimit = limits[2]
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
@@ -56,17 +37,18 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
         toc = time.time() - tic
 
-        a, b, improvement, detour_time, augment_time = augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit)
-        return a, b, improvement, toc, detour_time, augment_time
+        path, improvement, tree_time, detour_time, augment_time = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit)
     else:
         print("Graph is not connected and no path could be found")
         toc = time.time() - tic
         return [], {}, 0, toc, 0, 0
 
 
-# TODO: Make this supa fast!
+    toc = time.time()
+    runtime = toc - tic
+    return improvement, runtime, tree_time, detour_time, augment_time
 
-def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit):
+def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit):
     tic = time.time()
     detours_time = 0
 
@@ -81,17 +63,17 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
         return path, {}, 0, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
-    original_path = copy.deepcopy(path)
-    before_ber = copy.deepcopy(ber)
+    originalPath = copy.deepcopy(path)
+    beforeBER = copy.deepcopy(ber)
     for i in path:
-        before_ber = before_ber.intersection(G.nodes[i]["features"])
+        beforeBER = beforeBER.intersection(G.nodes[i]["features"])
 
-    skipAmounts = range(2, min(detour_distance_limit, len(original_path)) + 1)
+    skipAmounts = range(2, min(detourDistanceLimit, len(originalPath)) + 1)
     for skipAmount in skipAmounts:
-        for i in range(len(original_path) - skipAmount):
-            if original_path[i] in path and original_path[i + skipAmount] in path:
-                startIndex = path.index(original_path[i])
-                endIndex = path.index(original_path[i + skipAmount])
+        for i in range(len(originalPath) - skipAmount):
+            if originalPath[i] in path and originalPath[i + skipAmount] in path:
+                startIndex = path.index(originalPath[i])
+                endIndex = path.index(originalPath[i + skipAmount])
                 detourStart = path[startIndex]
                 detourEnd = path[endIndex]
                 bottleneck = path[startIndex + 1:endIndex]
@@ -110,7 +92,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                     # Nothing to improve here, skip this detour
                     continue
 
-                detours, detours_time = find_detours_with_timer(G, detourStart, detourEnd, pro, path, neighbour_limit, neighbour_depth_limit, [], [])
+                detours, detours_time = find_detours_with_timer(G, detourStart, detourEnd, pro, path, neighbourLimit, depthLimit, [], [])
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print("detours:", detours)
@@ -141,20 +123,20 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
 
 
-    after_ber = copy.deepcopy(ber)
+    afterBER = copy.deepcopy(ber)
     for i in path:
-        after_ber = after_ber.intersection(G.nodes[i]["features"])
+        afterBER = afterBER.intersection(G.nodes[i]["features"])
 
-    # if before_ber != after_ber:
-        # print("ber before:", before_ber)
-        # print("path before:", original_path)
-        # print("ber after optimization:", after_ber)
-        # print("path after: ", path)
+    # if beforeBER != afterBER:
+    #     print("ber before:", beforeBER)
+    #     print("path before:", originalPath)
+    #     print("ber after optimization:", afterBER)
+    #     print("path after: ", path)
     # else:
     #     print("----")
 
     toc = time.time() - tic
-    return path, after_ber, len(after_ber) - len(before_ber), detours_time, toc
+    return path, afterBER, len(afterBER) - len(beforeBER), detours_time, toc
 
 
 
@@ -170,17 +152,17 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
     # print("sorted neighbours:", neighbours)
     return neighbours
 
-def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
+def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
     tic = time.time()
 
-    detours = find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
+    detours = find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix)
     # print("final detours: ", detours)
 
     toc = time.time() - tic
     return detours, toc
 
-def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
-    # print(detourStart, detourEnd)
+def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
+    # print("detour call,", detourStart, detourEnd)
 
     if depthLimit == 0:
         return []
@@ -210,9 +192,8 @@ def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimi
 
                         prefix = prefix + [s]
                         postfix = [e] + postfix
-                        depthLimit = depthLimit - 1
 
-                        detours = detours + find_detours(G, s, e, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
+                        detours = detours + find_detours(G, s, e, PRO, path, neighbourLimit, depthLimit - 1, prefix, postfix)
 
     return detours
 
