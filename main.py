@@ -30,12 +30,12 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-# depthLimits = [1]
-# neighbourLimits = [2]
+# depthLimits = [10]
+# neighbourLimits = [5]
 # detour_distance_limit = [3]
-depthLimits = [2, 3, 4]
-neighbourLimits = [6, 8, 10]
-detour_distance_limit = [6, 7, 8]
+depthLimits = [1, 2, 3, 4]
+neighbourLimits = [10, 20, 30, 40, 50]
+detour_distance_limit = [10]
 
 
 limits = [
@@ -127,11 +127,8 @@ print("Finding paths using speedy boiiiiiiiiii")
 open(f'{CHOSEN_PATH}/results/output.csv', 'w')
 
 for current_limits in limit_entries:
-    improvement_total = 0
-    runtime_total = 0
-    tree_time_total = 0
-    detour_time_total = 0
-    augment_time_total = 0
+    improvements = []
+    runtimes = []
 
     print("current limits:", current_limits)
 
@@ -139,31 +136,25 @@ for current_limits in limit_entries:
         # print("pro", i + 1, "/", len(pro_objects))
         pro = pro_objects[i]
 
-        improvement, runtime, tree_time, detour_time, augment_time = MP(G, pro, current_limits)
+        extraHops, improvement, runtime = MP(G, pro, current_limits)
 
-        improvement_total += improvement
-        runtime_total += runtime
-        tree_time_total += tree_time
-        detour_time_total += detour_time
-        augment_time_total += (augment_time - detour_time)
+        improvements.append(improvement)
+        runtimes.append(runtime)
 
 
-    avg_improvement = round(improvement_total / len(pro_objects), 3)
-    avg_runtime = round(runtime_total / len(pro_objects), 3)
-    avg_treetime = round(tree_time_total / len(pro_objects), 3)
-    avg_detour_time = round(detour_time_total / len(pro_objects), 3)
-    avg_augment_time = round(augment_time_total / len(pro_objects), 3)
+    avg_improvement = round(sum(improvements) / len(improvements), 3)
+    avg_runtime = round(sum(runtimes) / len(runtimes), 3)
 
     print("avg improvement: ", avg_improvement)
-    print("avg runtime:     ", avg_runtime)
-    print("avg tree time:   ", avg_treetime)
-    print("avg detour time: ", avg_detour_time)
-    print("avg augment time:", avg_augment_time)
+    print("max imp:", max(improvements))
+    print("avg runtime: ", avg_runtime)
+    print("max runtime:", max(runtimes))
     print("-----------------------------")
 
 
     # TODO: Spit this into file
     result_string = f"{current_limits[0]},{current_limits[1]},{current_limits[2]},{avg_improvement},{avg_runtime}\n"
+
     with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
         # for line in results:
         file.writelines(result_string)

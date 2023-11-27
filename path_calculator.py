@@ -24,7 +24,6 @@ def MP(G, pro, limits):
         print("Either start or end did not fulfill the strict requirements, so no path could be found.")
         return 0, 0, 0, 0, 0
 
-
     depthLimit = limits[0]
     neighbourLimit = limits[1]
     detourDistanceLimit = limits[2]
@@ -32,35 +31,33 @@ def MP(G, pro, limits):
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
-        # print("path:", path)
 
-
-        toc = time.time() - tic
-
-        path, improvement, tree_time, detour_time, augment_time = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit)
+        newPath, improvement = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit)
     else:
         print("Graph is not connected and no path could be found")
         toc = time.time() - tic
-        return [], {}, 0, toc, 0, 0
+        return [], [], 0, toc
 
 
     toc = time.time()
     runtime = toc - tic
-    return improvement, runtime, tree_time, detour_time, augment_time
+
+    return len(newPath) - len(path), improvement, runtime
+
+
+
+
 
 def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit):
-    tic = time.time()
-    detours_time = 0
-
     if len(path) < 3:
         print("path too short to optimize")
-        return path, {}, 0, 0, time.time() - tic
+        return path, 0
 
     ber = set(pro.requirements.best_effort)
 
     if(len(ber) == 0):
         # print("no BER so no improvement possible")
-        return path, {}, 0, 0, time.time() - tic
+        return path, 0
 
     # Store original path and ber for comparison at the end
     originalPath = copy.deepcopy(path)
@@ -92,7 +89,7 @@ def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, det
                     # Nothing to improve here, skip this detour
                     continue
 
-                detours, detours_time = find_detours_with_timer(G, detourStart, detourEnd, pro, path, neighbourLimit, depthLimit, [], [])
+                detours = find_detours(G, detourStart, detourEnd, pro, path, neighbourLimit, depthLimit, [], [])
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print("detours:", detours)
@@ -135,8 +132,7 @@ def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, det
     # else:
     #     print("----")
 
-    toc = time.time() - tic
-    return path, afterBER, len(afterBER) - len(beforeBER), detours_time, toc
+    return path, len(afterBER) - len(beforeBER)
 
 
 
@@ -152,14 +148,6 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
     # print("sorted neighbours:", neighbours)
     return neighbours
 
-def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
-    tic = time.time()
-
-    detours = find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix)
-    # print("final detours: ", detours)
-
-    toc = time.time() - tic
-    return detours, toc
 
 def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
     # print("detour call,", detourStart, detourEnd)

@@ -19,11 +19,9 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-0. Upgrade code:
-   3. After the previous: Make sure nodes are only checked once, go through the alg logically & check....
-
-1. Update pseudocode to reflect code changes:
-   1. No graph filtering at the beginning but when adding detours when when looping for prefixes
+1. Proof as much as possible the exactness or applicability of my approach:
+   1. Within limits: Exact, as it improves the path as much as possible for every interval --> Does this guarantee the best path when a detour of a detour might be better?? --> Will that second-level detour not be found by the later iterations as it is part of the search cloud? (nice name btw, search cloud)
+   2. Globally: Not exact, but 'good' --> Enumerate smart things I do to make the limits have as little negative effect on the path improvement as possible (limit sorting, ...)
 
 2. Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
 
@@ -31,7 +29,6 @@ When proving the exactness/effectiveness of my algorithm:
    1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
    2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
 
-4. Proof as much as possible the exactness or applicability of my approach
 
 # Planning
 
