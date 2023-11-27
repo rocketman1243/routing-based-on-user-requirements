@@ -48,17 +48,8 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
     tic = time.time()
 
-    # complying_nodes = []
-    # for n in list(G.nodes):
-    #     if fulfills_strict_requirements(G, pro, n):
-    #         complying_nodes.append(n)
-
-    # subgraph = G.subgraph(complying_nodes)
-
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
-
-        # path = nx.shortest_path(G, pro.as_source, pro.as_destination)
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
         print("path:", path)
 
@@ -179,47 +170,6 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
     print("sorted neighbours:", neighbours)
     return neighbours
 
-# def old_limit_neighbours(G, pro, na, nb, neighbour_limit):
-#     if len(na) > neighbour_limit:
-#         sorted_na = sorted(list(na), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
-#         na = set(sorted_na[:neighbour_limit])
-#     if len(nb) > neighbour_limit:
-#         sorted_nb = sorted(list(nb), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(pro.requirements.best_effort))), reverse=True)
-#         nb = set(sorted_nb[:neighbour_limit])
-
-    return na, nb
-
-
-# def score_detour(G, pro, detour):
-#     ber = set(pro.requirements.best_effort)
-#     for n in detour:
-#         ber = ber.intersection(set(G.nodes[n]["features"]))
-
-#     return len(ber)
-
-
-# def add_detour(detours, scores, nr_detours_limit, detour, G, pro):
-#     if nr_detours_limit == 0:
-#         detours.append(detour)
-#         return detours, scores
-
-#     if len(detours) < nr_detours_limit:
-#         detours.append(detour)
-
-    # new_score = score_detour(G, pro, detour)
-    # if len(scores) < nr_detours_limit:
-    #     detours.append(detour)
-    #     scores.append(new_score)
-    # else:
-    #     for i, score in enumerate(scores):
-    #         if new_score > score:
-    #             detours[i] = detour
-    #             scores[i] = score
-
-
-    # print("new detour:", detour, new_score, detours, scores)
-    # return detours, scores
-
 def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
     tic = time.time()
 
@@ -231,7 +181,6 @@ def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, neighbourLimit
 
 def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
     print(detourStart, detourEnd)
-    print("-- finding detours:", detourStart, detourEnd, path, prefix, postfix)
 
     if depthLimit == 0:
         return []
@@ -241,20 +190,14 @@ def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimi
     startNeighbours = list(set(nx.neighbors(G, detourStart)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
     endNeighbours = list(set(nx.neighbors(G, detourEnd)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
 
-    print("na, nb before limit", startNeighbours, endNeighbours)
-
     startNeighbours = limit_neighbours(G, startNeighbours, PRO, neighbourLimit)
     endNeighbours = limit_neighbours(G, endNeighbours, PRO, neighbourLimit)
-
-    print("na, nb after limit", startNeighbours, endNeighbours)
 
     shared_neighbours = set(startNeighbours).intersection(set(endNeighbours))
 
     for i in shared_neighbours:
         if fulfills_strict_requirements(G, PRO, i):
             detours.append(prefix + [i] + postfix)
-
-    print("sharedN", shared_neighbours)
 
     # second level and onwards
     for s in startNeighbours:
@@ -272,109 +215,6 @@ def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimi
                         detours = detours + find_detours(G, s, e, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
 
     return detours
-
-
-
-# # Find all node sequences that we can use to replace node z from a to b
-# def old_find_detours(G, x, y, pro, path, levels, neighbour_limit):
-
-#     tic = time.time()
-
-#     detours = []
-#     scores = []
-
-#     na = set(nx.neighbors(G, x))
-#     nb = set(nx.neighbors(G, y))
-
-#     print("na, nb before limit", na, nb)
-#     na, nb = limit_neighbours(G, pro, na, nb, neighbour_limit)
-#     print("na, nb after limit", na, nb)
-
-#     # first level
-#     shared_neighbours = na.intersection(nb).difference(set(path))
-#     for i in shared_neighbours:
-#         if fulfills_strict_requirements(G, pro, i):
-#             detours.append([i])
-
-#     # second level and onwards
-#     for aa in na:
-#         if aa not in path and fulfills_strict_requirements(G, pro, aa):
-#             for bb in nb:
-#                 if bb not in path and fulfills_strict_requirements(G, pro, bb):
-#                     if aa != bb:
-#                         toplevel_prefix = [aa]
-#                         toplevel_postfix = [bb]
-
-#                         naa = set(nx.neighbors(G, aa))
-#                         nbb = set(nx.neighbors(G, bb))
-
-#                         reachables = naa.intersection(nbb).difference(set(path))
-
-#                         for r in reachables:
-#                             if fulfills_strict_requirements(G, pro, r):
-#                                 detour = toplevel_prefix + [r] + toplevel_postfix
-#                                 detours.append(detour)
-
-
-#                         # this is symmetric: If the prefix and postfix are connected, they form a 2-node detour
-#                         if bb in naa and aa in nbb:
-#                             detour = [aa, bb]
-#                             detours.append(detour)
-
-#                         # print("to third level")
-#                         detours, scores = find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, 1, levels, neighbour_limit, detours, scores)
-
-#     toc = time.time() - tic
-#     return detours, toc
-
-# def find_detours_one_level(G, pro, aa, bb, toplevel_prefix, toplevel_postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores):
-
-#     currentLevel += 1
-#     if currentLevel > maxLevel:
-#         return detours, scores
-
-#     # print("in third level")
-
-#     naa = set(nx.neighbors(G, aa))
-#     nbb = set(nx.neighbors(G, bb))
-
-#     # nth level
-#     for aaa in naa:
-#         if fulfills_strict_requirements(G, pro, aaa) and aaa not in path + toplevel_prefix:
-#             for bbb in nbb:
-#                 if fulfills_strict_requirements(G, pro, bbb) and bbb not in path + toplevel_postfix:
-#                     if aaa != bbb:
-#                         prefix = toplevel_prefix + [aaa]
-#                         postfix = [bbb] + toplevel_postfix
-
-#                         if len(set(prefix).intersection(set(postfix))) != 0:
-#                             # print("prefix and postfix overlap: ", prefix, postfix)
-#                             continue
-
-
-#                         naaa = set(nx.neighbors(G, aaa))
-#                         nbbb = set(nx.neighbors(G, bbb))
-
-
-#                         reachables = naaa.intersection(nbbb).difference(set(path)).difference(set(prefix)).difference(set(postfix))
-
-#                         # print("in third level: ", aaa, bbb, naaa, nbbb, prefix, postfix, reachables)
-
-
-#                         for r in reachables:
-#                             if fulfills_strict_requirements(G, pro, r):
-#                                 detour = prefix + [r] + postfix
-#                                 detours.append(detour)
-
-#                         # this is symmetric: If the prefix and postfix are connected, they form a 4-node detour
-#                         if bbb in naaa:
-#                             detour = prefix + postfix
-#                             detours.append(detour)
-
-#                         detours, scores = find_detours_one_level(G, pro, aaa, bbb, prefix, postfix, path, currentLevel, maxLevel, neighbour_limit, detours, scores)
-
-#     return detours, scores
-
 
 
 ###################################################################

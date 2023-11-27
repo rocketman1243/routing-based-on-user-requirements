@@ -20,8 +20,6 @@ When proving the exactness/effectiveness of my algorithm:
 # TODO
 
 0. Upgrade code:
-   1. Fix flaky behaviour where results are not exactly the same with the same input.....
-   2. Exclude 1st level neighbours from the second level of detours, etc. To avoid neighbours being considered (and scored) twice
    3. After the previous: Make sure nodes are only checked once, go through the alg logically & check....
 
 1. Update pseudocode to reflect code changes:
