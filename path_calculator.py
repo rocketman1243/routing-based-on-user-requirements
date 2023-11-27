@@ -77,6 +77,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
 
 def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbour_limit, detour_distance_limit):
     tic = time.time()
+    detours_time = 0
 
     if len(path) < 3:
         print("path too short to optimize")
@@ -85,31 +86,28 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     ber = set(pro.requirements.best_effort)
 
     if(len(ber) == 0):
-        # print("no BER so no improvement possible")
+        print("no BER so no improvement possible")
         return path, {}, 0, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
-    # original_path = copy.deepcopy(path)
+    original_path = copy.deepcopy(path)
     before_ber = copy.deepcopy(ber)
     for i in path:
         before_ber = before_ber.intersection(G.nodes[i]["features"])
 
-    # +1 to ensure that the lowest value is possible and not cut off
-    distances = range(2, min(detour_distance_limit, len(path)) + 1)
-    print("distances:", distances)
-    for distance in distances:
-        for i in range(len(path) - distance):
-            if i + distance + 1 <= len(path):
-                a = path[i]
-                b = path[i + distance]
+    skipAmounts = range(2, min(detour_distance_limit, len(original_path)) + 1)
+    for skipAmount in skipAmounts:
+        for i in range(len(original_path) - skipAmount):
+            if original_path[i] in path and original_path[i + skipAmount] in path:
+                startIndex = path.index(original_path[i])
+                endIndex = path.index(original_path[i + skipAmount])
+                detourStart = path[startIndex]
+                detourEnd = path[endIndex]
+                bottleneck = path[startIndex + 1:endIndex]
 
-                detours, detours_time = find_detours_with_timer(G, a, b, pro, path, neighbour_limit, neighbour_depth_limit, [], [])
-                # print(a, b)
-                # print("#detours", len(detours))
-                print("detours:", detours)
 
                 clean_ber = copy.deepcopy(ber)
-                for c in path[:i+1] + path[i+distance:]:
+                for c in path[:startIndex+1] + path[endIndex:]:
                     clean_ber = clean_ber.intersection(G.nodes[c]["features"])
 
                 current_ber = copy.deepcopy(ber)
@@ -120,6 +118,11 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 if len(clean_ber) <= len(current_ber):
                     # Nothing to improve here, skip this detour
                     continue
+
+                detours, detours_time = find_detours_with_timer(G, detourStart, detourEnd, pro, path, neighbour_limit, neighbour_depth_limit, [], [])
+                # print(a, b)
+                # print("#detours", len(detours))
+                print("detours:", detours)
 
                 ber_to_beat = copy.deepcopy(current_ber)
 
@@ -139,7 +142,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
                 # Replace bad node with detour
                 if replace_path_segment_with_detour:
-                    potential_path = path[:i+1] + replacement_detour + path[i+distance:]
+                    potential_path = path[:i+1] + replacement_detour + path[i+skipAmount:]
 
                     # Ensure no silly mistakes were made
                     if nx.is_simple_path(G, potential_path):
@@ -168,7 +171,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
 
 def limit_neighbours(G, neighbours, PRO, neighbourLimit):
 
-    sortedNeighbours = sorted(list(neighbours), key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(PRO.requirements.best_effort))), reverse=True)
+    sortedNeighbours = sorted(neighbours, key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(PRO.requirements.best_effort))), reverse=True)
 
     if len(neighbours) > neighbourLimit:
         neighbours = sortedNeighbours[:neighbourLimit]
@@ -176,7 +179,7 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
         neighbours = sortedNeighbours
 
     print("sorted neighbours:", neighbours)
-    return set(neighbours)
+    return neighbours
 
 # def old_limit_neighbours(G, pro, na, nb, neighbour_limit):
 #     if len(na) > neighbour_limit:
@@ -237,8 +240,8 @@ def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimi
 
     detours = []
 
-    startNeighbours = set(nx.neighbors(G, detourStart)).difference(set(path)).difference(set(prefix)).difference(set(postfix))
-    endNeighbours = set(nx.neighbors(G, detourEnd)).difference(set(path)).difference(set(prefix)).difference(set(postfix))
+    startNeighbours = list(set(nx.neighbors(G, detourStart)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
+    endNeighbours = list(set(nx.neighbors(G, detourEnd)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
 
     print("na, nb before limit", startNeighbours, endNeighbours)
 
@@ -247,7 +250,7 @@ def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimi
 
     print("na, nb after limit", startNeighbours, endNeighbours)
 
-    shared_neighbours = startNeighbours.intersection(endNeighbours)
+    shared_neighbours = set(startNeighbours).intersection(set(endNeighbours))
 
     for i in shared_neighbours:
         if fulfills_strict_requirements(G, PRO, i):
