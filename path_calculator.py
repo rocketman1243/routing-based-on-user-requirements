@@ -26,13 +26,12 @@ def MP(G, pro, limits):
 
     depthLimit = limits[0]
     neighbourLimit = limits[1]
-    detourDistanceLimit = limits[2]
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
 
-        newPath, improvement = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit)
+        newPath, improvement = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit)
     else:
         print("Graph is not connected and no path could be found")
         toc = time.time() - tic
@@ -48,7 +47,7 @@ def MP(G, pro, limits):
 
 
 
-def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, detourDistanceLimit):
+def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit):
     if len(path) < 3:
         print("path too short to optimize")
         return path, 0
@@ -65,12 +64,12 @@ def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit, det
     for i in path:
         beforeBER = beforeBER.intersection(G.nodes[i]["features"])
 
-    skipAmounts = range(2, min(detourDistanceLimit, len(originalPath)) + 1)
-    for skipAmount in skipAmounts:
-        for i in range(len(originalPath) - skipAmount):
-            if originalPath[i] in path and originalPath[i + skipAmount] in path:
+    detourDistances = range(2, len(originalPath))
+    for detourDistance in detourDistances:
+        for i in range(len(originalPath) - detourDistance):
+            if originalPath[i] in path and originalPath[i + detourDistance] in path:
                 startIndex = path.index(originalPath[i])
-                endIndex = path.index(originalPath[i + skipAmount])
+                endIndex = path.index(originalPath[i + detourDistance])
                 detourStart = path[startIndex]
                 detourEnd = path[endIndex]
                 bottleneck = path[startIndex + 1:endIndex]

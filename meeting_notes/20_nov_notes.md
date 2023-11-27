@@ -29,6 +29,7 @@ When proving the exactness/effectiveness of my algorithm:
    1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
    2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
 
+4. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 # Planning
 
