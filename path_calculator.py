@@ -106,16 +106,16 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 bottleneck = path[startIndex + 1:endIndex]
 
 
-                clean_ber = copy.deepcopy(ber)
-                for c in path[:startIndex+1] + path[endIndex:]:
-                    clean_ber = clean_ber.intersection(G.nodes[c]["features"])
+                bottleneckFreeBER = copy.deepcopy(ber)
+                for c in set(path).difference(set(bottleneck)):
+                    bottleneckFreeBER = bottleneckFreeBER.intersection(G.nodes[c]["features"])
 
-                current_ber = copy.deepcopy(ber)
+                currentPathBER = copy.deepcopy(ber)
                 for c in path:
-                    current_ber = current_ber.intersection(G.nodes[c]["features"])
+                    currentPathBER = currentPathBER.intersection(G.nodes[c]["features"])
 
 
-                if len(clean_ber) <= len(current_ber):
+                if len(bottleneckFreeBER) <= len(currentPathBER):
                     # Nothing to improve here, skip this detour
                     continue
 
@@ -124,25 +124,23 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 # print("#detours", len(detours))
                 print("detours:", detours)
 
-                ber_to_beat = copy.deepcopy(current_ber)
-
-                replace_path_segment_with_detour = False
-                replacement_detour = []
+                bestBER = copy.deepcopy(currentPathBER)
+                bestDetour = []
+                updatePath = False
 
                 for detour in detours:
-
-                    potential_ber = copy.deepcopy(clean_ber)
+                    potentialBer = copy.deepcopy(bottleneckFreeBER)
                     for j in detour:
-                        potential_ber = potential_ber.intersection(G.nodes[j]["features"])
+                        potentialBer = potentialBer.intersection(G.nodes[j]["features"])
 
-                    if len(potential_ber) > len(ber_to_beat):
-                        replace_path_segment_with_detour = True
-                        replacement_detour = detour
-                        ber_to_beat = copy.deepcopy(potential_ber)
+                    if len(potentialBer) > len(bestBER):
+                        bestDetour = detour
+                        bestBER = copy.deepcopy(potentialBer)
+                        updatePath = True
 
-                # Replace bad node with detour
-                if replace_path_segment_with_detour:
-                    potential_path = path[:i+1] + replacement_detour + path[i+skipAmount:]
+                # Replace bottleneck with detour
+                if updatePath:
+                    potential_path = path[:startIndex + 1] + bestDetour + path[endIndex:]
 
                     # Ensure no silly mistakes were made
                     if nx.is_simple_path(G, potential_path):
@@ -156,11 +154,11 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     for i in path:
         after_ber = after_ber.intersection(G.nodes[i]["features"])
 
-    # if before_ber != after_ber:
-    #     print("ber before:", before_ber)
-    #     print("path before:", original_path)
-    #     print("ber after optimization:", after_ber)
-    #     print("path after: ", path)
+    if before_ber != after_ber:
+        print("ber before:", before_ber)
+        print("path before:", original_path)
+        print("ber after optimization:", after_ber)
+        print("path after: ", path)
     # else:
     #     print("----")
 
