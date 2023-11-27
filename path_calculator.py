@@ -51,7 +51,7 @@ def filter_graph(G, pro, neighbour_depth_limit, neighbour_limit, detour_distance
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
         path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
-        print("path:", path)
+        # print("path:", path)
 
 
         toc = time.time() - tic
@@ -77,7 +77,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     ber = set(pro.requirements.best_effort)
 
     if(len(ber) == 0):
-        print("no BER so no improvement possible")
+        # print("no BER so no improvement possible")
         return path, {}, 0, 0, time.time() - tic
 
     # Store original path and ber for comparison at the end
@@ -113,7 +113,7 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
                 detours, detours_time = find_detours_with_timer(G, detourStart, detourEnd, pro, path, neighbour_limit, neighbour_depth_limit, [], [])
                 # print(a, b)
                 # print("#detours", len(detours))
-                print("detours:", detours)
+                # print("detours:", detours)
 
                 bestBER = copy.deepcopy(currentPathBER)
                 bestDetour = []
@@ -145,11 +145,11 @@ def augment_path_to_biggest_subset(G, pro, path, neighbour_depth_limit, neighbou
     for i in path:
         after_ber = after_ber.intersection(G.nodes[i]["features"])
 
-    if before_ber != after_ber:
-        print("ber before:", before_ber)
-        print("path before:", original_path)
-        print("ber after optimization:", after_ber)
-        print("path after: ", path)
+    # if before_ber != after_ber:
+        # print("ber before:", before_ber)
+        # print("path before:", original_path)
+        # print("ber after optimization:", after_ber)
+        # print("path after: ", path)
     # else:
     #     print("----")
 
@@ -167,20 +167,20 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
     else:
         neighbours = sortedNeighbours
 
-    print("sorted neighbours:", neighbours)
+    # print("sorted neighbours:", neighbours)
     return neighbours
 
 def find_detours_with_timer(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
     tic = time.time()
 
     detours = find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix)
-    print("final detours: ", detours)
+    # print("final detours: ", detours)
 
     toc = time.time() - tic
     return detours, toc
 
 def find_detours(G, detourStart, detourEnd, PRO, path, neighbourLimit, depthLimit, prefix, postfix):
-    print(detourStart, detourEnd)
+    # print(detourStart, detourEnd)
 
     if depthLimit == 0:
         return []
@@ -273,7 +273,7 @@ def smartDFS(G, pro, maxDepth):
                 newHopsLeft = hopsLeft - 1
                 Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
 
-    print(global_best_path)
+    # print(global_best_path)
     # print(AllResults)
 
     return time.time() - tic
