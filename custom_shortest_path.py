@@ -63,73 +63,77 @@ under the condition of copying with it the full license text. Thus, here it is:
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-def find_predecessors_and_successors(G, source, target, pro):
+def find_predecessors_and_successors(G, pro):
     """Bidirectional shortest path helper.
 
     Returns (pred, succ, w) where
     pred is a dictionary of predecessors from w to the source, and
     succ is a dictionary of successors from w to the target.
     """
-    # Do BFS from both source and target and meets in the middle
+    source = pro.as_source
+    target = pro.as_destination
+
+
+    # Do BFS from both source and target and meet in the middle
     if target == source:
         return ({target: None}, {source: None}, source)
 
-    Gpred = G.adj
-    Gsucc = G.adj
+    neighbours = G.adj
 
     # predecessor and successors in search
     pred = {source: None}
     succ = {target: None}
 
     # initialize fringes, start with forward
-    forward_fringe = [source]
-    reverse_fringe = [target]
+    forwardVisited = [source]
+    reverseVisited = [target]
 
-    while forward_fringe and reverse_fringe:
-        if len(forward_fringe) <= len(reverse_fringe):
-            this_level = forward_fringe
-            forward_fringe = []
-            for v in this_level:
-                if fulfillsStrictRequirements(G, pro, v):
-                    for w in Gsucc[v]:
-                        if fulfillsStrictRequirements(G, pro, w):
-                            if w not in pred:
-                                forward_fringe.append(w)
-                                pred[w] = v
-                            if w in succ:  # path found
-                                return pred, succ, w
+    # We only call this method when we are sure there is a path
+    while True:
+        if len(forwardVisited) <= len(reverseVisited):
+            thisLevel = forwardVisited
+            forwardVisited = []
+            for currentNode in thisLevel:
+                if fulfillsStrictRequirements(G, pro, currentNode):
+                    for neighbour in neighbours[currentNode]:
+                        if fulfillsStrictRequirements(G, pro, neighbour):
+                            if neighbour not in pred:
+                                forwardVisited.append(neighbour)
+                                pred[neighbour] = currentNode
+                            if neighbour in succ:  # path found
+                                return pred, succ, neighbour
         else:
-            this_level = reverse_fringe
-            reverse_fringe = []
-            for v in this_level:
-                if fulfillsStrictRequirements(G, pro, v):
-                    for w in Gpred[v]:
-                        if fulfillsStrictRequirements(G, pro, w):
-                            if w not in succ:
-                                succ[w] = v
-                                reverse_fringe.append(w)
-                            if w in pred:  # found path
-                                return pred, succ, w
-
-    print(f"No path between {source} and {target}.")
+            thisLevel = reverseVisited
+            reverseVisited = []
+            for currentNode in thisLevel:
+                if fulfillsStrictRequirements(G, pro, currentNode):
+                    for neighbour in neighbours[currentNode]:
+                        if fulfillsStrictRequirements(G, pro, neighbour):
+                            if neighbour not in succ:
+                                reverseVisited.append(neighbour)
+                                succ[neighbour] = currentNode
+                            if neighbour in pred:  # found path
+                                return pred, succ, neighbour
 
 
-def bidirectionalBFSWithFilter(G, source, target, pro):
+def bidirectionalBFSWithFilter(G, pro):
     # call helper to do the real work
-    results = find_predecessors_and_successors(G, source, target, pro)
-    pred, succ, w = results
+    results = find_predecessors_and_successors(G, pro)
+    pred, succ, meetupNode = results
 
-    # build path from pred+w+succ
+    # build path from pred + meetupNode + succ
     path = []
-    # from source to w
-    while w is not None:
-        path.append(w)
-        w = pred[w]
+
+    # from source to meetupNode
+    while meetupNode is not None:
+        path.append(meetupNode)
+        meetupNode = pred[meetupNode]
     path.reverse()
+
     # from w to target
-    w = succ[path[-1]]
-    while w is not None:
-        path.append(w)
-        w = succ[w]
+    meetupNode = succ[path[-1]]
+    while meetupNode is not None:
+        path.append(meetupNode)
+        meetupNode = succ[meetupNode]
 
     return path

@@ -22,20 +22,21 @@ def MP(G, pro, limits):
 
     if not fulfillsStrictRequirements(G, pro, start) or not fulfillsStrictRequirements(G, pro, end):
         print("Either start or end did not fulfill the strict requirements, so no path could be found.")
-        return 0, 0, 0, 0, 0
+        return 0, 0, 0
 
     depthLimit = limits[0]
     neighbourLimit = limits[1]
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
-        path = bidirectionalBFSWithFilter(G, pro.as_source, pro.as_destination, pro)
+        path = bidirectionalBFSWithFilter(G, pro)
+        print(path)
 
         newPath, improvement = augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit)
     else:
-        print("Graph is not connected and no path could be found")
+        print("No path could be found")
         toc = time.time() - tic
-        return [], [], 0, toc
+        return [], 0, toc
 
 
     toc = time.time()

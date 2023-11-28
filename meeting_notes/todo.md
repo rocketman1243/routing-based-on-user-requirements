@@ -19,19 +19,17 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-1. Include pseudocode of pathfinding method
+1. Run global best path vs MP path (with a 500ms cap on MP runtime) to show quality of results of MP --> Put results on slide
 
-2. Run global best path vs MP path (with a 500ms cap on MP runtime) to show quality of results of MP
+2. Update accompanying text for the algorithm according to code changes, and include explanation of the bidirectional bfs code
 
-3. Update accompanying text for the algorithm according to code changes, and include explanation of the bidirectional bfs code
+3. BGP: Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
 
-4. BGP: Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
-
-5. Setup evaluations:
+4. Setup evaluations:
    1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
    2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
 
-6. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
+5. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 # Planning
 

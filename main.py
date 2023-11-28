@@ -33,8 +33,8 @@ test_nio_path = "test_files/nio_files/"
 # depthLimits = [10]
 # neighbourLimits = [5]
 # detour_distance_limit = [3]
-depthLimits = [1]
-neighbourLimits = [5, 8, 10, 12]
+depthLimits = [3]
+neighbourLimits = [5]
 
 limits = [
     depthLimits,
@@ -42,16 +42,16 @@ limits = [
 ]
 
 
-# CHOSEN_PATH = test_path
-# path_to_nio_files = test_nio_path
+CHOSEN_PATH = test_path
+path_to_nio_files = test_nio_path
 
 
 
 
 
-CHOSEN_PATH = paper_network_setup_path
-# CHOSEN_PATH = small_paper_network_setup_path
-path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
+# CHOSEN_PATH = paper_network_setup_path
+# # CHOSEN_PATH = small_paper_network_setup_path
+# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
 
