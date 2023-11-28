@@ -3,6 +3,8 @@ import os
 import json
 from types import SimpleNamespace
 import networkx as nx
+import signal
+import time
 
 small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
 small_scale_realistic_paths_experiment = "small_scale_setup/realistic_paths_experiment"
@@ -32,9 +34,8 @@ test_nio_path = "test_files/nio_files/"
 
 # depthLimits = [10]
 # neighbourLimits = [5]
-# detour_distance_limit = [3]
 depthLimits = [3]
-neighbourLimits = [5]
+neighbourLimits = [50]
 
 limits = [
     depthLimits,
@@ -42,16 +43,16 @@ limits = [
 ]
 
 
-CHOSEN_PATH = test_path
-path_to_nio_files = test_nio_path
+# CHOSEN_PATH = test_path
+# path_to_nio_files = test_nio_path
 
 
 
 
 
 # CHOSEN_PATH = paper_network_setup_path
-# # CHOSEN_PATH = small_paper_network_setup_path
-# path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
+CHOSEN_PATH = small_paper_network_setup_path
+path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
 
@@ -108,49 +109,80 @@ nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
 
-# # Find full path
-# print("Note: FINDING FULL PATH with SMARTDFS. SO settle in cos this is going to take some time.....")
-# for i in range(len(pro_objects)):
-#     print("pro:", i)
-#     runtime = smartDFS(G, pro_objects[i], len(G.nodes))
-#     print("runtime:", runtime)
-# exit(0)
+
+
+
+
+
+# Find full path
+def handler(signum, frame):
+    raise Exception("end of time")
+
+timePerPROSeconds = 60
+
+print("Note: FINDING FULL PATH with slowpoke SMARTDFS. SO settle in cos this is going to take some time.....")
+
+with open("small_paper_network_setup/results/full_paths.csv","w") as file:
+    for i in range(len(pro_objects)):
+
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(timePerPROSeconds)
+        print("pro:", i)
+        try:
+            tic = time.time()
+            pathLength, numberOfBER = smartDFS(G, pro_objects[i], len(G.nodes))
+            runtime = time.time() - tic
+            file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
+        except Exception:
+            print("too slow")
+
+
+
+
+
+
+
+
+
 
 
 print("Finding paths using speedy boiiiiiiiiii")
 
 # Reset results file
-open(f'{CHOSEN_PATH}/results/output.csv', 'w')
+open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'w')
 
 for current_limits in limit_entries:
-    with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
+    with open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'a') as file:
 
-        improvements = []
-        runtimes = []
+        # improvements = []
+        # runtimes = []
 
         print("current limits:", current_limits)
 
         for i in range(len(pro_objects)):
-            # print("pro", i + 1, "/", len(pro_objects))
+            print("pro", i)
             pro = pro_objects[i]
 
-            extraHops, improvement, runtime = MP(G, pro, current_limits)
+            totalHops, extraHops, totalBER, improvement, runtime = MP(G, pro, current_limits)
+            result_string = f"{i},{totalHops},{totalBER},{round(runtime, 3)}\n"
+            file.write(result_string)
 
-            improvements.append(improvement)
-            runtimes.append(runtime)
+            # improvements.append(improvement)
+            # runtimes.append(runtime)
 
 
-        avg_improvement = round(sum(improvements) / len(improvements), 3)
-        avg_runtime = round(sum(runtimes) / len(runtimes), 3)
+        # avg_improvement = round(sum(improvements) / len(improvements), 3)
+        # avg_runtime = round(sum(runtimes) / len(runtimes), 3)
 
-        print("avg improvement: ", avg_improvement)
-        print("max imp:", max(improvements))
-        print("avg runtime: ", avg_runtime)
-        print("max runtime:", max(runtimes))
-        print("-----------------------------")
+        # print("avg improvement: ", avg_improvement)
+        # print("max imp:", max(improvements))
+        # print("avg runtime: ", avg_runtime)
+        # print("max runtime:", max(runtimes))
+        # print("-----------------------------")
 
 
         # TODO: Spit this into file
-        result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_runtime}\n"
-        file.write(result_string)
+        # result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_runtime}\n"
+        # result_string = f"{}"
+        # file.write(result_string)
 

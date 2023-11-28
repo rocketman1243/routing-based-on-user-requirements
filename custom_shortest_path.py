@@ -88,8 +88,8 @@ def find_predecessors_and_successors(G, pro):
     forwardVisited = [source]
     reverseVisited = [target]
 
-    # We only call this method when we are sure there is a path
-    while True:
+    # Keep going while both forward and reverse have unexplored nodes
+    while len(forwardVisited) > 0 and len(reverseVisited) > 0:
         if len(forwardVisited) <= len(reverseVisited):
             thisLevel = forwardVisited
             forwardVisited = []
@@ -115,11 +115,18 @@ def find_predecessors_and_successors(G, pro):
                             if neighbour in pred:  # found path
                                 return pred, succ, neighbour
 
+    # If we come here, there exists no path... :(
+    return [], [], -1
+
+
 
 def bidirectionalBFSWithFilter(G, pro):
     # call helper to do the real work
     results = find_predecessors_and_successors(G, pro)
     pred, succ, meetupNode = results
+
+    if len(pred) == 0 and len(succ) == 0 and meetupNode == -1:
+        return []
 
     # build path from pred + meetupNode + succ
     path = []

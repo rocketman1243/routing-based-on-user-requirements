@@ -18,9 +18,9 @@ to be consumed by main.py
 
 """
 
-number_of_nodes = 50
-number_of_features_in_distribution = 30
-min_nr_of_features = 25
+number_of_nodes = 200
+number_of_features_in_distribution = 100
+min_nr_of_features = 80
 output_path = "small_paper_network_setup/data/nio_files"
 
 dry_run = False

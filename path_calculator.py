@@ -27,43 +27,41 @@ def MP(G, pro, limits):
     depthLimit = limits[0]
     neighbourLimit = limits[1]
 
-    if nx.has_path(G, pro.as_source, pro.as_destination):
+    path = bidirectionalBFSWithFilter(G, pro)
 
-        path = bidirectionalBFSWithFilter(G, pro)
-        print(path)
-
-        newPath, improvement = augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit)
-    else:
-        print("No path could be found")
+    if len(path) == 0:
         toc = time.time() - tic
         return [], 0, toc
 
+    newPath, totalBER, improvement = augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit)
 
     toc = time.time()
     runtime = toc - tic
 
-    return len(newPath) - len(path), improvement, runtime
+    return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime
 
 
 
 
 
 def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
-    if len(path) < 3:
-        print("path too short to optimize")
-        return path, 0
 
     ber = set(pro.requirements.best_effort)
 
     if(len(ber) == 0):
         # print("no BER so no improvement possible")
-        return path, 0
+        return path, 0, 0
 
     # Store original path and ber for comparison at the end
     originalPath = copy.deepcopy(path)
     beforeBER = copy.deepcopy(ber)
     for i in path:
         beforeBER = beforeBER.intersection(G.nodes[i]["features"])
+
+
+    if len(path) < 3:
+        print("path too short to optimize")
+        return path, len(beforeBER), 0
 
     detourDistances = range(2, len(originalPath))
     for detourDistance in detourDistances:
@@ -132,7 +130,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
     # else:
     #     print("----")
 
-    return path, len(afterBER) - len(beforeBER)
+    return path, len(afterBER), len(afterBER) - len(beforeBER)
 
 
 
@@ -200,8 +198,8 @@ def smartDFS(G, pro, maxDepth):
     Q = []
     Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
 
-    global_best_score = -1
-    global_best_path = (0, 0)
+    globalBestScoreNrBER = -1
+    globalBestPathLength = (0, 0)
 
     while not len(Q) == 0:
         vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
@@ -212,7 +210,7 @@ def smartDFS(G, pro, maxDepth):
         Bc = copy.deepcopy(Bp)
         Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
 
-        if len(Bc) < global_best_score:
+        if len(Bc) < globalBestScoreNrBER:
             # We can never become the best path, so might as well exit
             continue
 
@@ -224,9 +222,9 @@ def smartDFS(G, pro, maxDepth):
         if vc == pro.as_destination:
             # heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, 0, hopsLeft))
 
-            if len(Bc) > global_best_score:
-                global_best_score = len(Bc)
-                global_best_path = (len(Bc), len(Pc))
+            if len(Bc) > globalBestScoreNrBER:
+                globalBestScoreNrBER = len(Bc)
+                globalBestPathLength = len(Pc)
 
 
             continue
@@ -245,7 +243,7 @@ def smartDFS(G, pro, maxDepth):
     # print(global_best_path)
     # print(AllResults)
 
-    return time.time() - tic
+    return globalBestPathLength, globalBestScoreNrBER
 
 
 

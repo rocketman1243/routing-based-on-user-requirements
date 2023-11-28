@@ -5,15 +5,15 @@ import os
 
 # Tuning values
 
-num_objects = 50
-nr_of_features = 30
+num_objects = 200
+nr_of_features = 100
 
 
 
 dry_run = False
 
 requirements = list(range(1, nr_of_features + 1))
-best_effort_min_amount = nr_of_features - 5
+best_effort_min_amount = nr_of_features
 best_effort_max_amount = nr_of_features
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
