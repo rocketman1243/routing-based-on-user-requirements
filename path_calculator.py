@@ -11,7 +11,7 @@ import time
 import math
 import queue
 import heapq
-from custom_shortest_path import bidirectional_shortest_path_including_filter, fulfills_strict_requirements
+from custom_shortest_path import bidirectionalBFSWithFilter, fulfillsStrictRequirements
 
 def MP(G, pro, limits):
 
@@ -20,7 +20,7 @@ def MP(G, pro, limits):
     start = str(pro.as_source)
     end = str(pro.as_destination)
 
-    if not fulfills_strict_requirements(G, pro, start) or not fulfills_strict_requirements(G, pro, end):
+    if not fulfillsStrictRequirements(G, pro, start) or not fulfillsStrictRequirements(G, pro, end):
         print("Either start or end did not fulfill the strict requirements, so no path could be found.")
         return 0, 0, 0, 0, 0
 
@@ -29,9 +29,9 @@ def MP(G, pro, limits):
 
     if nx.has_path(G, pro.as_source, pro.as_destination):
 
-        path = bidirectional_shortest_path_including_filter(G, pro.as_source, pro.as_destination, pro)
+        path = bidirectionalBFSWithFilter(G, pro.as_source, pro.as_destination, pro)
 
-        newPath, improvement = augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit)
+        newPath, improvement = augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit)
     else:
         print("Graph is not connected and no path could be found")
         toc = time.time() - tic
@@ -47,7 +47,7 @@ def MP(G, pro, limits):
 
 
 
-def augment_path_to_biggest_subset(G, pro, path, depthLimit, neighbourLimit):
+def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
     if len(path) < 3:
         print("path too short to optimize")
         return path, 0
@@ -165,13 +165,13 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
     shared_neighbours = set(startNeighbours).intersection(set(endNeighbours))
 
     for i in shared_neighbours:
-        if fulfills_strict_requirements(G, PRO, i):
+        if fulfillsStrictRequirements(G, PRO, i):
             detours.append(prefix + [i] + postfix)
 
     # second level and onwards
     for s in startNeighbours:
         for e in endNeighbours:
-            if fulfills_strict_requirements(G, PRO, s) and fulfills_strict_requirements(G, PRO, e):
+            if fulfillsStrictRequirements(G, PRO, s) and fulfillsStrictRequirements(G, PRO, e):
                 if s != e and len(set([s, e]).intersection(set(path + prefix + postfix))) == 0:
                         # If the prefix and postfix are connected, they form a 2-node detour
                         if (s, e) in G.edges:
@@ -236,7 +236,7 @@ def smartDFS(G, pro, maxDepth):
         neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
 
         for vi in neighbours_low_to_high:
-            satisfies_strict_requirements = fulfills_strict_requirements(G, pro, vi)
+            satisfies_strict_requirements = fulfillsStrictRequirements(G, pro, vi)
             if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
                 newHopsLeft = hopsLeft - 1
                 Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))

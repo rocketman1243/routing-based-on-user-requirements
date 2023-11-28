@@ -1,5 +1,5 @@
 
-def fulfills_strict_requirements(G, pro, node):
+def fulfillsStrictRequirements(G, pro, node):
     # If we encountered this node before and deemed it UNWORTHY, Call out the same sentence AGAIN!!!
 
     if G.nodes[node]["filtered"]:
@@ -90,9 +90,9 @@ def find_predecessors_and_successors(G, source, target, pro):
             this_level = forward_fringe
             forward_fringe = []
             for v in this_level:
-                if fulfills_strict_requirements(G, pro, v):
+                if fulfillsStrictRequirements(G, pro, v):
                     for w in Gsucc[v]:
-                        if fulfills_strict_requirements(G, pro, w):
+                        if fulfillsStrictRequirements(G, pro, w):
                             if w not in pred:
                                 forward_fringe.append(w)
                                 pred[w] = v
@@ -102,9 +102,9 @@ def find_predecessors_and_successors(G, source, target, pro):
             this_level = reverse_fringe
             reverse_fringe = []
             for v in this_level:
-                if fulfills_strict_requirements(G, pro, v):
+                if fulfillsStrictRequirements(G, pro, v):
                     for w in Gpred[v]:
-                        if fulfills_strict_requirements(G, pro, w):
+                        if fulfillsStrictRequirements(G, pro, w):
                             if w not in succ:
                                 succ[w] = v
                                 reverse_fringe.append(w)
@@ -114,7 +114,7 @@ def find_predecessors_and_successors(G, source, target, pro):
     print(f"No path between {source} and {target}.")
 
 
-def bidirectional_shortest_path_including_filter(G, source, target, pro):
+def bidirectionalBFSWithFilter(G, source, target, pro):
     # call helper to do the real work
     results = find_predecessors_and_successors(G, source, target, pro)
     pred, succ, w = results

@@ -33,7 +33,7 @@ test_nio_path = "test_files/nio_files/"
 # depthLimits = [10]
 # neighbourLimits = [5]
 # detour_distance_limit = [3]
-depthLimits = [2]
+depthLimits = [1]
 neighbourLimits = [5, 8, 10, 12]
 
 limits = [
@@ -122,9 +122,9 @@ print("Finding paths using speedy boiiiiiiiiii")
 # Reset results file
 open(f'{CHOSEN_PATH}/results/output.csv', 'w')
 
-with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
+for current_limits in limit_entries:
+    with open(f'{CHOSEN_PATH}/results/output.csv', 'a') as file:
 
-    for current_limits in limit_entries:
         improvements = []
         runtimes = []
 
