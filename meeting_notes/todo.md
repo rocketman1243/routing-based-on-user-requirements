@@ -19,15 +19,16 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-1. Run global best path vs MP path (with a 500ms cap on MP runtime) to show quality of results of MP --> Put results on slide
+1. Create graphs that convince Fernando that my heuristic is DA BOMB!!!
 
-3. Update accompanying text for the algorithm according to code changes, and include explanation of the bidirectional bfs code
-4. Send pseudocode, explanation & proof to the Fern
+8. Setup evaluations:
+   1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
+   2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
+
+9. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 
-5. BGP: Describe how the values for local preference should (and will) be set by ASes themselves such that it vibes with the local policy they already (might) have around using local prefs for their paths. If their policies already use values between 100 (default) and (say) 200, the supported-features values should start at 201 whereas 101 is enough for ASes that do not use the local pref yet. SO: Thats why I did not hardcode values in the report (#BANGGGGGGG)
 
-6. Extend BGP story with the xBGP situation (and 1 more alternative BGP idea)
 
 7. Make presentation for Monday's meeting with:
    1. Progress update:
@@ -38,11 +39,6 @@ When proving the exactness/effectiveness of my algorithm:
    3. Overview of BGP implementation ideas
    4. Sign green light??
 
-8. Setup evaluations:
-   1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
-   2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
-
-9. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 # Planning
 

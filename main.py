@@ -32,10 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-# depthLimits = [10]
-# neighbourLimits = [5]
-depthLimits = [3]
-neighbourLimits = [50]
+depthLimits = [1]
+neighbourLimits = [80]
 
 limits = [
     depthLimits,
@@ -115,26 +113,26 @@ G.add_edges_from(edges)
 
 
 # Find full path
-def handler(signum, frame):
-    raise Exception("end of time")
+# def handler(signum, frame):
+#     raise Exception("end of time")
 
-timePerPROSeconds = 60
+# timePerPROSeconds = 60
 
-print("Note: FINDING FULL PATH with slowpoke SMARTDFS. SO settle in cos this is going to take some time.....")
+# print("Note: FINDING FULL PATH with slowpoke SMARTDFS. SO settle in cos this is going to take some time.....")
 
-with open("small_paper_network_setup/results/full_paths.csv","w") as file:
-    for i in range(len(pro_objects)):
+# with open("small_paper_network_setup/results/full_paths.csv","w") as file:
+#     for i in range(len(pro_objects)):
 
-        signal.signal(signal.SIGALRM, handler)
-        signal.alarm(timePerPROSeconds)
-        print("pro:", i)
-        try:
-            tic = time.time()
-            pathLength, numberOfBER = smartDFS(G, pro_objects[i], len(G.nodes))
-            runtime = time.time() - tic
-            file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
-        except Exception:
-            print("too slow")
+#         signal.signal(signal.SIGALRM, handler)
+#         signal.alarm(timePerPROSeconds)
+#         print("pro:", i)
+#         try:
+#             tic = time.time()
+#             pathLength, numberOfBER = smartDFS(G, pro_objects[i], len(G.nodes))
+#             runtime = time.time() - tic
+#             file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
+#         except Exception:
+#             print("too slow")
 
 
 
@@ -154,8 +152,8 @@ open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'w')
 for current_limits in limit_entries:
     with open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'a') as file:
 
-        # improvements = []
-        # runtimes = []
+        improvements = []
+        runtimes = []
 
         print("current limits:", current_limits)
 
@@ -167,18 +165,18 @@ for current_limits in limit_entries:
             result_string = f"{i},{totalHops},{totalBER},{round(runtime, 3)}\n"
             file.write(result_string)
 
-            # improvements.append(improvement)
-            # runtimes.append(runtime)
+            improvements.append(improvement)
+            runtimes.append(runtime)
 
 
-        # avg_improvement = round(sum(improvements) / len(improvements), 3)
-        # avg_runtime = round(sum(runtimes) / len(runtimes), 3)
+        avg_improvement = round(sum(improvements) / len(improvements), 3)
+        avg_runtime = round(sum(runtimes) / len(runtimes), 3)
 
-        # print("avg improvement: ", avg_improvement)
-        # print("max imp:", max(improvements))
-        # print("avg runtime: ", avg_runtime)
-        # print("max runtime:", max(runtimes))
-        # print("-----------------------------")
+        print("avg improvement: ", avg_improvement)
+        print("max imp:", max(improvements))
+        print("avg runtime: ", avg_runtime)
+        print("max runtime:", max(runtimes))
+        print("-----------------------------")
 
 
         # TODO: Spit this into file
