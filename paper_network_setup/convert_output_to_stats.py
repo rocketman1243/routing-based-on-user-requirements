@@ -3,25 +3,41 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-def graphMe(xTicks, yValues, xLabel, yLabel, title):
+def graphMe(xTicks, yValues, yCap, yValues2, yCap2, xLabel, yLabel, yLabel2, title):
     plt.rcParams["font.family"] = "monospace"
 
-    fig, ax = plt.subplots()
+    fig, ax1 = plt.subplots()
 
-    ax.plot(range(len(xTicks)), yValues, color=(0.99, 0.32, 0.32), label="UPDATE LABEL IF NEEDED")
-    # ax.plot(range(len(avg_relative_improvements) * 100), y, color=(0.1, 0.8, 0.5), label="runtime (s) of heuristic")
+    ax1_colour = (0.99, 0.32, 0.32)
+    ax1.set_xlabel(xLabel, fontsize=12)
+    ax1.set_ylabel(yLabel, fontsize=12)
+    ax1.set_yticks(range(0, yCap + 1, 1))
+    ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel)
+    ax1.set_ylim([0, yCap])
 
-    # ax.set_xticklabels(xTicks)
+    if len(yValues2) > 0:
+        ax1.tick_params(axis='y', labelcolor=ax1_colour)
+
+        yticklabels = []
+        yticks = range(0, yCap2 + 1, 10)
+        for yt in yticks:
+            yticklabels.append(f"{yt}%")
+        ax2_colour = (0.22, 0.3, 0.9)
+        ax2 = ax1.twinx()
+        ax2.plot(yValues2, color=ax2_colour)
+        ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
+        ax2.set_yticks(yticks, labels=yticklabels)
+        ax2.tick_params(axis='y', labelcolor=ax2_colour)
+        ax2.set_ylim([0, yCap2])
+
     plt.xticks(range(len(xTicks)), xTicks)
-    ax.set_xlabel(xLabel, fontsize=12)
-    ax.set_ylabel(yLabel, fontsize=12)
 
     plt.xlim(0, len(xTicks))
-    plt.ylim(0, max(yValues) + 1)
+    # plt.ylim(0, yCap)
 
 
 
-    ax.set_title(title)
+    ax1.set_title(title)
 
     fig.tight_layout()
     plt.tight_layout()
@@ -71,7 +87,7 @@ with open(pathHeuristicPaths, "r") as file:
 
         neighbourLimitDict = {
             "avg_improvement": float(items[2]),
-            "avg_relative_improvement": float(items[3]),
+            "avg_relative_improvement": float(items[3]) * 100,
             "avg_runtime": float(items[4]),
             "runtimes": runtimes
         }
@@ -112,11 +128,13 @@ To show, each in separate pic:
 """
 
 # - How limits improve average improvement
-
-graphMe(xTicks, avg_improvements, "[depthLimit, neighbourLimit]", "average number of extra BER","average extra #BER on top of shortest path due to updating path with detours")
-
 # - How significant this improvement is (using the relative improvement as indicator somehow)
 
+graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement of # satisfied BER over #BER of initial shortest path (%)","average extra #BER on top of shortest path due to updating path with detours")
 
+
+
+# - How limits change average runtime
+graphMe(xTicks, avg_runtimes, 10, [], 0, "[depthLimit, neighbourLimit]", "average runtime (s)","","average runtime (s)")
 
 
