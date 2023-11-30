@@ -19,25 +19,16 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-1. Create graphs that convince Fernando that my heuristic is DA BOMB!!!
+1. Create graphing script for large paper network & visualize it nicely
 
-8. Setup evaluations:
-   1. For different values of neighbourLimit and neighbourDepth, show the average path improvement.
-   2. Calculate the global best path using smartDFS, then compare its #hops and #BER to the #hops and #BER of the fast heuristic approach
+2. Look into precomputation:
+   1. What would you want to precompute?
+   2. How can you precompute it?
+   3. How much faster would things become?
 
-9. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
+3. Practice presentation
 
-
-
-
-7. Make presentation for Monday's meeting with:
-   1. Progress update:
-      1. Proof for completeness is done
-      2. Experimental setup is done, can collect data
-      3. BGP implementation ideas are done
-   2. Results of smartDFS vs heuristic with also compared runtimes to see what the shorter runtime 'costs' us
-   3. Overview of BGP implementation ideas
-   4. Sign green light??
+4. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 
 # Planning

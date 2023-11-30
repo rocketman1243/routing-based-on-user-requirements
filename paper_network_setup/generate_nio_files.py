@@ -19,7 +19,8 @@ to be consumed by main.py
 """
 
 number_of_nodes = 75000
-number_of_features_in_distribution = 100
+maxNrOfFeatures = 100
+minNrOfFeatures = 80
 output_path = "paper_network_setup/data/nio_files"
 
 dry_run = False
@@ -60,13 +61,11 @@ for n in G.nodes:
     mapping[n] = str(n)
 G = nx.relabel_nodes(G, mapping)
 
-# Note: Nodes are added based on edges in connected graph
 node_info = {}
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
-# After edges are inserted from connected dataset, we generate features based on this
-features = generate_features(number_of_features_in_distribution, list(G.nodes))
+features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
 
 with open("./paper_network_setup/data/as_numbers.txt", "w") as file:
     for asn in list(G.nodes):

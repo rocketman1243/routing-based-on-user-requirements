@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [1]
-neighbourLimits = [80]
+depthLimits = [1, 2]
+neighbourLimits = [10, 20, 30, 40, 50, 60, 70, 80]
 
 limits = [
     depthLimits,
@@ -48,8 +48,8 @@ limits = [
 
 
 
-# CHOSEN_PATH = paper_network_setup_path
-CHOSEN_PATH = small_paper_network_setup_path
+CHOSEN_PATH = paper_network_setup_path
+# CHOSEN_PATH = small_paper_network_setup_path
 path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
@@ -153,34 +153,44 @@ for current_limits in limit_entries:
     with open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'a') as file:
 
         improvements = []
+        relative_improvements = []
         runtimes = []
 
         print("current limits:", current_limits)
 
         for i in range(len(pro_objects)):
-            print("pro", i)
+            # print("pro", i)
             pro = pro_objects[i]
 
             totalHops, extraHops, totalBER, improvement, runtime = MP(G, pro, current_limits)
-            result_string = f"{i},{totalHops},{totalBER},{round(runtime, 3)}\n"
-            file.write(result_string)
 
-            improvements.append(improvement)
+            # comparison_result_string = f"{i},{totalHops},{totalBER},{round(runtime, 3)}\n"
+            # file.write(comparison_result_string)
+
             runtimes.append(runtime)
+            improvements.append(improvement)
+
+            # Shows you how large the improvement was over the original number of BER,
+            # gives insight into the size of the impact (20 improvement over original of 70 is less epic than 20 improvement over original of 10)
+            relative_improvements.append(improvement / totalBER)
 
 
         avg_improvement = round(sum(improvements) / len(improvements), 3)
+        avg_relative_improvement = round(sum(relative_improvements) / len(relative_improvements), 3)
         avg_runtime = round(sum(runtimes) / len(runtimes), 3)
 
-        print("avg improvement: ", avg_improvement)
-        print("max imp:", max(improvements))
-        print("avg runtime: ", avg_runtime)
-        print("max runtime:", max(runtimes))
-        print("-----------------------------")
+        # print("avg improvement: ", avg_improvement)
+        # print("max imp:", max(improvements))
+        # print("avg runtime: ", avg_runtime)
+        # print("max runtime:", max(runtimes))
+        # print("-----------------------------")
 
+        # Format runtimes in list-string to reconstruct for a boxplot to show spread of runtimes
+        runtime_string = ""
+        for r in runtimes:
+            runtime_string = runtime_string + str(r) + "-"
+        runtime_string = runtime_string[:-1]
 
-        # TODO: Spit this into file
-        # result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_runtime}\n"
-        # result_string = f"{}"
-        # file.write(result_string)
+        tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},{runtime_string},\n"
+        file.write(tradeoff_result_string)
 

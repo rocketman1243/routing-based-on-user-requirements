@@ -5,11 +5,8 @@ import os
 
 # Tuning values
 
-num_objects = 50
+num_objects = 100
 nr_of_features = 100
-# experiment = "max_best_effort_experiment"
-
-
 
 
 dry_run = False
