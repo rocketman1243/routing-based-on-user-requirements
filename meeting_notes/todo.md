@@ -19,16 +19,12 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-1. Create graphing script for large paper network & visualize it nicely
+1. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.)
+   1. Describe this in the thesis (or update bidirectional DFS if there are better options)
+   2. Prepare to defend/explain this at thesis
 
-2. Look into precomputation:
-   1. What would you want to precompute?
-   2. How can you precompute it?
-   3. How much faster would things become?
+2. Practice presentation
 
-3. Practice presentation
-
-4. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.) --> Prepare to defend this at thesis
 
 
 # Planning
