@@ -40,7 +40,7 @@ def MP(G, pro, limits):
     toc = time.time()
     runtime = toc - tic
 
-    print("heuristic path:", newPath, "heuristic BER:", totalBER)
+    print("h #BER:", totalBER)
 
     return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime, timeAfterPath
 
@@ -266,7 +266,7 @@ def globalBFS(G, pro, maxDepth):
                 # Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
 
 
-    print("globalBFS path:", globalBestPath, "#BER:", len(globalBestBER))
+    print("g #BER:", len(globalBestBER))
     # print(AllResults)
 
     return globalBestPathLength, globalBestScoreNrBER
