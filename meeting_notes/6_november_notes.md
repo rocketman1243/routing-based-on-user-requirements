@@ -35,7 +35,7 @@ For algorithm:
 
 -----------
 
-Come up with cases that fail, be more critical, make this 
+Come up with cases that fail, be more critical, make this
 
 Proving 'hardness' of this problem
 

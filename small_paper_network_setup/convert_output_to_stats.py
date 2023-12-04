@@ -14,7 +14,7 @@ def spit_stats(x, y, title, xlabel, ylabel):
     # ax.set_xticklabels(x.keys())
 
     print(y)
-    ax.plot(range(len(x)), x, color=(0.99, 0.32, 0.32), label="runtime (s) of global smart DFS")
+    ax.plot(range(len(x)), x, color=(0.99, 0.32, 0.32), label="runtime (s) of globalBFS")
     ax.set_xlabel(xlabel, fontsize=12)
     ax.plot(range(len(x)), y, color=(0.1, 0.8, 0.5), label="runtime (s) of heuristic")
     ax.set_ylabel(ylabel, fontsize=12)

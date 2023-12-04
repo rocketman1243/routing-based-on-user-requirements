@@ -40,6 +40,8 @@ def MP(G, pro, limits):
     toc = time.time()
     runtime = toc - tic
 
+    print("heuristic path:", newPath, "heuristic BER:", )
+
     return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime, timeAfterPath
 
 
@@ -127,7 +129,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
     # if beforeBER != afterBER:
     #     print("ber before:", beforeBER)
     #     print("path before:", originalPath)
-    #     print("ber after optimization:", afterBER)
+    print("ber after optimization:", afterBER)
     #     print("path after: ", path)
     # else:
     #     print("----")
@@ -190,7 +192,7 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
 
 
 
-def smartDFS(G, pro, maxDepth):
+def globalBFS(G, pro, maxDepth):
     tic = time.time()
 
     # MaxHeap, achieved by multiplying |B| * -1
@@ -202,6 +204,8 @@ def smartDFS(G, pro, maxDepth):
 
     globalBestScoreNrBER = -1
     globalBestPathLength = (0, 0)
+    globalBestPath = []
+    globalBestBER = {}
 
     while not len(Q) == 0:
         vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
@@ -227,6 +231,8 @@ def smartDFS(G, pro, maxDepth):
             if len(Bc) > globalBestScoreNrBER:
                 globalBestScoreNrBER = len(Bc)
                 globalBestPathLength = len(Pc)
+                globalBestPath = Pc
+                globalBestBER = Bc
 
 
             continue
@@ -240,9 +246,9 @@ def smartDFS(G, pro, maxDepth):
             satisfies_strict_requirements = fulfillsStrictRequirements(G, pro, vi)
             if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
                 newHopsLeft = hopsLeft - 1
-                Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
+                Q = [(vi, vc, Pc, Bc, 0, newHopsLeft)] + Q
 
-    # print(global_best_path)
+    print("globalBFS path:", globalBestPath, "BER:", globalBestBER)
     # print(AllResults)
 
     return globalBestPathLength, globalBestScoreNrBER

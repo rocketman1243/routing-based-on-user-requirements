@@ -1,4 +1,4 @@
-from path_calculator import MP, smartDFS
+from path_calculator import MP, globalBFS
 import os
 import json
 from types import SimpleNamespace
@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [1]
-neighbourLimits = [80]
+depthLimits = [201]
+neighbourLimits = [201]
 
 limits = [
     depthLimits,
@@ -48,8 +48,8 @@ limits = [
 
 
 
-CHOSEN_PATH = paper_network_setup_path
-# CHOSEN_PATH = small_paper_network_setup_path
+# CHOSEN_PATH = paper_network_setup_path
+CHOSEN_PATH = small_paper_network_setup_path
 path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
@@ -115,26 +115,27 @@ print(sorted_on_degree[0])
 
 
 # Find full path
-# def handler(signum, frame):
-#     raise Exception("end of time")
 
-# timePerPROSeconds = 60
+def handler(signum, frame):
+    raise Exception("end of time")
 
-# print("Note: FINDING FULL PATH with slowpoke SMARTDFS. SO settle in cos this is going to take some time.....")
+timePerPROSeconds = 60
 
-# with open("small_paper_network_setup/results/full_paths.csv","w") as file:
-#     for i in range(len(pro_objects)):
+print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
-#         signal.signal(signal.SIGALRM, handler)
-#         signal.alarm(timePerPROSeconds)
-#         print("pro:", i)
-#         try:
-#             tic = time.time()
-#             pathLength, numberOfBER = smartDFS(G, pro_objects[i], len(G.nodes))
-#             runtime = time.time() - tic
-#             file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
-#         except Exception:
-#             print("too slow")
+with open("small_paper_network_setup/results/full_paths.csv","w") as file:
+    for i in range(len(pro_objects)):
+
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(timePerPROSeconds)
+        print("pro:", i)
+        try:
+            tic = time.time()
+            pathLength, numberOfBER = globalBFS(G, pro_objects[i], len(G.nodes) + 1)
+            runtime = time.time() - tic
+            # file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
+        except Exception as e:
+            print("too slow:", e)
 
 
 
@@ -187,7 +188,7 @@ for current_limits in limit_entries:
 
         # print("avg improvement: ", avg_improvement)
         # print("max imp:", max(improvements))
-        # print("avg runtime: ", avg_runtime)
+        print("avg runtime: ", avg_runtime)
         # print("max runtime:", max(runtimes))
         print("avg pathfinder time (ms):", avg_pathfinder_time)
         # print("-----------------------------")
