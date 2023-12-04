@@ -19,11 +19,18 @@ When proving the exactness/effectiveness of my algorithm:
 
 # TODO
 
-1. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.)
+1. Practise presentation
+
+2. Write about other applications of this requirement-based pathfinding problem:
+   1. Finding driving routes that fit requirements like requiring nature along the route, avoiding toll ports, requiring silent asphalt to reduce car tire noise, or to avoid naturally fragile areas (to no not disturb that area)
+   2. Similar: Walking routes through a city (avoid busy areas, avoid bad neighbourhoods, require walkable areas)
+   3. Robotic pathfinding, where node features can encode things like require suitable terrain type (steady rock instead of loose sand), require exposure to the sun (to recharge batteries)
+
+3. Research multiple pathfinding algorithms & motivate why I chose bidirectional BFS (no advanced knowledge required, which is useful as the internet often changes, etc.)
    1. Describe this in the thesis (or update bidirectional DFS if there are better options)
    2. Prepare to defend/explain this at thesis
 
-2. Practice presentation
+4. Practice presentation
 
 
 

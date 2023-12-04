@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [1, 2]
-neighbourLimits = [10, 20, 30, 40, 50, 60, 70, 80]
+depthLimits = [1]
+neighbourLimits = [80]
 
 limits = [
     depthLimits,
@@ -106,6 +106,8 @@ G.add_nodes_from(as_numbers)
 nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
+sorted_on_degree = sorted(G.degree, key = lambda x: x[1], reverse=True)
+print(sorted_on_degree[0])
 
 
 
@@ -155,6 +157,7 @@ for current_limits in limit_entries:
         improvements = []
         relative_improvements = []
         runtimes = []
+        pathfinderTimes = []
 
         print("current limits:", current_limits)
 
@@ -162,13 +165,15 @@ for current_limits in limit_entries:
             # print("pro", i)
             pro = pro_objects[i]
 
-            totalHops, extraHops, totalBER, improvement, runtime = MP(G, pro, current_limits)
+            totalHops, extraHops, totalBER, improvement, runtime, pathfinderTime = MP(G, pro, current_limits)
 
             # comparison_result_string = f"{i},{totalHops},{totalBER},{round(runtime, 3)}\n"
             # file.write(comparison_result_string)
 
             runtimes.append(runtime)
             improvements.append(improvement)
+            pathfinderTimes.append(pathfinderTime * 1000)
+
 
             # Shows you how large the improvement was over the original number of BER,
             # gives insight into the size of the impact (20 improvement over original of 70 is less epic than 20 improvement over original of 10)
@@ -178,11 +183,13 @@ for current_limits in limit_entries:
         avg_improvement = round(sum(improvements) / len(improvements), 3)
         avg_relative_improvement = round(sum(relative_improvements) / len(relative_improvements), 3)
         avg_runtime = round(sum(runtimes) / len(runtimes), 3)
+        avg_pathfinder_time = round(sum(pathfinderTimes) / len(pathfinderTimes), 6)
 
         # print("avg improvement: ", avg_improvement)
         # print("max imp:", max(improvements))
         # print("avg runtime: ", avg_runtime)
         # print("max runtime:", max(runtimes))
+        print("avg pathfinder time (ms):", avg_pathfinder_time)
         # print("-----------------------------")
 
         # Format runtimes in list-string to reconstruct for a boxplot to show spread of runtimes
@@ -192,5 +199,5 @@ for current_limits in limit_entries:
         runtime_string = runtime_string[:-1]
 
         tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},{runtime_string},\n"
-        file.write(tradeoff_result_string)
+        # file.write(tradeoff_result_string)
 

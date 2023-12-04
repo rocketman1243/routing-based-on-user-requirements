@@ -27,7 +27,9 @@ def MP(G, pro, limits):
     depthLimit = limits[0]
     neighbourLimit = limits[1]
 
+    timeBeforePath = time.time()
     path = bidirectionalBFSWithFilter(G, pro)
+    timeAfterPath = time.time() - timeBeforePath
 
     if len(path) == 0:
         toc = time.time() - tic
@@ -38,7 +40,7 @@ def MP(G, pro, limits):
     toc = time.time()
     runtime = toc - tic
 
-    return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime
+    return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime, timeAfterPath
 
 
 
