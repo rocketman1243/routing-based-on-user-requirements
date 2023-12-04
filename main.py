@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [201]
-neighbourLimits = [201]
+depthLimits = [2]
+neighbourLimits = [50]
 
 limits = [
     depthLimits,
@@ -95,10 +95,7 @@ for _,_,files in os.walk(path_to_nio_files):
                 }
                 here = nio_object.as_number
                 for index, other in enumerate(nio_object.connections):
-                    edge_info = {
-                        "latency": nio_object.latency[index]
-                    }
-                    edges.append([here, other, edge_info])
+                    edges.append([here, other])
 
 # Build graph
 G = nx.Graph()
@@ -121,14 +118,14 @@ def handler(signum, frame):
 
 timePerPROSeconds = 60
 
-print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
+# print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
 with open("small_paper_network_setup/results/full_paths.csv","w") as file:
     for i in range(len(pro_objects)):
 
         signal.signal(signal.SIGALRM, handler)
         signal.alarm(timePerPROSeconds)
-        print("pro:", i)
+        # print("pro:", i)
         try:
             tic = time.time()
             pathLength, numberOfBER = globalBFS(G, pro_objects[i], len(G.nodes) + 1)
@@ -147,7 +144,7 @@ with open("small_paper_network_setup/results/full_paths.csv","w") as file:
 
 
 
-print("Finding paths using speedy boiiiiiiiiii")
+# print("Finding paths using speedy boiiiiiiiiii")
 
 # Reset results file
 open(f'{CHOSEN_PATH}/results/heuristic_paths.csv', 'w')
@@ -160,7 +157,7 @@ for current_limits in limit_entries:
         runtimes = []
         pathfinderTimes = []
 
-        print("current limits:", current_limits)
+        # print("current limits:", current_limits)
 
         for i in range(len(pro_objects)):
             # print("pro", i)
