@@ -69,67 +69,57 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
         return path, len(beforeBER), 0
 
 
-    weNeedAnotherRound = True
-    while weNeedAnotherRound:
-        originalPath = copy.deepcopy(path)
-        noUpdates = True
-        detourDistances = range(2, len(originalPath))
-        for detourDistance in detourDistances:
-            for i in range(len(originalPath) - detourDistance):
-                if originalPath[i] in path and originalPath[i + detourDistance] in path:
-                    startIndex = path.index(originalPath[i])
-                    endIndex = path.index(originalPath[i + detourDistance])
-                    detourStart = path[startIndex]
-                    detourEnd = path[endIndex]
-                    bottleneck = path[startIndex + 1:endIndex]
+    originalPath = copy.deepcopy(path)
+    detourDistances = range(2, len(originalPath))
+    for detourDistance in detourDistances:
+        for i in range(len(originalPath) - detourDistance):
+            if originalPath[i] in path and originalPath[i + detourDistance] in path:
+                startIndex = path.index(originalPath[i])
+                endIndex = path.index(originalPath[i + detourDistance])
+                detourStart = path[startIndex]
+                detourEnd = path[endIndex]
+                bottleneck = path[startIndex + 1:endIndex]
 
 
-                    bottleneckFreeBER = copy.deepcopy(ber)
-                    for c in set(path).difference(set(bottleneck)):
-                        bottleneckFreeBER = bottleneckFreeBER.intersection(G.nodes[c]["features"])
+                bottleneckFreeBER = copy.deepcopy(ber)
+                for c in set(path).difference(set(bottleneck)):
+                    bottleneckFreeBER = bottleneckFreeBER.intersection(G.nodes[c]["features"])
 
-                    currentPathBER = copy.deepcopy(ber)
-                    for c in path:
-                        currentPathBER = currentPathBER.intersection(G.nodes[c]["features"])
+                currentPathBER = copy.deepcopy(ber)
+                for c in path:
+                    currentPathBER = currentPathBER.intersection(G.nodes[c]["features"])
 
 
-                    if len(bottleneckFreeBER) <= len(currentPathBER):
-                        # Nothing to improve here, skip this bottleneck
-                        continue
+                if len(bottleneckFreeBER) <= len(currentPathBER):
+                    # Nothing to improve here, skip this bottleneck
+                    continue
 
-                    detours = find_detours(G, detourStart, detourEnd, pro, path, depthLimit, neighbourLimit, [], [])
-                    # print(a, b)
-                    # print("#detours", len(detours))
-                    # print("detours:", detours)
+                detours = find_detours(G, detourStart, detourEnd, pro, path, depthLimit, neighbourLimit, [], [])
+                # print(a, b)
+                # print("#detours", len(detours))
+                # print("detours:", detours)
 #
-                    bestBER = copy.deepcopy(currentPathBER)
-                    bestDetour = []
-                    updatePath = False
+                bestBER = copy.deepcopy(currentPathBER)
+                bestDetour = []
+                updatePath = False
 
-                    for detour in detours:
-                        potentialBer = copy.deepcopy(bottleneckFreeBER)
-                        for j in detour:
-                            potentialBer = potentialBer.intersection(G.nodes[j]["features"])
+                for detour in detours:
+                    potentialBer = copy.deepcopy(bottleneckFreeBER)
+                    for j in detour:
+                        potentialBer = potentialBer.intersection(G.nodes[j]["features"])
 
-                        if len(potentialBer) > len(bestBER):
-                            bestDetour = detour
-                            bestBER = copy.deepcopy(potentialBer)
-                            updatePath = True
-                            noUpdates = False
+                    if len(potentialBer) > len(bestBER):
+                        bestDetour = detour
+                        bestBER = copy.deepcopy(potentialBer)
+                        updatePath = True
 
-                    # Replace bottleneck with detour
-                    if updatePath:
-                        potential_path = path[:startIndex + 1] + bestDetour + path[endIndex:]
+                # Replace bottleneck with detour
+                if updatePath:
+                    potential_path = path[:startIndex + 1] + bestDetour + path[endIndex:]
 
-                        # Ensure no silly mistakes were made
-                        if nx.is_simple_path(G, potential_path):
-                            path = potential_path
-
-        # If we cannot find any bottleneck anymore
-        if noUpdates:
-           weNeedAnotherRound = False
-
-    # TODO: Case where there is a bottleneck but there is no detour that can fix that. Then it loops infinitely
+                    # Ensure no silly mistakes were made
+                    if nx.is_simple_path(G, potential_path):
+                        path = potential_path
 
     afterBER = copy.deepcopy(ber)
     for i in path:
@@ -139,7 +129,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
     #     print("ber before:", beforeBER)
     #     print("path before:", originalPath)
     #     print("ber after optimization:", len(afterBER))
-    #     print("path after: ", path)
+    # print("path after: ", path)
     # else:
     #     print("----")
 
@@ -162,7 +152,7 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
 
 def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
     # print(detourStart, detourEnd)
-#
+
     if depthLimit == 0:
         return []
 
@@ -174,9 +164,6 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
     startNeighbours = limit_neighbours(G, startNeighbours, PRO, neighbourLimit)
     endNeighbours = limit_neighbours(G, endNeighbours, PRO, neighbourLimit)
 
-    # if detourStart == "22" and detourEnd == "11" and "21" in endNeighbours:
-        # print("hi", startNeighbours, endNeighbours)
-
     shared_neighbours = set(startNeighbours).intersection(set(endNeighbours))
 
     for i in shared_neighbours:
@@ -187,7 +174,6 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
     # second level and onwards
     for s in startNeighbours:
         for e in endNeighbours:
-            # if detourStart == "22" and detourEnd == "11" and s == "1" and e == "9":
 
             if fulfillsStrictRequirements(G, PRO, s) and fulfillsStrictRequirements(G, PRO, e):
                 if s != e and len(set([s, e]).intersection(set(path + prefix + postfix))) == 0:
@@ -209,20 +195,17 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
 
 
 def globalBFS(G, PRO):
-
-
     if not fulfillsStrictRequirements(G, PRO, PRO.as_source) or not fulfillsStrictRequirements(G, PRO, PRO.as_destination):
         return [], -1
 
-
-    Bb = -1 # globally [b]est set of best effort requirements
+    BglobalBestSCore = -1 # globally [b]est set of best effort requirements
     Pb = 0 # globally [b]est path, corresponding to Bb
 
     Q = []
     Q.append((PRO.as_source, [], PRO.requirements.best_effort))
 
     while not len(Q) == 0:
-        vc, Pp, Bp = Q.pop()
+        vc, Pp, Bp = Q.pop(0) # Remove and return the first item from the queue
 
         Pc = copy.deepcopy(Pp)
         Pc.append(vc)
@@ -230,14 +213,14 @@ def globalBFS(G, PRO):
         Bc = copy.deepcopy(Bp)
         Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
 
-        if len(Bc) <= Bb:
+        if len(Bc) <= BglobalBestSCore:
             # We can never become better than the best path, so might as well exit
             continue
 
 
         if vc == PRO.as_destination:
-            if len(Bc) > Bb:
-                Bb = copy.deepcopy(Bc)
+            if len(Bc) > BglobalBestSCore:
+                BglobalBestSCore = len(Bc)
                 Pb = copy.deepcopy(Pc)
 
             continue # Stop exploring after final node
@@ -246,7 +229,7 @@ def globalBFS(G, PRO):
         neighboursWithBERIntersectionScore = []
         neighbours = list(nx.neighbors(G, vc))
         for n in neighbours:
-            BERIntersectionScore = len(set(G.nodes[n]["features"]).intersection(set(PRO.requirements.best_effort)))
+            BERIntersectionScore = len(set(G.nodes[n]["features"]).intersection(Bc))
             neighboursWithBERIntersectionScore.append([n, BERIntersectionScore])
 
         neighboursSortedOnDescendingScore = sorted(neighboursWithBERIntersectionScore, key=lambda x: x[1], reverse=True)
@@ -255,12 +238,11 @@ def globalBFS(G, PRO):
         for vi in neighboursSortedOnSCore:
             viSatisfiesStrictRequirements = fulfillsStrictRequirements(G, PRO, vi)
             if vi not in Pc and viSatisfiesStrictRequirements:
-                Q = [(vi, Pc, Bc)] + Q
+                Q.append((vi, Pc, Bc))
 
+    print("g #BER:", BglobalBestSCore)
 
-    print("g #BER:", Bb)
-
-    return Pb, Bb
+    return Pb, BglobalBestSCore
 
 
 

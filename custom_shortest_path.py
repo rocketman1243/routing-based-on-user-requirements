@@ -8,8 +8,7 @@ def fulfillsStrictRequirements(G, pro, node):
     # Measure up this node's abilities to our utmost highly regarded standards of purity and honour,
     # and only return true when this young padawan is WORTHY to meet our gaze
     if set(pro.requirements.strict).issubset(set(G.nodes[node]["features"])):
-        if len(set(pro.geolocation.exclude).intersection(set(G.nodes[node]["geolocation"]))) == 0:
-            return True
+        return True
 
     # Set those who are not deemed worthy with a MARK that will haunt them for the rest of
     # their LIFE such that all that encounter these faulty ones later on will know what

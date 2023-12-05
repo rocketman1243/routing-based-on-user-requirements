@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [1]
-neighbourLimits = [80]
+depthLimits = [3]
+neighbourLimits = [200]
 
 limits = [
     depthLimits,
@@ -89,7 +89,6 @@ for _,_,files in os.walk(path_to_nio_files):
 
                 as_numbers.append(nio_object.as_number)
                 node_info[nio_object.as_number] = {
-                    "geolocation": nio_object.geolocation,
                     "features": nio_object.features,
                     "filtered": False
                 }
@@ -125,7 +124,7 @@ with open("small_paper_network_setup/results/full_paths.csv","w") as file:
 
         signal.signal(signal.SIGALRM, handler)
         signal.alarm(timePerPROSeconds)
-        print("slowpoke pro:", i)
+        # print("slowpoke pro:", i)
         try:
             tic = time.time()
             Pb, Bb = globalBFS(G, pro_objects[i])
