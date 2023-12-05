@@ -208,23 +208,21 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
 
 
 
-def globalBFS(G, pro, maxDepth):
-    tic = time.time()
+def globalBFS(G, PRO):
 
-    # MaxHeap, achieved by multiplying |B| * -1
-    # AllResults = []
 
-    # Stack to keep memory limited: Stack will grow to at most <maxDepth> size
+    if not fulfillsStrictRequirements(G, PRO, PRO.as_source) or not fulfillsStrictRequirements(G, PRO, PRO.as_destination):
+        return [], -1
+
+
+    Bb = -1 # globally [b]est set of best effort requirements
+    Pb = 0 # globally [b]est path, corresponding to Bb
+
     Q = []
-    Q.append((pro.as_source, pro.as_destination, [], pro.requirements.best_effort, 0, maxDepth))
-
-    globalBestScoreNrBER = -1
-    globalBestPathLength = (0, 0)
-    globalBestPath = []
-    globalBestBER = {}
+    Q.append((PRO.as_source, [], PRO.requirements.best_effort))
 
     while not len(Q) == 0:
-        vc, vp, Pp, Bp, Lp, hopsLeft = Q.pop()
+        vc, Pp, Bp = Q.pop()
 
         Pc = copy.deepcopy(Pp)
         Pc.append(vc)
@@ -232,44 +230,37 @@ def globalBFS(G, pro, maxDepth):
         Bc = copy.deepcopy(Bp)
         Bc = set(Bc).intersection(set(G.nodes[vc]["features"]))
 
-        if len(Bc) < globalBestScoreNrBER:
-            # We can never become the best path, so might as well exit
+        if len(Bc) <= Bb:
+            # We can never become better than the best path, so might as well exit
             continue
 
 
-        # Lc = Lp
-        # if vc != vp:
-        #     Lc = Lp + G.edges[vp, vc]["latency"]
+        if vc == PRO.as_destination:
+            if len(Bc) > Bb:
+                Bb = copy.deepcopy(Bc)
+                Pb = copy.deepcopy(Pc)
 
-        if vc == pro.as_destination:
-            # heapq.heappush(AllResults, (-1 * len(Bc), Pc, Bc, 0, hopsLeft))
-
-            if len(Bc) > globalBestScoreNrBER:
-                globalBestScoreNrBER = len(Bc)
-                globalBestPathLength = len(Pc)
-                globalBestPath = Pc
-                globalBestBER = Bc
+            continue # Stop exploring after final node
 
 
-            continue
-        if hopsLeft == 0:
-            continue
+        neighboursWithBERIntersectionScore = []
+        neighbours = list(nx.neighbors(G, vc))
+        for n in neighbours:
+            BERIntersectionScore = len(set(G.nodes[n]["features"]).intersection(set(PRO.requirements.best_effort)))
+            neighboursWithBERIntersectionScore.append([n, BERIntersectionScore])
 
-        neighbours_sorted_on_degree = sorted(G.degree(list(nx.neighbors(G, vc))), key=lambda x: x[1], reverse=False)
-        neighbours_low_to_high = list(el[0] for el in neighbours_sorted_on_degree)
+        neighboursSortedOnDescendingScore = sorted(neighboursWithBERIntersectionScore, key=lambda x: x[1], reverse=True)
+        neighboursSortedOnSCore = list(el[0] for el in neighboursSortedOnDescendingScore)
 
-        for vi in neighbours_low_to_high:
-            satisfies_strict_requirements = fulfillsStrictRequirements(G, pro, vi)
-            if (not (vi in Pc)) and satisfies_strict_requirements and hopsLeft >= 1:
-                newHopsLeft = hopsLeft - 1
-                Q = [(vi, vc, Pc, Bc, 0, newHopsLeft)] + Q
-                # Q.append((vi, vc, Pc, Bc, 0, newHopsLeft))
+        for vi in neighboursSortedOnSCore:
+            viSatisfiesStrictRequirements = fulfillsStrictRequirements(G, PRO, vi)
+            if vi not in Pc and viSatisfiesStrictRequirements:
+                Q = [(vi, Pc, Bc)] + Q
 
 
-    print("g #BER:", len(globalBestBER))
-    # print(AllResults)
+    print("g #BER:", Bb)
 
-    return globalBestPathLength, globalBestScoreNrBER
+    return Pb, Bb
 
 
 

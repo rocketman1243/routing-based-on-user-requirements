@@ -32,8 +32,8 @@ test_nio_path = "test_files/nio_files/"
 
 
 
-depthLimits = [2]
-neighbourLimits = [50]
+depthLimits = [1]
+neighbourLimits = [80]
 
 limits = [
     depthLimits,
@@ -125,12 +125,12 @@ with open("small_paper_network_setup/results/full_paths.csv","w") as file:
 
         signal.signal(signal.SIGALRM, handler)
         signal.alarm(timePerPROSeconds)
-        # print("pro:", i)
+        print("slowpoke pro:", i)
         try:
             tic = time.time()
-            pathLength, numberOfBER = globalBFS(G, pro_objects[i], len(G.nodes) + 1)
+            Pb, Bb = globalBFS(G, pro_objects[i])
             runtime = time.time() - tic
-            # file.write(f"{i},{pathLength},{numberOfBER},{round(runtime, 3)}\n")
+            # file.write(f"{i},{len(Pb)},{Bb}\n")
         except Exception as e:
             print("too slow:", e)
 
