@@ -1,4 +1,4 @@
-filename = "tradeoff_experiment/edgelists/streets-LARGE"
+filename = "comparison_experiment/edgelists/flights-SMALL"
 oldfile = filename + ".csv"
 newfile = filename + ".txt"
 
@@ -9,12 +9,12 @@ with open(oldfile, "r") as old:
             if i == 0:
                 i += 1
                 continue
-            items = line.split(",")
+            items = line.split(" ")
 
             i += 1
 
             # if i > 10:
             #     break
 
-            # print(items[2], items[3])
-            new.write(f"{items[2]} {items[3]}\n")
+            # print(items[0], items[1])
+            new.write(f"{items[0]} {items[1]}\n")
