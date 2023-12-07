@@ -3,7 +3,6 @@ from types import SimpleNamespace
 import networkx as nx
 import copy
 import matplotlib.pyplot as plt
-from filterset import Filterset
 from geopy import distance
 import os
 import random
@@ -94,7 +93,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
                     # Nothing to improve here, skip this bottleneck
                     continue
 
-                detours = find_detours(G, detourStart, detourEnd, pro, path, depthLimit, neighbourLimit, [], [])
+                detours = find_detours(G, detourStart, detourEnd, pro, path, depthLimit, neighbourLimit, [], [], bottleneckFreeBER)
                 # print(a, b)
                 # print("#detours", len(detours))
                 # print("detours:", detours)
@@ -137,9 +136,9 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
 
 
 
-def limit_neighbours(G, neighbours, PRO, neighbourLimit):
+def limit_neighbours(G, neighbours, neighbourLimit, bottleneckFreeBER):
 
-    sortedNeighbours = sorted(neighbours, key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(PRO.requirements.best_effort))), reverse=True)
+    sortedNeighbours = sorted(neighbours, key = lambda x: len(set(G.nodes[x]["features"]).intersection(set(bottleneckFreeBER))), reverse=True)
 
     if len(neighbours) > neighbourLimit:
         neighbours = sortedNeighbours[:neighbourLimit]
@@ -150,7 +149,7 @@ def limit_neighbours(G, neighbours, PRO, neighbourLimit):
     return neighbours
 
 
-def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix):
+def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimit, prefix, postfix, bottleneckFreeBER):
     # print(detourStart, detourEnd)
 
     if depthLimit == 0:
@@ -161,8 +160,8 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
     startNeighbours = list(set(nx.neighbors(G, detourStart)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
     endNeighbours = list(set(nx.neighbors(G, detourEnd)).difference(set(path)).difference(set(prefix)).difference(set(postfix)))
 
-    startNeighbours = limit_neighbours(G, startNeighbours, PRO, neighbourLimit)
-    endNeighbours = limit_neighbours(G, endNeighbours, PRO, neighbourLimit)
+    startNeighbours = limit_neighbours(G, startNeighbours, neighbourLimit, bottleneckFreeBER)
+    endNeighbours = limit_neighbours(G, endNeighbours, neighbourLimit, bottleneckFreeBER)
 
     shared_neighbours = set(startNeighbours).intersection(set(endNeighbours))
 
