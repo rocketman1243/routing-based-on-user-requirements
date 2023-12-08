@@ -3,25 +3,39 @@ import json
 from copy import deepcopy
 import os
 import random
+from highway_graph_generator import generateHighwayGraph
 
 prefix = "1_tradeoff_experiment/"
 
+
+
+experiment = "flights"
+
+
 # COMMENT/UNCOMMENT AS NEEDED
 
-# # AS graph
-# number_of_nodes = 75000
-# G = nx.random_internet_as_graph(number_of_nodes)
-# output_path = prefix + "nio_files/as_graph"
+output_path = ""
+if experiment == "as_graph":
+    number_of_nodes = 75388
+    G = nx.random_internet_as_graph(number_of_nodes)
+    output_path = prefix + "nio_files/as_graph"
 
-# # grid
-# number_of_nodes = 100
-# G = nx.grid_2d_graph(100, 100)
-# output_path = prefix + "nio_files/grid"
+if experiment == "city":
+    G = nx.grid_2d_graph(232, 232)
+    output_path = prefix + "nio_files/city"
+
+if experiment == "flights":
+    G = nx.powerlaw_cluster_graph(6872, 6, 0.01)
+    output_path = prefix + "nio_files/flights"
+
+if experiment == "village":
+    G = generateHighwayGraph(100, 100, 2, 10)
+    output_path = prefix + "nio_files/village"
 
 
-
-
-
+if len(output_path) == 0:
+    print("no experiment recognized")
+    exit(0)
 
 
 
@@ -29,7 +43,7 @@ prefix = "1_tradeoff_experiment/"
 
 maxNrOfFeatures = 100
 minNrOfFeatures = 80
-dry_run = True
+dry_run = False
 
 
 ###################
@@ -73,7 +87,8 @@ def generate_features(number_of_features_per_as: int, min_nr_of_features:int, as
 
 features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
 
-with open(prefix + "/as_numbers.txt", "w") as file:
+as_numbers_path = prefix + "as_numbers/" + experiment + "_as_numbers.txt"
+with open(as_numbers_path, "w") as file:
     for asn in list(G.nodes):
         file.write(asn + "\n")
 
@@ -97,10 +112,6 @@ print("#edges in G:", len(G.edges))
 #################### SPIT OUT NIO FILES ###########################################
 
 for asn in list(G.nodes):
-    # if asn not in node_info:
-    #     bad_nodes.append(asn)
-    #     continue
-
     node = G.nodes[asn]
     edges_local = []
     latencies = []

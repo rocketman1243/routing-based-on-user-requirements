@@ -1,0 +1,27 @@
+as_graph:
+
+average degree: 21.671778001804
+#connected components 1
+#nodes in G: 75388
+#edges in G: 816896
+
+city:
+
+average degree: 3.9827586206896552
+#connected components 1
+#nodes in G: 53824
+#edges in G: 107184
+
+flights:
+
+average degree: 11.9895227008149
+#connected components 1
+#nodes in G: 6872
+#edges in G: 41196
+
+village:
+
+average degree: 2.1525244350370416
+#connected components 1
+#nodes in G: 128504
+#edges in G: 138304
