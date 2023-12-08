@@ -1,30 +1,35 @@
-import requests
 import networkx as nx
 import json
-import matplotlib.pyplot as plt
-from types import SimpleNamespace
-from generate_features_distribution import generate_features
 from copy import deepcopy
 import os
-import pprint
-from geopy import distance
 import random
 
-"""
-CONTENTS
-This script creates a worst case network and turns it into a collection of NIO files
-to be consumed by main.py
+prefix = "1_tradeoff_experiment/"
+
+# COMMENT/UNCOMMENT AS NEEDED
+
+# # AS graph
+# number_of_nodes = 75000
+# G = nx.random_internet_as_graph(number_of_nodes)
+# output_path = prefix + "nio_files/as_graph"
+
+# # grid
+# number_of_nodes = 100
+# G = nx.grid_2d_graph(100, 100)
+# output_path = prefix + "nio_files/grid"
 
 
-"""
 
-number_of_nodes = 75000
+
+
+
+
+
+
+
 maxNrOfFeatures = 100
 minNrOfFeatures = 80
-output_path = "paper_network_setup/data/nio_files"
-
-dry_run = False
-
+dry_run = True
 
 
 ###################
@@ -42,16 +47,7 @@ if not dry_run:
 
 #######################3
 
-# See https://networkx.org/documentation/stable/reference/generated/networkx.generators.internet_as_graphs.random_internet_as_graph.html#networkx.generators.internet_as_graphs.random_internet_as_graph for the source of this wonderful item
-G = nx.random_internet_as_graph(number_of_nodes)
 
-# Statistics
-total_degree = 0
-for node in G.nodes:
-    total_degree += nx.degree(G, node)
-average = total_degree / len(G.nodes)
-print(average, " average degree")
-print("#connected components", len(list(nx.connected_components(G))))
 
 
 
@@ -65,9 +61,19 @@ node_info = {}
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
+def generate_features(number_of_features_per_as: int, min_nr_of_features:int, as_numbers):
+    features = list(range(1, number_of_features_per_as + 1))
+
+    mapping = {}
+
+    for as_number in as_numbers:
+        mapping[as_number] = random.sample(features, random.randint(0, len(features) - min_nr_of_features) + min_nr_of_features)
+
+    return mapping
+
 features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
 
-with open("./paper_network_setup/data/as_numbers.txt", "w") as file:
+with open(prefix + "/as_numbers.txt", "w") as file:
     for asn in list(G.nodes):
         file.write(asn + "\n")
 
@@ -78,7 +84,15 @@ for node in G.nodes:
 
 nx.set_node_attributes(G, feature_info)
 
-print("#nodes in G: ", len(G.nodes))
+# Statistics
+total_degree = 0
+for node in G.nodes:
+    total_degree += nx.degree(G, node)
+average = total_degree / len(G.nodes)
+print("average degree:", average)
+print("#connected components", len(list(nx.connected_components(G))))
+print("#nodes in G:", len(G.nodes))
+print("#edges in G:", len(G.edges))
 
 #################### SPIT OUT NIO FILES ###########################################
 
@@ -109,5 +123,3 @@ for asn in list(G.nodes):
         with open(filename, "w") as file:
             output = json.dumps(nio, indent=2)
             file.write(output)
-
-print("#nodes in G:", len(list(G.nodes)))
