@@ -34,17 +34,15 @@ def generateHighwayGraph(m, n, minEdgeLength, maxEdgeLength):
                 newEdges.append([node, newNodes[0]])
                 newEdges.append([n, newNodes[-1]])
                 G.add_edges_from(newEdges)
-                print(G.nodes)
-                print(G.edges)
 
         oldG.nodes[node]["updated"] = True
 
     G.remove_edges_from(oldEdges)
 
-    nx.draw(G)
-    plt.draw()
-    plt.show()
+    # nx.draw(G)
+    # plt.draw()
+    # plt.show()
 
     return G
 
-G = generateHighwayGraph(5, 10, 2, 5)
+# G = generateHighwayGraph(5, 10, 2, 5)

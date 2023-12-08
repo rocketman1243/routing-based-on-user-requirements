@@ -1,30 +1,53 @@
-import requests
 import networkx as nx
 import json
-import matplotlib.pyplot as plt
-from types import SimpleNamespace
-from generate_features_distribution import generate_features
 from copy import deepcopy
 import os
-import pprint
-from geopy import distance
 import random
+from highway_graph_generator import generateHighwayGraph
 
-"""
-CONTENTS
-This script creates a worst case network and turns it into a collection of NIO files
-to be consumed by main.py
+prefix = "2_comparison_experiment/"
 
 
-"""
 
-number_of_nodes = 200
-number_of_features_in_distribution = 100
-min_nr_of_features = 80
-output_path = "small_paper_network_setup/data/nio_files"
+# experiment = "as_graph"
+# experiment = "city"
+# experiment = "flights"
+# experiment = "village"
 
-dry_run = False
 
+# COMMENT/UNCOMMENT AS NEEDED
+
+output_path = ""
+if experiment == "as_graph":
+    G = nx.random_internet_as_graph(500)
+    output_path = prefix + "nio_files/as_graph"
+
+if experiment == "city":
+    G = nx.grid_2d_graph(22, 23)
+    output_path = prefix + "nio_files/city"
+
+if experiment == "flights":
+    G = nx.powerlaw_cluster_graph(500, 6, 0.01)
+    output_path = prefix + "nio_files/flights"
+
+if experiment == "village":
+    G = generateHighwayGraph(10, 10, 1, 4)
+    output_path = prefix + "nio_files/village"
+
+
+if len(output_path) == 0:
+    print("no experiment recognized")
+    exit(0)
+
+
+
+
+
+maxNrOfFeatures = 100
+minNrOfFeatures = 80
+dry_run = True
+if dry_run:
+    print("DRY RUN")
 
 
 ###################
@@ -42,17 +65,7 @@ if not dry_run:
 
 #######################3
 
-# See https://networkx.org/documentation/stable/reference/generated/networkx.generators.internet_as_graphs.random_internet_as_graph.html#networkx.generators.internet_as_graphs.random_internet_as_graph for the source of this wonderful item
-G = nx.random_internet_as_graph(number_of_nodes)
-# G = nx.path_graph(number_of_nodes)
 
-# Statistics
-total_degree = 0
-for node in G.nodes:
-    total_degree += nx.degree(G, node)
-average = total_degree / len(G.nodes)
-print(average, " average degree")
-print("#connected components", len(list(nx.connected_components(G))))
 
 
 
@@ -62,36 +75,48 @@ for n in G.nodes:
     mapping[n] = str(n)
 G = nx.relabel_nodes(G, mapping)
 
-# Note: Nodes are added based on edges in connected graph
 node_info = {}
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
-# After edges are inserted from connected dataset, we generate features based on this
-features = generate_features(number_of_features_in_distribution, min_nr_of_features, list(G.nodes))
+def generate_features(number_of_features_per_as: int, min_nr_of_features:int, as_numbers):
+    features = list(range(1, number_of_features_per_as + 1))
 
-with open("./small_paper_network_setup/data/as_numbers.txt", "w") as file:
+    mapping = {}
+
+    for as_number in as_numbers:
+        mapping[as_number] = random.sample(features, random.randint(0, len(features) - min_nr_of_features) + min_nr_of_features)
+
+    return mapping
+
+features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
+
+as_numbers_path = prefix + "as_numbers/" + experiment + "_as_numbers.txt"
+with open(as_numbers_path, "w") as file:
     for asn in list(G.nodes):
         file.write(asn + "\n")
 
 feature_info = {}
 for node in G.nodes:
     feature_info[node] = {}
-    f_list = features[node]
-    f_list.sort()
-    feature_info[node]["features"] = f_list
+    feature_info[node]["features"] = features[node]
 
 nx.set_node_attributes(G, feature_info)
 
-print("#nodes in G: ", len(G.nodes))
+# Statistics
+total_degree = 0
+for node in G.nodes:
+    total_degree += nx.degree(G, node)
+average = total_degree / len(G.nodes)
+print(output_path)
+print("#nodes in G:", len(G.nodes))
+print("#edges in G:", len(G.edges))
+print("average degree:", average)
+print("#connected components", len(list(nx.connected_components(G))))
 
 #################### SPIT OUT NIO FILES ###########################################
 
 for asn in list(G.nodes):
-    # if asn not in node_info:
-    #     bad_nodes.append(asn)
-    #     continue
-
     node = G.nodes[asn]
     edges_local = []
     latencies = []
@@ -114,5 +139,3 @@ for asn in list(G.nodes):
         with open(filename, "w") as file:
             output = json.dumps(nio, indent=2)
             file.write(output)
-
-print("#nodes in G:", len(list(G.nodes)))

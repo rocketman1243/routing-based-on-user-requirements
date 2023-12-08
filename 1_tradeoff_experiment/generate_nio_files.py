@@ -7,9 +7,10 @@ from highway_graph_generator import generateHighwayGraph
 
 prefix = "1_tradeoff_experiment/"
 
-
-
-experiment = "flights"
+experiment = "as_graph"
+# experiment = "city"
+# experiment = "flights"
+# experiment = "village"
 
 
 # COMMENT/UNCOMMENT AS NEEDED
@@ -43,7 +44,9 @@ if len(output_path) == 0:
 
 maxNrOfFeatures = 100
 minNrOfFeatures = 80
-dry_run = False
+dry_run = True
+if dry_run:
+    print("DRY RUN")
 
 
 ###################
