@@ -6,34 +6,20 @@ import networkx as nx
 import signal
 import time
 
-small_scale_proof_of_concept_path = "small_scale_setup/proof_of_concept_experiment"
-small_scale_realistic_paths_experiment = "small_scale_setup/realistic_paths_experiment"
-
-full_scale_proof_of_concept_experiment_path = "full_scale_setup/proof_of_concept_experiment"
-
-#######################
-
-
-initial_results_path = "full_scale_setup/initial_results_experiment"
-cost_of_control_experiment_path =  "full_scale_setup/cost_of_control_experiment"
-as_path_experiment_path = "full_scale_setup/as_path_experiment"
-scalability_experiment_path = "full_scale_setup/scalability_experiment"
-optimization_trade_off_experiment = "full_scale_setup/optimization_trade_off_experiment"
-max_best_effort_experiment = "full_scale_setup/max_best_effort_experiment"
-
-paper_network_setup_path = "paper_network_setup"
-small_paper_network_setup_path = "small_paper_network_setup"
-worst_case_network_path = "worst_case_network_setup"
-
 test_path = "test_files"
 test_nio_path = "test_files/nio_files/"
+
+tradeoff_experiment_path = "1_tradeoff_experiment"
+comparison_experiment_path = "2_comparison_experiment"
 
 ##############################################################################3
 
 
 
-depthLimits = [3]
-neighbourLimits = [200]
+
+
+depthLimits = [1, 2, 3]
+neighbourLimits = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 
 limits = [
     depthLimits,
@@ -46,10 +32,8 @@ limits = [
 
 
 
+CHOSEN_PATH = tradeoff_experiment_path
 
-
-# CHOSEN_PATH = paper_network_setup_path
-CHOSEN_PATH = small_paper_network_setup_path
 path_to_nio_files = f"{CHOSEN_PATH}/data/nio_files/"
 
 ########################################################################33
@@ -84,9 +68,6 @@ for _,_,files in os.walk(path_to_nio_files):
                 nio_content = nio_file.read()
                 nio_object = json.loads(nio_content, object_hook=lambda nio_content: SimpleNamespace(**nio_content))
 
-                if "scalability_experiment" in path_to_nio_files:
-                    nio_object.features = []
-
                 as_numbers.append(nio_object.as_number)
                 node_info[nio_object.as_number] = {
                     "features": nio_object.features,
@@ -102,8 +83,8 @@ G.add_nodes_from(as_numbers)
 nx.set_node_attributes(G, node_info)
 G.add_edges_from(edges)
 
-sorted_on_degree = sorted(G.degree, key = lambda x: x[1], reverse=True)
-print(sorted_on_degree[0])
+# sorted_on_degree = sorted(G.degree, key = lambda x: x[1], reverse=True)
+# print(sorted_on_degree[0])
 
 
 
@@ -112,26 +93,26 @@ print(sorted_on_degree[0])
 
 # Find full path
 
-def handler(signum, frame):
-    raise Exception("end of time")
+# def handler(signum, frame):
+#     raise Exception("end of time")
 
-timePerPROSeconds = 60
+# timePerPROSeconds = 60
 
 # print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
-with open("small_paper_network_setup/results/full_paths.csv","w") as file:
-    for i in range(len(pro_objects)):
+# with open("small_paper_network_setup/results/full_paths.csv","w") as file:
+#     for i in range(len(pro_objects)):
 
-        signal.signal(signal.SIGALRM, handler)
-        signal.alarm(timePerPROSeconds)
-        # print("slowpoke pro:", i)
-        try:
-            tic = time.time()
-            Pb, Bb = globalBFS(G, pro_objects[i])
-            runtime = time.time() - tic
-            # file.write(f"{i},{len(Pb)},{Bb}\n")
-        except Exception as e:
-            print("too slow:", e)
+#         signal.signal(signal.SIGALRM, handler)
+#         signal.alarm(timePerPROSeconds)
+#         # print("slowpoke pro:", i)
+#         try:
+#             tic = time.time()
+#             Pb, Bb = globalBFS(G, pro_objects[i])
+#             runtime = time.time() - tic
+#             # file.write(f"{i},{len(Pb)},{Bb}\n")
+#         except Exception as e:
+#             print("too slow:", e)
 
 
 
