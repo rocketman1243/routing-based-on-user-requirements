@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-def graphMe(xTicks, yValues, yCap, yValues2, yCap2, xLabel, yLabel, yLabel2, title):
+def graphMe(xTicks, yValues, yCap, yValues2, yCap2, yValues3, yCap3, xLabel, yLabel, yLabel2, yLabel3, title):
     plt.rcParams["font.family"] = "monospace"
 
     fig, ax1 = plt.subplots()
@@ -15,20 +15,33 @@ def graphMe(xTicks, yValues, yCap, yValues2, yCap2, xLabel, yLabel, yLabel2, tit
     ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel2)
     ax1.set_ylim([0, yCap])
 
-    if len(yValues2) > 0:
-        ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
+    ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
 
-        yticklabels = []
-        yticks = range(0, yCap2 + 1, 10)
-        for yt in yticks:
-            yticklabels.append(f"{yt}%")
-        ax2_colour = (0.22, 0.3, 0.9)
-        ax2 = ax1.twinx()
-        ax2.plot(yValues2, color=ax2_colour, label=yLabel)
-        ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
-        ax2.set_yticks(yticks, labels=yticklabels)
-        ax2.tick_params(axis='y', labelcolor=ax2_colour)
-        ax2.set_ylim([0, yCap2])
+    yticklabels = []
+    yticks = range(0, yCap2 + 1, 10)
+    for yt in yticks:
+        yticklabels.append(f"{yt}%")
+    ax2_colour = (0.22, 0.3, 0.9)
+    ax2 = ax1.twinx()
+    ax2.plot(yValues2, color=ax2_colour, label=yLabel)
+    ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
+    ax2.set_yticks(yticks, labels=yticklabels)
+    ax2.tick_params(axis='y', labelcolor=ax2_colour)
+    ax2.set_ylim([0, yCap2])
+
+
+    # yticklabels3 = []
+    # yticks3 = range(0, yCap3 + 1, 3)
+    # for yt in yticks3:
+    #     yticklabels2.append(f"{yt}%")
+    ax3_colour = (0.6, 0.5, 0.3)
+    ax3 = ax1.twinx()
+    ax3.plot(yValues3, color=ax3_colour, label=yLabel)
+    # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
+    # ax2.set_yticks(yticks, labels=yticklabels)
+    # ax2.tick_params(axis='y', labelcolor=ax2_colour)
+    # ax2.set_ylim([0, yCap2])
+
 
         # plt.legend(loc="upper left")
 
@@ -80,10 +93,8 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.show()
 
 
-
-pathHeuristicPaths = f"paper_network_setup/results/heuristic_paths.csv"
-
-scoreHeuristicPaths = {}
+experiment = "as_graph"
+pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 
 depthLimits = []
 neighbourLimits = []
@@ -154,28 +165,23 @@ To show, each in separate pic:
 # - How limits improve average improvement
 # - How significant this improvement is (using the relative improvement as indicator somehow)
 
-graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement (%)","average extra #BER on top of shortest path due to updating path with detours")
+# graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement (%)","average extra #BER on top of shortest path due to updating path with detours")
 
 
 runtime_threshold = [0.5 for i in range(100)]
-runtime_cap = 10
-# - How limits change average runtime
-graphMe(xTicks, avg_runtimes, runtime_cap, runtime_threshold, runtime_cap, "[depthLimit, neighbourLimit]", "average runtime (s)","","average runtime (s) compared to threshold of 0.5 seconds")
+runtime_cap = math.ceil(max(avg_runtimes))
 
-# NOTE: HERE I EDIT DATA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# Remove intense outlier to get better view:
-new_2_70 = sorted(runtimes_dict["[2, 70]"])
-new_2_70.remove(max(new_2_70))
-runtimes_dict["[2, 70]"] = new_2_70
+# - What set of limits provides the best tradeoff between runtime and improvements?
+graphMe(xTicks, avg_runtimes, runtime_cap, runtime_threshold, runtime_cap, avg_improvements, int(math.ceil(max(avg_improvements))), "[depthLimit, neighbourLimit]", "average runtime (s)", "threshold","avg improvement of BER","average runtime (s) compared to threshold of 0.5 seconds")
 
 
 # - What range of values the runtimes take on for each set of limits,
-boxplot_cap = 0
-for key in runtimes_dict:
-    if max(runtimes_dict[key]) > boxplot_cap:
-        boxplot_cap = max(runtimes_dict[key])
+# boxplot_cap = 0
+# for key in runtimes_dict:
+#     if max(runtimes_dict[key]) > boxplot_cap:
+#         boxplot_cap = max(runtimes_dict[key])
 
-runtime_threshold = [0.5 for i in range(1, len(runtimes_dict) + 3) ]
-boxplotMe(runtimes_dict, "runtime (s)", "[depthLimit, neighbourLimit]", "Boxplots of runtimes (s) compared to threshold of 0.5 seconds", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
+# runtime_threshold = [0.5 for i in range(1, len(runtimes_dict) + 3) ]
+# boxplotMe(runtimes_dict, "runtime (s)", "[depthLimit, neighbourLimit]", "Boxplots of runtimes (s) compared to threshold of 0.5 seconds", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
 
 

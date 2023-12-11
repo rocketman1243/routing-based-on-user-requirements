@@ -6,17 +6,15 @@ import os
 # Tuning values
 
 # experiment = "as_graph"
-# experiment = "city"
+experiment = "city"
 # experiment = "flights"
-experiment = "village"
+# experiment = "village"
 
 num_objects = 100
 nr_of_features = 100
 
 
-dry_run = True
-if dry_run:
-    print("DRY RUN")
+dry_run = False
 
 requirements = list(range(1, 101))
 best_effort_min_amount = 80
@@ -27,6 +25,9 @@ max_nr_geolocations = 0
 prefix = "1_tradeoff_experiment/"
 
 ###################################33
+
+if dry_run:
+    print("DRY RUN")
 
 # Cleanup previous files in directory as the number of objects may be less than before,
 # causing dead files from previous runs to still exist

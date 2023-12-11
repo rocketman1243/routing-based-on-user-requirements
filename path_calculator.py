@@ -39,8 +39,6 @@ def MP(G, pro, limits):
     toc = time.time()
     runtime = toc - tic
 
-    print("h #BER:", totalBER)
-
     return len(newPath), len(newPath) - len(path), totalBER, improvement, runtime, timeAfterPath
 
 
@@ -64,7 +62,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
 
 
     if len(path) < 3:
-        print("path too short to optimize")
+        # print("path too short to optimize")
         return path, len(beforeBER), 0
 
 
@@ -184,7 +182,7 @@ def find_detours(G, detourStart, detourEnd, PRO, path, depthLimit, neighbourLimi
                     newPrefix = prefix + [s]
                     newPostfix = [e] + postfix
 
-                    detours = detours + find_detours(G, s, e, PRO, path, depthLimit - 1, neighbourLimit, newPrefix, newPostfix)
+                    detours = detours + find_detours(G, s, e, PRO, path, depthLimit - 1, neighbourLimit, newPrefix, newPostfix, bottleneckFreeBER)
 
     return detours
 
@@ -239,7 +237,7 @@ def globalBFS(G, PRO):
             if vi not in Pc and viSatisfiesStrictRequirements:
                 Q.append((vi, Pc, Bc))
 
-    print("g #BER:", BglobalBestSCore)
+    # print("g #BER:", BglobalBestSCore)
 
     return Pb, BglobalBestSCore
 

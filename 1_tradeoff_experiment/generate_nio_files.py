@@ -7,11 +7,21 @@ from highway_graph_generator import generateHighwayGraph
 
 prefix = "1_tradeoff_experiment/"
 
-experiment = "as_graph"
-# experiment = "city"
+# experiment = "as_graph"
+experiment = "city"
 # experiment = "flights"
 # experiment = "village"
 
+
+
+
+dry_run = False
+
+
+
+
+maxNrOfFeatures = 100
+minNrOfFeatures = 80
 
 # COMMENT/UNCOMMENT AS NEEDED
 
@@ -22,7 +32,7 @@ if experiment == "as_graph":
     output_path = prefix + "nio_files/as_graph"
 
 if experiment == "city":
-    G = nx.grid_2d_graph(232, 232)
+    G = nx.grid_2d_graph(64, 69)
     output_path = prefix + "nio_files/city"
 
 if experiment == "flights":
@@ -30,7 +40,7 @@ if experiment == "flights":
     output_path = prefix + "nio_files/flights"
 
 if experiment == "village":
-    G = generateHighwayGraph(100, 100, 2, 10)
+    G = generateHighwayGraph(15, 15, 2, 10)
     output_path = prefix + "nio_files/village"
 
 
@@ -42,9 +52,6 @@ if len(output_path) == 0:
 
 
 
-maxNrOfFeatures = 100
-minNrOfFeatures = 80
-dry_run = True
 if dry_run:
     print("DRY RUN")
 

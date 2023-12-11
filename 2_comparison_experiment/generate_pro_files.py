@@ -10,7 +10,7 @@ import os
 # experiment = "flights"
 experiment = "village"
 
-num_objects = 100
+num_objects = 200
 nr_of_features = 100
 
 
