@@ -18,45 +18,38 @@ comparison_experiment_path = "2_comparison_experiment"
 ############# TWEAK HERE #################################################
 ##########################################################################
 
-# as_graph_depthLimits = [2]
-# as_graph_neighbourLimits = [5, 6, 7, 8, 9, 10]
-as_graph_limits = [[1, i] for i in [8, 9, 10, 11, 12]]
-as_graph_limits += [[2, i] for i in [5, 6, 7, 8, 9, 10, 11, 12]]
-as_graph_limits += [[3, i] for i in [1, 2, 3, 4]]
+# as_graph_limits = [[1, i] for i in [8, 9, 10, 11, 12]]
+# as_graph_limits += [[2, i] for i in [5, 6, 7, 8, 9, 10, 11, 12]]
+# as_graph_limits += [[3, i] for i in [1, 2, 3, 4]]
+as_graph_limits = [[2, 7]]
 
 
-# city_depthLimits = [3]
-# city_neighbourLimits = [2, 4, 6, 8, 10]
-city_limits = [[2, i] for i in [6, 7, 8, 9, 10]]
-city_limits += [[3, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-city_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+# city_limits = [[i, 3] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+city_limits = [[2, 3]]
 
 
-# flights_depthLimits = [2]
-# flights_neighbourLimits = [20, 25, 30, 35, 40]
-flights_limits = [[1, i] for i in [30, 40, 50, 60]]
-flights_limits += [[2, i] for i in [20, 25, 30, 35, 40, 45, 50]]
-flights_limits += [[3, i] for i in [10, 15, 20, 25]]
+# flights_limits = [[1, i] for i in [30, 40, 50, 60]]
+# flights_limits += [[2, i] for i in [20, 25, 30, 35, 40, 45, 50]]
+# flights_limits += [[3, i] for i in [10, 15, 20, 25]]
+flights_limits = [[2, 30]]
 
 
 
-# village_depthLimits = [13, 14, 15]
-# village_neighbourLimits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-village_limits = [[13, i] for i in [6, 7, 8, 9, 10]]
-village_limits += [[14, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-village_limits += [[15, i] for i in [1, 2, 3, 4, 5]]
+# village_limits = [[i, 3] for i in [9, 10, 11, 12, 13, 14, 15, 16]]
+village_limits = [[14, 3]]
 
 
 graphTypes = ["as_graph", "city", "flights", "village"]
+# graphTypes = ["city"]
 
 # The limits that average runtime <= 500 ms while providing the most benefits
 depthLimitsForComparison = [1]
 neighbourLimitsForComparison = [1]
 
 
-CHOSEN_PATH = tradeoff_experiment_path
+CHOSEN_PATH = comparison_experiment_path
 
-disableFullSearch = True
+disableFullSearch = False
 
 ###########################################################################
 ###########################################################################
@@ -138,9 +131,7 @@ for graphType in graphTypes:
         def handler(signum, frame):
             raise Exception("end of time")
 
-        # timePerPROSeconds = 300 # 5 minutes = 300 seconds
-        timePerPROSeconds = 5
-
+        timePerPROSeconds = 300 # 5 minutes = 300 seconds
 
         print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
@@ -150,7 +141,7 @@ for graphType in graphTypes:
 
                 signal.signal(signal.SIGALRM, handler)
                 signal.alarm(timePerPROSeconds)
-                # print(f"{graphType} - slowpoke pro:", i)
+                print(f"{graphType} - slowpoke pro:", i)
                 try:
                     tic = time.time()
                     Pb, totalNrOfBER = globalBFS(G, pro_objects[i])

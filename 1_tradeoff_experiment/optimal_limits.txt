@@ -1,0 +1,7 @@
+as_path: 2, 7
+
+city: 2, 3
+
+flights: 2, 30
+
+village: 14, 3

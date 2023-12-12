@@ -14,6 +14,8 @@ prefix = "2_comparison_experiment/"
 # experiment = "flights"
 # experiment = "village"
 
+dry_run = True
+
 
 # COMMENT/UNCOMMENT AS NEEDED
 
@@ -45,7 +47,6 @@ if len(output_path) == 0:
 
 maxNrOfFeatures = 100
 minNrOfFeatures = 80
-dry_run = True
 if dry_run:
     print("DRY RUN")
 

@@ -6,28 +6,30 @@ import math
 def graphMe(xTicks, yValues, yCap, yValues2, yCap2, yValues3, yCap3, xLabel, yLabel, yLabel2, yLabel3, title):
     plt.rcParams["font.family"] = "monospace"
 
+    yCap = 1
+
     fig, ax1 = plt.subplots()
 
     ax1_colour = (0.99, 0.32, 0.32)
     ax1.set_xlabel(xLabel, fontsize=12)
     ax1.set_ylabel(yLabel, fontsize=12)
     ax1.set_yticks(range(0, yCap + 1, 1))
-    ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel2)
+    ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel)
     ax1.set_ylim([0, yCap])
 
     ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
 
-    yticklabels = []
-    yticks = range(0, yCap2 + 1, 10)
-    for yt in yticks:
-        yticklabels.append(f"{yt}%")
+    # yticklabels = []
+    # yticks = range(0, yCap2 + 1, 10)
+    # for yt in yticks:
+    #     yticklabels.append(f"{yt}%")
     ax2_colour = (0.22, 0.3, 0.9)
     ax2 = ax1.twinx()
-    ax2.plot(yValues2, color=ax2_colour, label=yLabel)
+    ax2.plot(yValues2, color=ax2_colour, label=yLabel2)
     ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
-    ax2.set_yticks(yticks, labels=yticklabels)
-    ax2.tick_params(axis='y', labelcolor=ax2_colour)
-    ax2.set_ylim([0, yCap2])
+    # ax2.set_yticks(yticks, labels=yticklabels)
+    # ax2.tick_params(axis='y', labelcolor=ax2_colour)
+    # ax2.set_ylim([0, yCap2])
 
 
     # yticklabels3 = []
@@ -36,14 +38,14 @@ def graphMe(xTicks, yValues, yCap, yValues2, yCap2, yValues3, yCap3, xLabel, yLa
     #     yticklabels2.append(f"{yt}%")
     ax3_colour = (0.6, 0.5, 0.3)
     ax3 = ax1.twinx()
-    ax3.plot(yValues3, color=ax3_colour, label=yLabel)
+    ax3.plot(yValues3, color=ax3_colour, label=yLabel3)
     # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
     # ax2.set_yticks(yticks, labels=yticklabels)
     # ax2.tick_params(axis='y', labelcolor=ax2_colour)
     # ax2.set_ylim([0, yCap2])
 
 
-        # plt.legend(loc="upper left")
+    plt.legend(loc="upper left")
 
     plt.xticks(range(len(xTicks)), xTicks)
 
@@ -93,7 +95,7 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.show()
 
 
-experiment = "as_graph"
+experiment = "village"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 
 depthLimits = []
@@ -118,7 +120,10 @@ with open(pathHeuristicPaths, "r") as file:
         runtimes = []
         runtime_string = items[5].split("-")
         for r in runtime_string:
-            runtimes.append(float(r))
+            if "e" in r:
+                r = "0.00001"
+            if r != "05":
+                runtimes.append(float(r))
 
         neighbourLimitDict = {
             "avg_improvement": float(items[2]),
