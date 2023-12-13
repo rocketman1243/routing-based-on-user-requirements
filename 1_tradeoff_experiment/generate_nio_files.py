@@ -7,8 +7,8 @@ from highway_graph_generator import generateHighwayGraph
 
 prefix = "1_tradeoff_experiment/"
 
-# experiment = "as_graph"
-experiment = "city"
+experiment = "as_graph"
+# experiment = "city"
 # experiment = "flights"
 # experiment = "village"
 
@@ -28,7 +28,14 @@ minNrOfFeatures = 80
 output_path = ""
 if experiment == "as_graph":
     number_of_nodes = 75388
-    G = nx.random_internet_as_graph(number_of_nodes)
+    edges = []
+    with open(prefix + "as-links.txt", "r") as file:
+        for line in file:
+            items = line.split("|")
+            edges.append([items[0], items[1]])
+    G = nx.Graph()
+    G.add_edges_from(edges)
+    # G = nx.random_internet_as_graph(number_of_nodes)
     output_path = prefix + "nio_files/as_graph"
 
 if experiment == "city":

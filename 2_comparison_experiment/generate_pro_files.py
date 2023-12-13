@@ -14,7 +14,7 @@ num_objects = 200
 nr_of_features = 100
 
 
-dry_run = True
+dry_run = False
 if dry_run:
     print("DRY RUN")
 

@@ -5,10 +5,10 @@ import os
 
 # Tuning values
 
-# experiment = "as_graph"
+experiment = "as_graph"
 # experiment = "city"
 # experiment = "flights"
-experiment = "village"
+# experiment = "village"
 
 num_objects = 100
 nr_of_features = 100

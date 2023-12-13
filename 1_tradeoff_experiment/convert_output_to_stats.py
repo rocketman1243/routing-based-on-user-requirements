@@ -3,64 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-def graphMe(xTicks, yValues, yCap, yValues2, yCap2, yValues3, yCap3, xLabel, yLabel, yLabel2, yLabel3, title):
-    plt.rcParams["font.family"] = "monospace"
-
-    yCap = 1
-
-    fig, ax1 = plt.subplots()
-
-    ax1_colour = (0.99, 0.32, 0.32)
-    ax1.set_xlabel(xLabel, fontsize=12)
-    ax1.set_ylabel(yLabel, fontsize=12)
-    ax1.set_yticks(range(0, yCap + 1, 1))
-    ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel)
-    ax1.set_ylim([0, yCap])
-
-    ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
-
-    # yticklabels = []
-    # yticks = range(0, yCap2 + 1, 10)
-    # for yt in yticks:
-    #     yticklabels.append(f"{yt}%")
-    ax2_colour = (0.22, 0.3, 0.9)
-    ax2 = ax1.twinx()
-    ax2.plot(yValues2, color=ax2_colour, label=yLabel2)
-    ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
-    # ax2.set_yticks(yticks, labels=yticklabels)
-    # ax2.tick_params(axis='y', labelcolor=ax2_colour)
-    # ax2.set_ylim([0, yCap2])
-
-
-    # yticklabels3 = []
-    # yticks3 = range(0, yCap3 + 1, 3)
-    # for yt in yticks3:
-    #     yticklabels2.append(f"{yt}%")
-    ax3_colour = (0.6, 0.5, 0.3)
-    ax3 = ax1.twinx()
-    ax3.plot(yValues3, color=ax3_colour, label=yLabel3)
-    # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
-    # ax2.set_yticks(yticks, labels=yticklabels)
-    # ax2.tick_params(axis='y', labelcolor=ax2_colour)
-    # ax2.set_ylim([0, yCap2])
-
-
-    plt.legend(loc="upper left")
-
-    plt.xticks(range(len(xTicks)), xTicks)
-
-    plt.xlim(0, len(xTicks))
-
-
-
-    ax1.set_title(title, fontsize=14)
-
-    fig.tight_layout()
-    plt.tight_layout()
-
-
-    plt.show()
-
 def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.rcParams["font.family"] = "monospace"
 
@@ -95,7 +37,85 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.show()
 
 
-experiment = "village"
+
+
+
+def graphMe(xTicks, yValues, yValues2, yValues3):
+    plt.rcParams["font.family"] = "monospace"
+
+
+    plt.plot(range(len(xTicks)), yValues, color="orange", label="avg runtime")
+    plt.plot(range(len(xTicks)), yValues2, linestyle="--", color="grey")
+    ax1 = plt.gca()
+    plt.xticks(range(len(xTicks)), xTicks)
+    ax1.set_xlabel("[depthLimit, neighbourLimit]")
+    ax1.set_ylabel("average runtime (s)", color="orange")
+
+    ax2 = ax1.twinx()
+    ax2.plot(range(len(xTicks)), yValues3, color="blue")
+    ax2.set_ylabel("#BER improvement", color="blue")
+    plt.vlines(x = "[2, 8]", color="red")
+
+    ax1.grid(linestyle='--')
+    plt.tight_layout()
+    plt.xlim(0, len(xTicks) - 1)
+    plt.show()
+
+    # yCap = 1
+    # fig, ax1 = plt.subplots()
+
+    # ax1_colour = (0.79, 0.32, 0.32)
+    # ax1.set_xlabel(xLabel, fontsize=12)
+    # ax1.set_ylabel(yLabel, fontsize=12)
+    # ax1.set_yticks(range(0, yCap + 1, 1))
+    # ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel)
+    # ax1.set_ylim([0, yCap])
+
+    # ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
+
+    # # yticklabels = []
+    # # yticks = range(0, yCap2 + 1, 10)
+    # # for yt in yticks:
+    # #     yticklabels.append(f"{yt}%")
+    # ax2_colour = (0.22, 0.3, 0.9)
+    # ax2 = ax1.twinx()
+    # # ax2.plot(yValues2, color=ax2_colour, label=yLabel2, linestyle="dotted")
+    # # ax2.set_yticks(yticks, labels=yticklabels)
+    # # ax2.tick_params(axis='y', labelcolor=ax2_colour)
+    # # ax2.set_ylim([0, yCap2])
+
+
+    # yticklabels3 = []
+    # yticks3 = range(0, yCap3 + 1)
+    # for yt in yticks3:
+    #     yticklabels3.append(f"{yt}%")
+    # ax3_colour = (0.1, 0.5, 0.3)
+    # ax3 = ax1.twinx()
+    # ax3.plot(yValues3, color=ax3_colour, label=yLabel3)
+    # # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
+    # # ax2.set_yticks(yticks, labels=yticklabels)
+    # # ax2.tick_params(axis='y', labelcolor=ax2_colour)
+    # # ax2.set_ylim([0, yCap2])
+
+
+    # plt.legend(loc="upper left")
+
+    # plt.xticks(range(len(xTicks)), xTicks)
+
+    # plt.xlim(0, len(xTicks))
+
+
+
+    # ax1.set_title(title, fontsize=14)
+
+    # fig.tight_layout()
+    # plt.tight_layout()
+
+
+    # plt.show()
+
+
+experiment = "as_graph"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 
 depthLimits = []
@@ -173,11 +193,11 @@ To show, each in separate pic:
 # graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement (%)","average extra #BER on top of shortest path due to updating path with detours")
 
 
-runtime_threshold = [0.5 for i in range(100)]
+runtime_threshold = [0.5 for i in range(len(xTicks))]
 runtime_cap = math.ceil(max(avg_runtimes))
 
 # - What set of limits provides the best tradeoff between runtime and improvements?
-graphMe(xTicks, avg_runtimes, runtime_cap, runtime_threshold, runtime_cap, avg_improvements, int(math.ceil(max(avg_improvements))), "[depthLimit, neighbourLimit]", "average runtime (s)", "threshold","avg improvement of BER","average runtime (s) compared to threshold of 0.5 seconds")
+graphMe(xTicks, avg_runtimes, runtime_threshold, avg_improvements)
 
 
 # - What range of values the runtimes take on for each set of limits,

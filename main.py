@@ -18,19 +18,23 @@ comparison_experiment_path = "2_comparison_experiment"
 ############# TWEAK HERE #################################################
 ##########################################################################
 
-# as_graph_limits = [[1, i] for i in [8, 9, 10, 11, 12]]
+# as_graph_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
 # as_graph_limits += [[2, i] for i in [5, 6, 7, 8, 9, 10, 11, 12]]
 # as_graph_limits += [[3, i] for i in [1, 2, 3, 4]]
-as_graph_limits = [[2, 7]]
+# as_graph_limits += [[4, i] for i in [1, 2]]
+as_graph_limits = [[2, 8]]
 
 
 # city_limits = [[i, 3] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+# city_limits = [[3, i] for i in [1, 2]]
 city_limits = [[2, 3]]
 
 
 # flights_limits = [[1, i] for i in [30, 40, 50, 60]]
 # flights_limits += [[2, i] for i in [20, 25, 30, 35, 40, 45, 50]]
 # flights_limits += [[3, i] for i in [10, 15, 20, 25]]
+# flights_limits = [[2, i] for i in [31, 32, 33, 34]]
+# flights_limits += [[3, i] for i in [1, 2, 3, 4, 5]]
 flights_limits = [[2, 30]]
 
 
@@ -39,16 +43,12 @@ flights_limits = [[2, 30]]
 village_limits = [[14, 3]]
 
 
-graphTypes = ["as_graph", "city", "flights", "village"]
-# graphTypes = ["city"]
-
-# The limits that average runtime <= 500 ms while providing the most benefits
-depthLimitsForComparison = [1]
-neighbourLimitsForComparison = [1]
-
+# graphTypes = ["as_graph", "city", "flights", "village"]
+graphTypes = ["village"]
 
 CHOSEN_PATH = comparison_experiment_path
 
+disableHeuristic = True
 disableFullSearch = False
 
 ###########################################################################
@@ -62,10 +62,6 @@ for graphType in graphTypes:
     pathToPROFiles = f"{CHOSEN_PATH}/pro_files/{graphType}/"
 
     outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}_heuristic.csv"
-
-    if "comparison" in CHOSEN_PATH:
-        depthLimits = depthLimitsForComparison
-        neighbourLimits = neighbourLimitsForComparison
 
     limit_entries = []
     if graphType == "as_graph":
@@ -127,6 +123,8 @@ for graphType in graphTypes:
 
     if disableFullSearch:
         print("globalBFS is DISABLED!")
+    if disableHeuristic:
+        print("HEURISTIC IS DISABLED!")
     if "comparison" in CHOSEN_PATH and not disableFullSearch:
         def handler(signum, frame):
             raise Exception("end of time")
@@ -136,19 +134,25 @@ for graphType in graphTypes:
         print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
         outputFilePathGlobalSearch = f"{CHOSEN_PATH}/results/{graphType}_global.csv"
-        with open(outputFilePathGlobalSearch, "w") as file:
-            for i in range(len(pro_objects)):
 
-                signal.signal(signal.SIGALRM, handler)
-                signal.alarm(timePerPROSeconds)
-                print(f"{graphType} - slowpoke pro:", i)
-                try:
-                    tic = time.time()
-                    Pb, totalNrOfBER = globalBFS(G, pro_objects[i])
-                    runtime = time.time() - tic
+        # reset file
+        open(outputFilePathGlobalSearch, "w")
+
+        for i in range(len(pro_objects)):
+            signal.signal(signal.SIGALRM, handler)
+            signal.alarm(timePerPROSeconds)
+            print(f"{graphType} - slowpoke pro:", i)
+            try:
+                tic = time.time()
+                Pb, totalNrOfBER = globalBFS(G, pro_objects[i])
+                runtime = time.time() - tic
+                with open(outputFilePathGlobalSearch, "a") as file:
                     file.write(f"{i},{len(Pb)},{totalNrOfBER},{round(runtime, 3)}\n")
-                except Exception as e:
-                    print("too slow:", e)
+            except Exception as e:
+                print("too slow:", e)
+        # prevent signal from killing heuristic
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(10000000000000000000000000)
 
 
 
@@ -157,8 +161,8 @@ for graphType in graphTypes:
 
 
 
-
-
+    if disableHeuristic:
+        exit(0)
 
     print("Finding paths using speedy boiiiiiiiiii")
 
