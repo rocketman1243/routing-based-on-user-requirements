@@ -39,17 +39,18 @@ flights_limits = [[2, 30]]
 
 
 
+village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 # village_limits = [[i, 3] for i in [9, 10, 11, 12, 13, 14, 15, 16]]
-village_limits = [[14, 3]]
+# village_limits = [[14, 3]]
 
 
 # graphTypes = ["as_graph", "city", "flights", "village"]
 graphTypes = ["village"]
 
-CHOSEN_PATH = comparison_experiment_path
+CHOSEN_PATH = tradeoff_experiment_path
 
-disableHeuristic = True
-disableFullSearch = False
+disableFullSearch = True
+disableHeuristic = False
 
 ###########################################################################
 ###########################################################################
@@ -152,7 +153,7 @@ for graphType in graphTypes:
                 print("too slow:", e)
         # prevent signal from killing heuristic
         signal.signal(signal.SIGALRM, handler)
-        signal.alarm(10000000000000000000000000)
+        signal.alarm(10000000)
 
 
 

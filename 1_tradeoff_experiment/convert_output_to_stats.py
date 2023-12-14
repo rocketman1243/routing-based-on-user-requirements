@@ -1,8 +1,11 @@
 from statistics import mean, median
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+import matplotlib.patches as mpatches
 import numpy as np
 import math
 from scipy.interpolate import make_interp_spline
+import csv
 
 
 def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
@@ -13,8 +16,8 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([1, len(runtimes) + 1])
 
-    ax1.set_xlabel(xLabel, fontsize=12)
-    ax1.set_ylabel(yLabel, fontsize=12)
+    ax1.set_xlabel(xLabel, fontsize="14")
+    ax1.set_ylabel(yLabel, fontsize="14")
     ax1.set_title(title, fontsize="14")
     ax1.set_ylim([0, cap])
 
@@ -42,121 +45,123 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
 
 
 
-def graphMe(xTicks, yValues0, yValues1, yValues2):
+def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
+    ax2ylim = 13
+    ax2ylimStep = 1
+    bestX = 6
+    legendLocation = "lower left"
+    zoneBoundaries = [2, 4, 6, 10, 11]
+
+
+    with open("1_tradeoff_experiment/annotation_parameters.csv", "r") as file:
+        for line in csv.DictReader(file):
+            if line["graphType"] == experiment:
+                ax2ylim = int(line["ax2ylim"])
+                ax2ylimStep = int(line["ax2ylimStep"])
+                bestX = int(line["bestX"])
+                legendLocation = line["legendLocation"]
+                zoneBoundariesString = line["zoneBoundaries"].split("-")
+                zoneBoundaries = [float(x) for x in zoneBoundariesString]
+
+
+
     plt.rcParams["font.family"] = "monospace"
 
-    # make line more smooth
-    x = list(range(len(xTicks)))
-    X_ = np.linspace(min(x), max(x), 50)
-    X_Y0_Spline = make_interp_spline(range(len(xTicks)), yValues0)
-    Y0_ = X_Y0_Spline(X_)
-    X_Y2_Spline = make_interp_spline(range(len(xTicks)), yValues2)
-    Y2_ = X_Y2_Spline(X_)
-
-
-    plt.plot(range(len(xTicks)), yValues0, color="orange", label="avg runtime")
-    # plt.plot(X_, Y0_, color="orange", label="avg runtime")
-    plt.plot(range(len(xTicks)), yValues1, linestyle="--", color="orange")
+    orangeColour = "orange"
+    plot0 = plt.plot(range(len(xTicks)), yValues0, color=orangeColour, label="avg runtime")
+    plot1 = plt.plot(range(len(xTicks)), yValues1, linestyle="--", color=orangeColour, label="runtime threshold")
     ax1 = plt.gca()
     plt.xticks(range(len(xTicks)), xTicks)
-    ax1.set_xlabel("[depthLimit, neighbourLimit]")
-    ax1.set_ylabel("average runtime (ms)", color="orange")
+    ax1.set_xlabel("[depthLimit, neighbourLimit]", fontsize=14)
+    ax1.set_ylabel("average runtime (ms)", color=orangeColour, fontsize=14)
     yticklabels1 = []
-    yticks = [i/10 for i in range(0, 12, 1)]
+    yticks = [i/10 for i in range(0, 30, 1)]
     for yt in yticks:
         yticklabels1.append(str(round(yt * 1000)))
-    ax1.set_yticks(yticks, labels=yticklabels1, color="orange")
-    ax1.set_ylim(0, 1.15)
+    ax1.set_yticks(yticks, labels=yticklabels1, color=orangeColour)
+    ax1.set_ylim(0, 1.2)
 
 
 
     ax2 = ax1.twinx()
-    ax2.plot(range(len(xTicks)), yValues2, color="blue")
+    plot2 = ax2.plot(range(len(xTicks)), yValues2, color="blue", label="avg #BER improvement (right axis)")
     # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
-    ax2.set_ylabel("#BER improvement", color="blue")
+    ax2.set_ylabel("average #BER improvement", color="blue", fontsize=14)
+
+
+
     yticklabels2 = []
-    yticks2 = [i for i in range(0, 7, 1)]
+    yticks2 = [i for i in range(0, ax2ylim + 1, ax2ylimStep)]
     for yt in yticks2:
-        yticklabels2.append(str(round(yt)))
+        yticklabels2.append(str(yt))
     ax2.set_yticks(yticks2, labels=yticklabels2, color="blue")
-    ax2.set_ylim(0, 6)
+    ax2.set_ylim(0, ax2ylim)
+
 
     # mark up the graph for easy readability
-    plt.vlines(x = 4, ymin=0, ymax=max(yValues2), color="red")
-    plt.vlines(x = 8, ymin=0, ymax=max(yValues2), color="red")
-    plt.hlines(y=yValues2[8], xmin=0, xmax=100, color="red", linestyles="dotted")
-    plt.vlines(x = 15, ymin=0, ymax=max(yValues2), color="red")
-    # plt.axhspan(i, i+.2, facecolor='0.2', alpha=0.5)
-    plt.axvspan(0, 8.5, facecolor="green", alpha=0.1)
-    plt.axvspan(8.5, 12.5, facecolor="red", alpha=0.1)
-    plt.axvspan(12.5, 15.1, facecolor="green", alpha=0.1)
-    plt.axvspan(15.1, 16.6, facecolor="red", alpha=0.1)
-    plt.axvspan(16.6, 17.9, facecolor="green", alpha=0.1)
-    plt.axvspan(17.9, 18, facecolor="red", alpha=0.1)
+    greenColour = "green"
+    greenAlpha = 0.25
+    redColour = "red"
+    redAlpha = 0.2
+    plt.axvspan(0, zoneBoundaries[0], facecolor=greenColour, alpha=greenAlpha)
+    nextIsGreen = False
+    if len(zoneBoundaries) > 1:
+        for i in range(len(zoneBoundaries) - 1):
+            nextColor = redColour
+            nextAlpha = redAlpha
+            if nextIsGreen:
+                nextColor = greenColour
+                nextAlpha = greenAlpha
+                nextIsGreen = False
+            else:
+                nextIsGreen = True
+            plt.axvspan(zoneBoundaries[i], zoneBoundaries[i + 1], facecolor=nextColor, alpha=nextAlpha)
+    if nextIsGreen:
+        plt.axvspan(zoneBoundaries[-1], 10000, facecolor=greenColour, alpha=greenAlpha)
+    else:
+        plt.axvspan(zoneBoundaries[-1], 10000, facecolor=redColour, alpha=redAlpha)
+
+    vline_colour = (1, 0.2, 0.0)
+    plt.vlines(x = bestX, ymin=0, ymax=1200, color=vline_colour, linestyle="solid", label="best limits")
+    plt.hlines(y=yValues2[bestX], xmin=0, xmax=100, color=vline_colour, linestyles="dotted", label="avg improvement of best limits")
+
+    vline_linestyle = (1, (3, 6))
+    # plt.vlines(x = 15, ymin=0, ymax=1200, color=vline_colour, linestyle=vline_linestyle)
+    # plt.vlines(x = bestX, ymin=0, ymax=1200, color=vline_colour, linestyle=vline_linestyle, label="start of plateau")
 
 
     # ax1.grid(linestyle='-.')
     plt.tight_layout()
     plt.xlim(0, len(xTicks) - 1)
-    # plt.ylim(0, max(yValues2))
-    plt.show()
-
-    # yCap = 1
-    # fig, ax1 = plt.subplots()
-
-    # ax1_colour = (0.79, 0.32, 0.32)
-    # ax1.set_xlabel(xLabel, fontsize=12)
-    # ax1.set_ylabel(yLabel, fontsize=12)
-    # ax1.set_yticks(range(0, yCap + 1, 1))
-    # ax1.plot(range(len(xTicks)), yValues, color=ax1_colour, label=yLabel)
-    # ax1.set_ylim([0, yCap])
-
-    # ax1.set_ylabel(yLabel, fontsize=12, color=ax1_colour)
-
-    # # yticklabels = []
-    # # yticks = range(0, yCap2 + 1, 10)
-    # # for yt in yticks:
-    # #     yticklabels.append(f"{yt}%")
-    # # ax2.set_yticks(yticks, labels=yticklabels)
-    # ax2_colour = (0.22, 0.3, 0.9)
-    # ax2 = ax1.twinx()
-    # # ax2.plot(yValues2, color=ax2_colour, label=yLabel2, linestyle="dotted")
-    # # ax2.tick_params(axis='y', labelcolor=ax2_colour)
-    # # ax2.set_ylim([0, yCap2])
 
 
-    # yticklabels3 = []
-    # yticks3 = range(0, yCap3 + 1)
-    # for yt in yticks3:
-    #     yticklabels3.append(f"{yt}%")
-    # ax3_colour = (0.1, 0.5, 0.3)
-    # ax3 = ax1.twinx()
-    # ax3.plot(yValues3, color=ax3_colour, label=yLabel3)
-    # # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
-    # # ax2.set_yticks(yticks, labels=yticklabels)
-    # # ax2.tick_params(axis='y', labelcolor=ax2_colour)
-    # # ax2.set_ylim([0, yCap2])
+    handles1, labels = ax1.get_legend_handles_labels()
+    handles2, labels = ax2.get_legend_handles_labels()
+    patchGreen = mpatches.Patch(color=greenColour, alpha=greenAlpha, label='fast enough')
+    patchRed = mpatches.Patch(color=redColour, alpha=redAlpha, label='too slow')
+    # line = Line2D([0], [0], label='manual line', color='k')
+    handles1.extend([patchGreen, patchRed])
+    handles1.extend(handles2)
+    # plt.legend(handles=handles1, loc=(0.005, 0.05))
+    plt.legend(handles=handles1, loc=legendLocation)
+
+
 
 
     # plt.legend(loc="upper left")
 
-    # plt.xticks(range(len(xTicks)), xTicks)
-
-    # plt.xlim(0, len(xTicks))
-
-
-
-    # ax1.set_title(title, fontsize=14)
+    ax1.set_title(f"Visualization of upper limit of performance increase by increasing number of neighbours for the {experiment} graph type.\n\nRed dotted line shows the point after which the avg #BER improvement plateaus.", fontsize=14)
 
     # fig.tight_layout()
-    # plt.tight_layout()
+    plt.tight_layout()
 
 
-    # plt.show()
+    plt.show()
 
 
-experiment = "as_graph"
+experiment = "flights"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
+# pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic_neighbours_upper_limit.csv"
 
 depthLimits = []
 neighbourLimits = []
@@ -237,7 +242,7 @@ runtime_threshold = [0.5 for i in range(len(xTicks))]
 runtime_cap = math.ceil(max(avg_runtimes))
 
 # - What set of limits provides the best tradeoff between runtime and improvements?
-graphMe(xTicks, avg_runtimes, runtime_threshold, avg_improvements)
+graphMe(xTicks, avg_runtimes, runtime_threshold, avg_improvements, experiment)
 
 
 # - What range of values the runtimes take on for each set of limits,
