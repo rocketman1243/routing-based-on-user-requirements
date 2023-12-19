@@ -5,35 +5,54 @@ import math
 
 
 
-def spit_stats(x, y, title, xlabel, ylabel, metric):
+# def spit_stats(x, y, title, xlabel, ylabel, metric):
 
+#     plt.rcParams["font.family"] = "monospace"
+
+#     fig, ax = plt.subplots()
+#     # ax.boxplot(x.values())
+#     # ax.set_xticklabels(x.keys())
+
+#     print(y)
+#     ax.plot(range(len(x)), x, color=(0.99, 0.32, 0.32), label=f"{metric} of globalBFS")
+#     ax.set_xlabel(xlabel, fontsize=12)
+#     if len(y) > 0:
+#         ax.plot(range(len(x)), y, color=(0.1, 0.8, 0.5), label=f"{metric} of heuristic")
+#         plt.ylim(0, max(x) + 5)
+#     ax.set_ylabel(ylabel, fontsize=12)
+
+#     plt.xlim(0, 100)
+
+#     ax.set_title(title)
+
+#     fig.tight_layout()
+#     plt.tight_layout()
+
+#     plt.legend(loc="upper left")
+#     plt.show()
+
+def cdf(data, title, xlabel, ylabel):
     plt.rcParams["font.family"] = "monospace"
+    plt.rcParams["font.size"] = "18"
 
-    fig, ax = plt.subplots()
-    # ax.boxplot(x.values())
-    # ax.set_xticklabels(x.keys())
 
-    print(y)
-    ax.plot(range(len(x)), x, color=(0.99, 0.32, 0.32), label=f"{metric} of globalBFS")
-    ax.set_xlabel(xlabel, fontsize=12)
-    if len(y) > 0:
-        ax.plot(range(len(x)), y, color=(0.1, 0.8, 0.5), label=f"{metric} of heuristic")
-        plt.ylim(0, max(x) + 5)
-    ax.set_ylabel(ylabel, fontsize=12)
+    plt.hist(data, color = (0.2, 0.9, 0.2), histtype="barstacked")
+    plt.yticks(list(range(0, 101, 10)), labels=[str(i) for i in list(range(0, 101, 10))])
 
-    plt.xlim(0, 100)
 
-    ax.set_title(title)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
 
-    fig.tight_layout()
     plt.tight_layout()
-
-    plt.legend(loc="upper left")
-    plt.show()
-
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/comparison-{experiment}.pdf", bbox_inches="tight")
+    # plt.show()
 
 
-experiment = "village"
+experiment = "as_graph_ber_500"
+graphTitle = "400 - 500 Features"
+
+
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
 pathHeuristicPaths = f"2_comparison_experiment/results/{experiment}_heuristic.csv"
 
@@ -97,7 +116,31 @@ hopcountDiffDict = {
     "global hopcount -- heuristic hopcount": hopcountDiff
 }
 
-spit_stats(nrBERFull, nrBERHeuristic, f"Comparison of #BER for the {experiment} graph type.\n\nRed line visible: Globally optimal path satisfies more BER than heuristic path", "path request number", "# satisfied BER", "# satisfied BER")
+
+#
+cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
+
+
+print(nrBERFull)
+print(BERdiff)
+# print(relativeDifferences)
+
+# get avg relative diff:
+relativeDifferences = []
+for i in range(len(nrBERFull)):
+    print(nrBERFull[i], BERdiff[i], BERdiff[i] / nrBERFull[i] )
+    relativeDifferences.append((nrBERFull[i] - BERdiff[i]) / nrBERFull[i])
+
+
+# print(relativeDifferences)
+total = sum(relativeDifferences)
+avg = total / len(relativeDifferences) * 100
+print("avg rel performance: ", avg)
+
+
+# OLD stats
+
+# spit_stats(nrBERFull, nrBERHeuristic, f"Comparison of #BER for the {experiment} graph type.\n\nRed line visible: Globally optimal path satisfies more BER than heuristic path", "path request number", "# satisfied BER", "# satisfied BER")
 
 # spit_stats(runtimeFull, runtimeHeuristic, f"Runtime to find global path much larger than heuristic for the {experiment} graph type.", "path request number", "runtime (seconds)", "runtime (s)")
 

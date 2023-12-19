@@ -19,10 +19,12 @@ comparison_experiment_path = "2_comparison_experiment"
 ##########################################################################
 
 # as_graph_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
-# as_graph_limits += [[2, i] for i in [5, 6, 7, 8, 9, 10, 11, 12]]
-# as_graph_limits += [[3, i] for i in [1, 2, 3, 4]]
-# as_graph_limits += [[4, i] for i in [1, 2]]
-as_graph_limits = [[2, 8]]
+as_graph_limits = []
+as_graph_limits += [[2, i] for i in [1, 2, 3, 4, 5]]
+as_graph_limits += [[3, i] for i in [4, 5, 6, 7]]
+as_graph_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+
+# as_graph_limits = [[2, 2]] # BEST LIMITS
 
 
 # city_limits = [[i, 3] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
@@ -45,7 +47,8 @@ village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 
 
 # graphTypes = ["as_graph", "city", "flights", "village"]
-graphTypes = ["village"]
+# graphTypes = ["as_graph_ber_5", "as_graph_ber_25", "as_graph_ber_500"]
+graphTypes = ["as_graph_uniform"]
 
 CHOSEN_PATH = tradeoff_experiment_path
 
@@ -65,7 +68,7 @@ for graphType in graphTypes:
     outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}_heuristic.csv"
 
     limit_entries = []
-    if graphType == "as_graph":
+    if "as_graph" in graphType:
         limit_entries = as_graph_limits
     if graphType == "city":
         limit_entries = city_limits
@@ -224,7 +227,7 @@ for graphType in graphTypes:
                 runtime_string = runtime_string + str(r) + "-"
             runtime_string = runtime_string[:-1]
 
-            tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},{runtime_string},\n"
+            tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},1-1,\n"
 
             if "tradeoff" in CHOSEN_PATH:
                 file.write(tradeoff_result_string)

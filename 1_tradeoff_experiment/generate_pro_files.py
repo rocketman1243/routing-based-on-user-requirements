@@ -5,20 +5,30 @@ import os
 
 # Tuning values
 
-experiment = "as_graph"
+# experiment = "as_graph"
+# experiment = "as_graph_ber_5"
+# experiment = "as_graph_ber_25"
+# experiment = "as_graph_ber_500"
+experiment = "as_graph_linear"
+# experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
 
+n = 100
+best_effort_min_amount = n
+best_effort_max_amount = n
+nr_of_features = n
+
+
+
+
 num_objects = 100
-nr_of_features = 100
 
 
-dry_run = False
+dry_run = True
 
-requirements = list(range(1, 101))
-best_effort_min_amount = 80
-best_effort_max_amount = 100
+requirements = list(range(1, nr_of_features + 1))
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 
@@ -55,7 +65,7 @@ output_objects = []
 for index in range(num_objects):
 
     endpoints = random.sample(ases, 2)
-    features = list(range(1,nr_of_features))
+    features = list(range(1,nr_of_features + 1))
 
     as_source = endpoints[0]
     as_destination = endpoints[1]

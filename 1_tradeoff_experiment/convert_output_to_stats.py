@@ -46,22 +46,22 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
 
 
 def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
-    ax2ylim = 13
+    ax2ylim = 1
     ax2ylimStep = 1
     bestX = 6
     legendLocation = "lower left"
-    zoneBoundaries = [2, 4, 6, 10, 11]
+    zoneBoundaries = []
 
 
-    with open("1_tradeoff_experiment/annotation_parameters.csv", "r") as file:
-        for line in csv.DictReader(file):
-            if line["graphType"] == experiment:
-                ax2ylim = int(line["ax2ylim"])
-                ax2ylimStep = int(line["ax2ylimStep"])
-                bestX = int(line["bestX"])
-                legendLocation = line["legendLocation"]
-                zoneBoundariesString = line["zoneBoundaries"].split("-")
-                zoneBoundaries = [float(x) for x in zoneBoundariesString]
+    # with open("1_tradeoff_experiment/annotation_parameters.csv", "r") as file:
+    #     for line in csv.DictReader(file):
+    #         if line["graphType"] == experiment:
+    #             ax2ylim = int(line["ax2ylim"])
+    #             ax2ylimStep = int(line["ax2ylimStep"])
+    #             bestX = int(line["bestX"])
+    #             legendLocation = line["legendLocation"]
+    #             zoneBoundariesString = line["zoneBoundaries"].split("-")
+    #             zoneBoundaries = [float(x) for x in zoneBoundariesString]
 
 
 
@@ -103,23 +103,24 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     greenAlpha = 0.25
     redColour = "red"
     redAlpha = 0.2
-    plt.axvspan(0, zoneBoundaries[0], facecolor=greenColour, alpha=greenAlpha)
-    nextIsGreen = False
-    if len(zoneBoundaries) > 1:
-        for i in range(len(zoneBoundaries) - 1):
-            nextColor = redColour
-            nextAlpha = redAlpha
-            if nextIsGreen:
-                nextColor = greenColour
-                nextAlpha = greenAlpha
-                nextIsGreen = False
-            else:
-                nextIsGreen = True
-            plt.axvspan(zoneBoundaries[i], zoneBoundaries[i + 1], facecolor=nextColor, alpha=nextAlpha)
-    if nextIsGreen:
-        plt.axvspan(zoneBoundaries[-1], 10000, facecolor=greenColour, alpha=greenAlpha)
-    else:
-        plt.axvspan(zoneBoundaries[-1], 10000, facecolor=redColour, alpha=redAlpha)
+    if len(zoneBoundaries) > 0:
+        plt.axvspan(0, zoneBoundaries[0], facecolor=greenColour, alpha=greenAlpha)
+        nextIsGreen = False
+        if len(zoneBoundaries) > 1:
+            for i in range(len(zoneBoundaries) - 1):
+                nextColor = redColour
+                nextAlpha = redAlpha
+                if nextIsGreen:
+                    nextColor = greenColour
+                    nextAlpha = greenAlpha
+                    nextIsGreen = False
+                else:
+                    nextIsGreen = True
+                plt.axvspan(zoneBoundaries[i], zoneBoundaries[i + 1], facecolor=nextColor, alpha=nextAlpha)
+        if nextIsGreen:
+            plt.axvspan(zoneBoundaries[-1], 10000, facecolor=greenColour, alpha=greenAlpha)
+        else:
+            plt.axvspan(zoneBoundaries[-1], 10000, facecolor=redColour, alpha=redAlpha)
 
     vline_colour = (1, 0.2, 0.0)
     plt.vlines(x = bestX, ymin=0, ymax=1200, color=vline_colour, linestyle="solid", label="best limits")
@@ -159,7 +160,7 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     plt.show()
 
 
-experiment = "flights"
+experiment = "as_graph_ber_5"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 # pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic_neighbours_upper_limit.csv"
 

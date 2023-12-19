@@ -4,10 +4,16 @@ from copy import deepcopy
 import os
 import random
 from highway_graph_generator import generateHighwayGraph
+from generate_features_distribution import generate_linear_features
 
 prefix = "1_tradeoff_experiment/"
 
-experiment = "as_graph"
+# experiment = "as_graph"
+# experiment = "as_graph_ber_5"
+# experiment = "as_graph_ber_25"
+# experiment = "as_graph_ber_500"
+experiment = "as_graph_linear"
+# experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
@@ -20,13 +26,13 @@ dry_run = False
 
 
 
+minNrOfFeatures = 0
 maxNrOfFeatures = 100
-minNrOfFeatures = 80
 
 # COMMENT/UNCOMMENT AS NEEDED
 
 output_path = ""
-if experiment == "as_graph":
+if "as_graph" in experiment:
     number_of_nodes = 75388
     edges = []
     with open(prefix + "as-links.txt", "r") as file:
@@ -36,7 +42,7 @@ if experiment == "as_graph":
     G = nx.Graph()
     G.add_edges_from(edges)
     # G = nx.random_internet_as_graph(number_of_nodes)
-    output_path = prefix + "nio_files/as_graph"
+    output_path = prefix + "nio_files/" + experiment
 
 if experiment == "city":
     G = nx.grid_2d_graph(64, 69)
@@ -102,7 +108,10 @@ def generate_features(number_of_features_per_as: int, min_nr_of_features:int, as
 
     return mapping
 
+
 features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
+if "linear" in experiment:
+    features = generate_linear_features(maxNrOfFeatures, minNrOfFeatures - 1, G.nodes, G)
 
 as_numbers_path = prefix + "as_numbers/" + experiment + "_as_numbers.txt"
 with open(as_numbers_path, "w") as file:
