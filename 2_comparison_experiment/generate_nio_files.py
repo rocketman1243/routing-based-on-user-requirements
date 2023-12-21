@@ -13,14 +13,18 @@ prefix = "2_comparison_experiment/"
 # experiment = "as_graph"
 # experiment = "as_graph_ber_5"
 # experiment = "as_graph_ber_25"
-experiment = "as_graph_ber_500"
+# experiment = "as_graph_ber_500"
+experiment = "as_graph_linear"
+# experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
 
 
-minNrOfFeatures = 400
-maxNrOfFeatures = 500
+maxNrOfFeatures = 100
+minNrOfFeatures = 80
+if "uniform" in experiment or "linear" in experiment:
+    minNrOfFeatures = 0
 
 dry_run = False
 
@@ -29,6 +33,8 @@ dry_run = False
 output_path = ""
 if "as_graph" in experiment:
     G = nx.random_internet_as_graph(500)
+    if "uniform" in experiment or "linear" in experiment:
+        G = nx.random_internet_as_graph(200)
     output_path = prefix + "nio_files/" + experiment
 
 if experiment == "city":

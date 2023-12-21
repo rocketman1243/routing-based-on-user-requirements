@@ -36,9 +36,10 @@ def cdf(data, title, xlabel, ylabel):
     plt.rcParams["font.size"] = "18"
 
 
-    plt.hist(data, color = (0.2, 0.9, 0.2), histtype="barstacked")
+    plt.hist(data, color = (0.2, 0.9, 0.2), histtype="barstacked", bins=np.arange(12))
     plt.yticks(list(range(0, 101, 10)), labels=[str(i) for i in list(range(0, 101, 10))])
-
+    plt.xticks(list(range(12)))
+    # plt.xlim(0, 11)
 
     plt.title(title)
     plt.xlabel(xlabel)
@@ -49,8 +50,8 @@ def cdf(data, title, xlabel, ylabel):
     # plt.show()
 
 
-experiment = "as_graph_ber_500"
-graphTitle = "400 - 500 Features"
+experiment = "as_graph"
+graphTitle = "AS Graph Network"
 
 
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
@@ -121,21 +122,21 @@ hopcountDiffDict = {
 cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
 
 
-print(nrBERFull)
-print(BERdiff)
+# print(nrBERFull)
+# print(BERdiff)
 # print(relativeDifferences)
 
 # get avg relative diff:
 relativeDifferences = []
 for i in range(len(nrBERFull)):
-    print(nrBERFull[i], BERdiff[i], BERdiff[i] / nrBERFull[i] )
+    # print(nrBERFull[i], BERdiff[i], BERdiff[i] / nrBERFull[i] )
     relativeDifferences.append((nrBERFull[i] - BERdiff[i]) / nrBERFull[i])
 
 
 # print(relativeDifferences)
 total = sum(relativeDifferences)
 avg = total / len(relativeDifferences) * 100
-print("avg rel performance: ", avg)
+# print("avg rel performance: ", avg)
 
 
 # OLD stats

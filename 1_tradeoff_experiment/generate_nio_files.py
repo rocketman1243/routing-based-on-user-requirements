@@ -12,11 +12,12 @@ prefix = "1_tradeoff_experiment/"
 # experiment = "as_graph_ber_5"
 # experiment = "as_graph_ber_25"
 # experiment = "as_graph_ber_500"
-experiment = "as_graph_linear"
+# experiment = "as_graph_linear"
 # experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
+experiment = "increasing_grid"
 
 
 
@@ -26,7 +27,7 @@ dry_run = False
 
 
 
-minNrOfFeatures = 0
+minNrOfFeatures = 80
 maxNrOfFeatures = 100
 
 # COMMENT/UNCOMMENT AS NEEDED
@@ -55,6 +56,10 @@ if experiment == "flights":
 if experiment == "village":
     G = generateHighwayGraph(15, 15, 2, 10)
     output_path = prefix + "nio_files/village"
+
+if experiment == "increasing_grid":
+    G = nx.grid_2d_graph(500, 500)
+    output_path = prefix + "nio_files/" + experiment
 
 
 if len(output_path) == 0:

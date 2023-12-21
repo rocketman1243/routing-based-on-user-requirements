@@ -2,6 +2,7 @@ import random
 import json
 import copy
 import os
+import math
 
 # Tuning values
 
@@ -9,11 +10,12 @@ import os
 # experiment = "as_graph_ber_5"
 # experiment = "as_graph_ber_25"
 # experiment = "as_graph_ber_500"
-experiment = "as_graph_linear"
+# experiment = "as_graph_linear"
 # experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
+experiment = "increasing_grid"
 
 n = 100
 best_effort_min_amount = n
@@ -23,10 +25,10 @@ nr_of_features = n
 
 
 
-num_objects = 100
+num_objects = 10
 
 
-dry_run = True
+dry_run = False
 
 requirements = list(range(1, nr_of_features + 1))
 max_number_of_strict_requirements = 0
@@ -43,7 +45,7 @@ if dry_run:
 # causing dead files from previous runs to still exist
 
 output_path = prefix + "pro_files/" + experiment
-if not dry_run:
+if not dry_run and experiment != "increasing_grid":
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -65,10 +67,22 @@ output_objects = []
 for index in range(num_objects):
 
     endpoints = random.sample(ases, 2)
+
     features = list(range(1,nr_of_features + 1))
 
     as_source = endpoints[0]
     as_destination = endpoints[1]
+
+    if experiment == "increasing_grid":
+        start_index = 90
+        start_pro = 100 + start_index
+        multiplier = start_pro + 10
+        # source_index = multiplier * index
+        # destination_index = multiplier * (index + 1)
+        # as_source = f"({source_index}, {source_index})"
+        as_source = f"({start_index + index}, {0})"
+        # as_destination = f"({destination_index}, {destination_index})"
+        as_destination = f"({start_index + index}, {multiplier})"
 
     # Requirements for privacy
     strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
@@ -117,6 +131,6 @@ for index in range(num_objects):
 if not dry_run:
     # Print the generated JSON objects
     for i, obj in enumerate(output_objects):
-        with open(f"{output_path}/pro_{(i):03}.json", "w") as file:
+        with open(f"{output_path}/pro_{(i + start_pro):03}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
 

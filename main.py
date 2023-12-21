@@ -19,12 +19,12 @@ comparison_experiment_path = "2_comparison_experiment"
 ##########################################################################
 
 # as_graph_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
-as_graph_limits = []
-as_graph_limits += [[2, i] for i in [1, 2, 3, 4, 5]]
-as_graph_limits += [[3, i] for i in [4, 5, 6, 7]]
-as_graph_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+# as_graph_limits = []
+# as_graph_limits += [[2, i] for i in [1, 2, 3, 4, 5]]
+# as_graph_limits += [[3, i] for i in [4, 5, 6, 7]]
+# as_graph_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
 
-# as_graph_limits = [[2, 2]] # BEST LIMITS
+as_graph_limits = [[2, 3]] # BEST LIMITS
 
 
 # city_limits = [[i, 3] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
@@ -45,15 +45,16 @@ village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 # village_limits = [[i, 3] for i in [9, 10, 11, 12, 13, 14, 15, 16]]
 # village_limits = [[14, 3]]
 
+increasing_grid_limits = [[2, 3]]
 
 # graphTypes = ["as_graph", "city", "flights", "village"]
 # graphTypes = ["as_graph_ber_5", "as_graph_ber_25", "as_graph_ber_500"]
-graphTypes = ["as_graph_uniform"]
+graphTypes = ["as_graph_linear"]
 
-CHOSEN_PATH = tradeoff_experiment_path
+CHOSEN_PATH = comparison_experiment_path
 
-disableFullSearch = True
-disableHeuristic = False
+disableFullSearch = False
+disableHeuristic = True
 
 ###########################################################################
 ###########################################################################
@@ -76,6 +77,8 @@ for graphType in graphTypes:
         limit_entries = flights_limits
     if graphType == "village":
         limit_entries = village_limits
+    if graphType == "increasing_grid":
+        limit_entries = increasing_grid_limits
     if len(limit_entries) == 0:
         print("NO LIMITS RECOGNIZED, EXITING")
         exit(0)
@@ -121,6 +124,8 @@ for graphType in graphTypes:
     nx.set_node_attributes(G, node_info)
     G.add_edges_from(edges)
 
+    print(len(G.nodes))
+
 
 
     # Find full path
@@ -133,7 +138,8 @@ for graphType in graphTypes:
         def handler(signum, frame):
             raise Exception("end of time")
 
-        timePerPROSeconds = 300 # 5 minutes = 300 seconds
+        # timePerPROSeconds = 300 # 5 minutes = 300 seconds
+        timePerPROSeconds = 3600 # 1 hour
 
         print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
@@ -184,7 +190,7 @@ for graphType in graphTypes:
             print("current limits:", current_limits, ", map:", graphType)
 
             for i in range(len(pro_objects)):
-                # print(graphType + " - pro", i)
+                print(graphType + " - pro", i)
                 pro = pro_objects[i]
 
                 totalHops, extraHops, totalNrOfBER, improvement, runtime, pathfinderTime = MP(G, pro, current_limits)
@@ -194,7 +200,7 @@ for graphType in graphTypes:
                     file.write(comparison_result_string)
 
                 # print("pathfinderTime: ", pathfinderTime)
-                # print("total time:", round(runtime, 3))
+                print("total time:", round(runtime, 3))
 
                 runtimes.append(runtime)
                 improvements.append(improvement)
@@ -227,7 +233,7 @@ for graphType in graphTypes:
                 runtime_string = runtime_string + str(r) + "-"
             runtime_string = runtime_string[:-1]
 
-            tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},1-1,\n"
+            tradeoff_result_string = f"{current_limits[0]},{current_limits[1]},{avg_improvement},{avg_relative_improvement},{avg_runtime},{runtime_string},\n"
 
             if "tradeoff" in CHOSEN_PATH:
                 file.write(tradeoff_result_string)
