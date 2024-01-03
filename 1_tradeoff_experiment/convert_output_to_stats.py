@@ -6,13 +6,22 @@ import numpy as np
 import math
 from scipy.interpolate import make_interp_spline
 import csv
+from scipy.optimize import curve_fit
 
+
+def function(x, a, b, c):
+    return a * pow(b, x) + c
 
 def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
     fig, ax1 = plt.subplots()
+    xdata = range(1, len(runtimes.keys()) + 1)
+
+    # Plot black line to show 0
+    ax1.plot(xdata, [0 for i in xdata], color="black")
+
     c = "orange"
     ax1.boxplot(runtimes.values(), notch=True, patch_artist=True,
             boxprops=dict(facecolor=c, color=c),
@@ -24,13 +33,22 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
 
-    averages = []
+    medians = []
     maxes = []
     for r in runtimes.values():
-        averages.append(np.median(r))
+        medians.append(np.median(r))
         maxes.append(np.max(r))
-    ax1.plot(range(1, len(runtimes.keys()) + 1), averages)
-    ax1.plot(range(1, len(runtimes.keys()) + 1), maxes)
+
+
+    # Fit curve
+    poptMax, pcov = curve_fit(function, xdata, maxes)
+    poptMed, pcov = curve_fit(function, xdata, medians)
+    print("max parameters:", poptMax)
+    print("med parameters:", poptMed)
+    ax1.plot(xdata, function(xdata, *poptMax), label = f"Approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot {round(poptMax[1], 3)}^x - {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
+    ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
+    # ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with y = {round(poptMed[0], 3)} * {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}", linestyle="dashed", color="g")
+
 
 
 
@@ -39,7 +57,9 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
     ax1.set_title(title)
-    ax1.set_ylim([0, cap + 0.25])
+    ax1.set_ylim([-.5, cap + 0.25])
+
+    plt.legend(fontsize=16)
 
     # if len(yValues2) > 0:
     #     # ax1_colour = (0.99, 0.32, 0.32)
@@ -291,6 +311,6 @@ for key in increasing_depths_runtime_dict:
         boxplot_cap = max(increasing_depths_runtime_dict[key])
 
 runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
-boxplotMe(increasing_depths_runtime_dict, "runtime (s)", "#hops between start and end node", "Boxplots of runtimes (s) for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
+boxplotMe(increasing_depths_runtime_dict, "runtime (seconds)", "#hops between start and end node", "Boxplots of runtimes for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
 
 
