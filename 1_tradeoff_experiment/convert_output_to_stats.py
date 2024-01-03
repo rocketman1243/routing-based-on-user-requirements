@@ -22,8 +22,19 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
             medianprops=dict(color="green"),
             )
     ax1.set_xticklabels(runtimes.keys())
-    print(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
+
+    averages = []
+    maxes = []
+    for r in runtimes.values():
+        averages.append(np.median(r))
+        maxes.append(np.max(r))
+    ax1.plot(range(1, len(runtimes.keys()) + 1), averages)
+    ax1.plot(range(1, len(runtimes.keys()) + 1), maxes)
+
+
+
+
 
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
@@ -84,14 +95,14 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     plot0 = plt.plot(range(len(xTicks)), yValues0, color=orangeColour, label="avg runtime", linestyle="dashdot")
     plot1 = plt.plot(range(len(xTicks)), yValues1, linestyle="dashed", color=orangeColour, label="maximum allowed runtime")
     ax1 = plt.gca()
-    plt.xticks(range(len(xTicks)), xTicks, fontsize=14)
-    ax1.set_xlabel("[depthLimit, neighbourLimit]", fontsize=14)
-    ax1.set_ylabel("average runtime (ms)", color=orangeColour, fontsize=14)
+    plt.xticks(range(len(xTicks)), xTicks, fontsize=16)
+    ax1.set_xlabel("[depthLimit, neighbourLimit]", fontsize=16)
+    ax1.set_ylabel("average runtime (ms)", color=orangeColour, fontsize=16)
     yticklabels1 = []
     yticks = [i/10 for i in range(0, 30, 1)]
     for yt in yticks:
         yticklabels1.append(str(round(yt * 1000)))
-    ax1.set_yticks(yticks, labels=yticklabels1, color=orangeColour, fontsize = 14)
+    ax1.set_yticks(yticks, labels=yticklabels1, color=orangeColour, fontsize = 16)
     ax1.set_ylim(0, 1.2)
 
 
@@ -99,7 +110,7 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     ax2 = ax1.twinx()
     plot2 = ax2.plot(range(len(xTicks)), yValues2, color="blue", label="avg score improvement (right axis)", linestyle="solid")
     # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
-    ax2.set_ylabel("average score improvement", color="blue", fontsize=14)
+    ax2.set_ylabel("average score improvement", color="blue", fontsize=16)
 
 
 
@@ -107,7 +118,7 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     yticks2 = [i/10 for i in range(11)]
     for yt in range(11):
         yticklabels2.append(str(yt / 10))
-    ax2.set_yticks(yticks2, labels=yticklabels2, color="blue", fontsize = 14)
+    ax2.set_yticks(yticks2, labels=yticklabels2, color="blue", fontsize = 16)
     ax2.set_ylim(0, ax2ylim)
 
 
@@ -157,23 +168,26 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     handles1.extend([patchGreen, patchRed])
     handles1.extend(handles2)
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
-    plt.legend(handles=handles1, loc=legendLocation, fontsize = 14)
+    plt.legend(handles=handles1, loc=legendLocation, fontsize = 16)
 
 
 
 
     # plt.legend(loc="upper left")
 
-    ax1.set_title(f"Score improvement and runtime per limit for the {experiment} graph type", fontsize = 18)
+    ax1.set_title(f"Score improvement and runtime per limit for the {experiment} graph type", fontsize = 16)
 
     # fig.tight_layout()
     plt.tight_layout()
 
-
+    # plt.figure(figsize=(10,6))
+    fig = plt.gcf()
+    fig.set_size_inches(14.5, 9.5)
+    # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - tradeoff experiment/showcase-{experiment}.pdf", bbox_inches="tight")
     plt.show()
 
 
-experiment = "village"
+experiment = "increasing_grid"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 # pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic_neighbours_upper_limit.csv"
 
@@ -182,9 +196,9 @@ neighbourLimits = []
 
 depthLimitDict = {}
 
-# increasing_depths_runtime_dict = {}
-# for i in range(10, 201, 10):
-#     increasing_depths_runtime_dict[i] = []
+increasing_depths_runtime_dict = {}
+for i in range(10, 201, 10):
+    increasing_depths_runtime_dict[i] = []
 
 with open(pathHeuristicPaths, "r") as file:
     for line in file:
@@ -207,11 +221,11 @@ with open(pathHeuristicPaths, "r") as file:
             if r != "05":
                 runtimes.append(float(r))
 
-        # for i in range(10, 201, 10):
-        #     # print("i:", i)
-        #     for j in range(i):
-        #         index = i - 10 + j
-        #         increasing_depths_runtime_dict[i].append(runtimes[j])
+        for i in range(10, 201, 10):
+            # print("i:", i)
+            for j in range(i):
+                index = i - 10 + j
+                increasing_depths_runtime_dict[i].append(runtimes[j])
 
 
 
@@ -263,20 +277,20 @@ To show, each in separate pic:
 # graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement (%)","average extra #BER on top of shortest path due to updating path with detours")
 
 
-runtime_threshold = [0.5 for i in range(len(xTicks))]
-runtime_cap = math.ceil(max(avg_runtimes))
+# runtime_threshold = [0.5 for i in range(len(xTicks))]
+# runtime_cap = math.ceil(max(avg_runtimes))
 
 # # - What set of limits provides the best tradeoff between runtime and improvements?
-graphMe(xTicks, avg_runtimes, runtime_threshold, avg_improvements, experiment)
+# graphMe(xTicks, avg_runtimes, runtime_threshold, avg_improvements, experiment)
 
 
 # - What range of values the runtimes take on for each set of limits,
-# boxplot_cap = 0
-# for key in increasing_depths_runtime_dict:
-#     if max(increasing_depths_runtime_dict[key]) > boxplot_cap:
-#         boxplot_cap = max(increasing_depths_runtime_dict[key])
+boxplot_cap = 0
+for key in increasing_depths_runtime_dict:
+    if max(increasing_depths_runtime_dict[key]) > boxplot_cap:
+        boxplot_cap = max(increasing_depths_runtime_dict[key])
 
-# runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
-# boxplotMe(increasing_depths_runtime_dict, "runtime (s)", "#hops between start and end node", "Boxplots of runtimes (s) for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
+runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
+boxplotMe(increasing_depths_runtime_dict, "runtime (s)", "#hops between start and end node", "Boxplots of runtimes (s) for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
 
 
