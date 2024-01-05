@@ -9,8 +9,10 @@ import csv
 from scipy.optimize import curve_fit
 
 
+# def function(x, a, b, c):
+#     return a * pow(b, x) + c
 def function(x, a, b, c):
-    return a * pow(b, x) + c
+    return a * x * x + b * x + c
 
 def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     plt.rcParams["font.family"] = "monospace"
@@ -18,9 +20,6 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
 
     fig, ax1 = plt.subplots()
     xdata = range(1, len(runtimes.keys()) + 1)
-
-    # Plot black line to show 0
-    ax1.plot(xdata, [0 for i in xdata], color="black")
 
     c = "orange"
     ax1.boxplot(runtimes.values(), notch=True, patch_artist=True,
@@ -32,6 +31,7 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
             )
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
+    ax1.set_yticks(range(0, 9))
 
     medians = []
     maxes = []
@@ -45,8 +45,8 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     poptMed, pcov = curve_fit(function, xdata, medians)
     print("max parameters:", poptMax)
     print("med parameters:", poptMed)
-    ax1.plot(xdata, function(xdata, *poptMax), label = f"Approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot {round(poptMax[1], 3)}^x - {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
-    ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
+    ax1.plot(xdata, function(xdata, *poptMax), label = f"Polynomial approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot x^2 - {abs(round(poptMax[1], 3))} \cdot x + {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
+    ax1.plot(xdata, function(xdata, *poptMed), label = f"Polynomial approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot x^2 + {round(poptMed[1], 3)} \cdot x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
     # ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with y = {round(poptMed[0], 3)} * {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}", linestyle="dashed", color="g")
 
 
@@ -57,7 +57,7 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
     ax1.set_title(title)
-    ax1.set_ylim([-.5, cap + 0.25])
+    ax1.set_ylim([0, 8])
 
     plt.legend(fontsize=16)
 
