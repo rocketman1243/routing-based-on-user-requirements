@@ -47,9 +47,13 @@ village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 
 increasing_grid_limits = [[2, 3]]
 
+internet_graph_0_25_ber_limits = [[2, i] for i in [2, 3, 4, 5, 6, 7, 8, 9]]
+internet_graph_0_25_ber_limits += [[3, i] for i in [4, 5, 6, 7]]
+internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+
 # graphTypes = ["as_graph", "city", "flights", "village"]
 # graphTypes = ["as_graph_ber_5", "as_graph_ber_25", "as_graph_ber_500"]
-graphTypes = ["as_graph_linear"]
+graphTypes = ["internet_graph_0_25_ber"]
 
 CHOSEN_PATH = comparison_experiment_path
 
@@ -79,6 +83,8 @@ for graphType in graphTypes:
         limit_entries = village_limits
     if graphType == "increasing_grid":
         limit_entries = increasing_grid_limits
+    if graphType == "internet_graph_0_25_ber":
+        limit_entries = internet_graph_0_25_ber_limits
     if len(limit_entries) == 0:
         print("NO LIMITS RECOGNIZED, EXITING")
         exit(0)
@@ -138,8 +144,9 @@ for graphType in graphTypes:
         def handler(signum, frame):
             raise Exception("end of time")
 
+        timePerPROSeconds = 60
         # timePerPROSeconds = 300 # 5 minutes = 300 seconds
-        timePerPROSeconds = 3600 # 1 hour
+        # timePerPROSeconds = 3600 # 1 hour
 
         print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 

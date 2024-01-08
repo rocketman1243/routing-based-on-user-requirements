@@ -219,6 +219,7 @@ def globalBFS(G, PRO):
             if len(Bc) > BglobalBestSCore:
                 BglobalBestSCore = len(Bc)
                 Pb = copy.deepcopy(Pc)
+                print("found better path!", BglobalBestSCore, Pb)
 
             continue # Stop exploring after final node
 

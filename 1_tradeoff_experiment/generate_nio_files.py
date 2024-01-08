@@ -17,7 +17,8 @@ prefix = "1_tradeoff_experiment/"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
-experiment = "increasing_grid"
+# experiment = "increasing_grid"
+experiment = "scalability_internet"
 
 
 
@@ -33,8 +34,8 @@ maxNrOfFeatures = 100
 # COMMENT/UNCOMMENT AS NEEDED
 
 output_path = ""
-if "as_graph" in experiment:
-    number_of_nodes = 75388
+if "as_graph" in experiment or "internet" in experiment:
+    # number_of_nodes = 75388
     edges = []
     with open(prefix + "as-links.txt", "r") as file:
         for line in file:

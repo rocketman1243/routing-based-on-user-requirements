@@ -1,8 +1,8 @@
 import random
 import json
-import copy
 import os
-import math
+import networkx as nx
+from generate_internet_scalability_paths import generate_path_with_minimum_length
 
 # Tuning values
 
@@ -15,7 +15,9 @@ import math
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
-experiment = "increasing_grid"
+# experiment = "increasing_grid"
+# experiment = "internet_graph_0_25_ber"
+experiment = "scalability_internet"
 
 n = 100
 best_effort_min_amount = n
@@ -45,7 +47,7 @@ if dry_run:
 # causing dead files from previous runs to still exist
 
 output_path = prefix + "pro_files/" + experiment
-if not dry_run and experiment != "increasing_grid":
+if not dry_run and experiment != "increasing_grid" and experiment != "scalability_internet":
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -59,6 +61,15 @@ with open(prefix + "as_numbers/" + experiment + "_as_numbers.txt", "r") as file:
     for line in file:
         ases.append(line[:-1])
 print("generating PROS with ", len(ases), "nodes")
+
+# for internet scalability
+edges = []
+with open(prefix + "as-links.txt", "r") as file:
+    for line in file:
+        items = line.split("|")
+        edges.append([items[0], items[1]])
+G = nx.Graph()
+G.add_edges_from(edges)
 
 # Generate random JSON objects
 output_objects = []
@@ -83,6 +94,28 @@ for index in range(num_objects):
         as_source = f"({start_index + index}, {0})"
         # as_destination = f"({destination_index}, {destination_index})"
         as_destination = f"({start_index + index}, {multiplier})"
+
+    if experiment == "scalability_internet":
+
+        # 10 through 200 in steps of 10
+        length = 10
+        print("before path generations")
+        # path = generate_path_with_minimum_length(G, length)
+
+        pathLengths = list(nx.shortest_path_length(G))
+        print(pathLengths)
+        for i in range(len(pathLengths)):
+            for j in range(len(pathLengths[i])):
+                if pathLengths[i][j] == length:
+                    as_source = i
+                    as_destination = j
+
+
+
+        print("after")
+        # as_source = path[0]
+        # as_destination = path[-1]
+
 
     # Requirements for privacy
     strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))

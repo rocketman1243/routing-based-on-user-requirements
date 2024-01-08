@@ -9,16 +9,17 @@ import os
 # experiment = "as_graph_ber_5"
 # experiment = "as_graph_ber_25"
 # experiment = "as_graph_ber_500"
-experiment = "as_graph_linear"
+# experiment = "as_graph_linear"
 # experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
+experiment = "internet_graph_0_25_ber"
 
-n = 100
-nr_of_features = n
-best_effort_min_amount = n
-best_effort_max_amount = n
+best_effort_min_amount = 25
+best_effort_max_amount = 25
+nr_of_features = 25
+
 
 num_objects = 200
 

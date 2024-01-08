@@ -14,15 +14,16 @@ prefix = "2_comparison_experiment/"
 # experiment = "as_graph_ber_5"
 # experiment = "as_graph_ber_25"
 # experiment = "as_graph_ber_500"
-experiment = "as_graph_linear"
+# experiment = "as_graph_linear"
 # experiment = "as_graph_uniform"
 # experiment = "city"
 # experiment = "flights"
 # experiment = "village"
+experiment = "internet_graph_0_25_ber"
 
 
-maxNrOfFeatures = 100
-minNrOfFeatures = 80
+maxNrOfFeatures = 25
+minNrOfFeatures = 0
 if "uniform" in experiment or "linear" in experiment:
     minNrOfFeatures = 0
 
@@ -31,7 +32,7 @@ dry_run = False
 # COMMENT/UNCOMMENT AS NEEDED
 
 output_path = ""
-if "as_graph" in experiment:
+if "as_graph" in experiment or "internet_graph" in experiment:
     G = nx.random_internet_as_graph(500)
     if "uniform" in experiment or "linear" in experiment:
         G = nx.random_internet_as_graph(200)
