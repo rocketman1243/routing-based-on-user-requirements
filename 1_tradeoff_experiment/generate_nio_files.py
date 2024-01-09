@@ -18,7 +18,8 @@ prefix = "1_tradeoff_experiment/"
 # experiment = "flights"
 # experiment = "village"
 # experiment = "increasing_grid"
-experiment = "scalability_internet"
+# experiment = "scalability_internet"
+experiment = "internet_graph_0_25_ber"
 
 
 
@@ -28,8 +29,8 @@ dry_run = False
 
 
 
-minNrOfFeatures = 80
-maxNrOfFeatures = 100
+minNrOfFeatures = 0
+maxNrOfFeatures = 25
 
 # COMMENT/UNCOMMENT AS NEEDED
 

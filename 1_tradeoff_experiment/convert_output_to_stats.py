@@ -14,24 +14,26 @@ from scipy.optimize import curve_fit
 def function(x, a, b, c):
     return a * x * x + b * x + c
 
-def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
+def boxplotMe(runtimes, yLabel, xLabel, title):
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
     fig, ax1 = plt.subplots()
     xdata = range(1, len(runtimes.keys()) + 1)
 
-    c = "orange"
+    c = "#9ce37d"
     ax1.boxplot(runtimes.values(), notch=True, patch_artist=True,
             boxprops=dict(facecolor=c, color=c),
             capprops=dict(color=c),
             whiskerprops=dict(color=c),
             flierprops=dict(color=c, markeredgecolor=c),
-            medianprops=dict(color="green"),
+            medianprops=dict(color="orange")
             )
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
-    ax1.set_yticks(range(0, 9))
+    plt.xticks(rotation=25)
+    ax1.set_yticks([i/100 for i in range(0, 31, 2)], labels=[str(i*10) for i in range(0, 31, 2)])
+    ax1.set_ylim([0, 0.3])
 
     medians = []
     maxes = []
@@ -39,14 +41,18 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
         medians.append(np.median(r))
         maxes.append(np.max(r))
 
+    yline2 = [0.04 for i in xdata]
+    ax1.plot(xdata, yline2, linestyle="dashed", label="40 ms", color = "grey")
+    yline1 = [0.01 for i in xdata]
+    ax1.plot(xdata, yline1, linestyle="dotted", label="10 ms", color = "grey")
 
     # Fit curve
-    poptMax, pcov = curve_fit(function, xdata, maxes)
-    poptMed, pcov = curve_fit(function, xdata, medians)
-    print("max parameters:", poptMax)
-    print("med parameters:", poptMed)
-    ax1.plot(xdata, function(xdata, *poptMax), label = f"Polynomial approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot x^2 - {abs(round(poptMax[1], 3))} \cdot x + {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
-    ax1.plot(xdata, function(xdata, *poptMed), label = f"Polynomial approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot x^2 + {round(poptMed[1], 3)} \cdot x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
+    # poptMax, pcov = curve_fit(function, xdata, maxes)
+    # poptMed, pcov = curve_fit(function, xdata, medians)
+    # print("max parameters:", poptMax)
+    # print("med parameters:", poptMed)
+    # ax1.plot(xdata, function(xdata, *poptMax), label = f"Polynomial approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot x^2 - {abs(round(poptMax[1], 3))} \cdot x + {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
+    # ax1.plot(xdata, function(xdata, *poptMed), label = f"Polynomial approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot x^2 + {round(poptMed[1], 3)} \cdot x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
     # ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with y = {round(poptMed[0], 3)} * {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}", linestyle="dashed", color="g")
 
 
@@ -57,9 +63,8 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
     ax1.set_title(title)
-    ax1.set_ylim([0, 8])
 
-    plt.legend(fontsize=16)
+    plt.legend()
 
     # if len(yValues2) > 0:
     #     # ax1_colour = (0.99, 0.32, 0.32)
@@ -79,9 +84,12 @@ def boxplotMe(runtimes, yLabel, xLabel, title, cap, yValues2, yLabel2):
     #     ax2.set_xticks(range(len(runtimes.keys())))
     #     ax2.set_ylim([0, cap])
 
-    # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - tradeoff experiment/{experiment}.pdf", bbox_inches="tight")
 
-    plt.show()
+    fig = plt.gcf()
+    fig.set_size_inches(19.5, 7)
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - tradeoff experiment/{experiment}.pdf", bbox_inches="tight")
+
+    # plt.show()
 
 
 
@@ -207,7 +215,7 @@ def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
     plt.show()
 
 
-experiment = "increasing_grid"
+experiment = "internet_graph_0_25_ber"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 # pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic_neighbours_upper_limit.csv"
 
@@ -219,6 +227,8 @@ depthLimitDict = {}
 increasing_depths_runtime_dict = {}
 for i in range(10, 201, 10):
     increasing_depths_runtime_dict[i] = []
+
+runtimesBoxplotDict = {}
 
 with open(pathHeuristicPaths, "r") as file:
     for line in file:
@@ -241,11 +251,13 @@ with open(pathHeuristicPaths, "r") as file:
             if r != "05":
                 runtimes.append(float(r))
 
-        for i in range(10, 201, 10):
-            # print("i:", i)
-            for j in range(i):
-                index = i - 10 + j
-                increasing_depths_runtime_dict[i].append(runtimes[j])
+        runtimesBoxplotDict[f"[{depthLimit},{neighbourLimit}]"] = runtimes
+
+        # for i in range(10, 201, 10):
+        #     # print("i:", i)
+        #     for j in range(i):
+        #         index = i - 10 + j
+        #         increasing_depths_runtime_dict[i].append(runtimes[j])
 
 
 
@@ -297,7 +309,7 @@ To show, each in separate pic:
 # graphMe(xTicks, avg_improvements, int(math.ceil(max(avg_improvements))), avg_relative_improvements, 100, "[depthLimit, neighbourLimit]", "average number of extra BER","average improvement (%)","average extra #BER on top of shortest path due to updating path with detours")
 
 
-# runtime_threshold = [0.5 for i in range(len(xTicks))]
+runtime_threshold = [0.5 for i in range(len(xTicks))]
 # runtime_cap = math.ceil(max(avg_runtimes))
 
 # # - What set of limits provides the best tradeoff between runtime and improvements?
@@ -305,12 +317,15 @@ To show, each in separate pic:
 
 
 # - What range of values the runtimes take on for each set of limits,
-boxplot_cap = 0
-for key in increasing_depths_runtime_dict:
-    if max(increasing_depths_runtime_dict[key]) > boxplot_cap:
-        boxplot_cap = max(increasing_depths_runtime_dict[key])
+# boxplot_cap = 0
+# for key in increasing_depths_runtime_dict:
+#     if max(increasing_depths_runtime_dict[key]) > boxplot_cap:
+#         boxplot_cap = max(increasing_depths_runtime_dict[key])
 
-runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
-boxplotMe(increasing_depths_runtime_dict, "runtime (seconds)", "#hops between start and end node", "Boxplots of runtimes for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
+# # runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
+# boxplotMe(increasing_depths_runtime_dict, "runtime (seconds)", "#hops between start and end node", "Boxplots of runtimes for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
+
+# Realistic scenario runtimes plot
+boxplotMe(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", "Boxplots of runtimes for Realistic Scenario experiment")
 
 

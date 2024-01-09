@@ -16,10 +16,10 @@ from generate_internet_scalability_paths import generate_path_with_minimum_lengt
 # experiment = "flights"
 # experiment = "village"
 # experiment = "increasing_grid"
-# experiment = "internet_graph_0_25_ber"
-experiment = "scalability_internet"
+# experiment = "scalability_internet"
+experiment = "internet_graph_0_25_ber"
 
-n = 100
+n = 25
 best_effort_min_amount = n
 best_effort_max_amount = n
 nr_of_features = n
@@ -27,7 +27,7 @@ nr_of_features = n
 
 
 
-num_objects = 10
+num_objects = 100
 
 
 dry_run = False
@@ -164,6 +164,6 @@ for index in range(num_objects):
 if not dry_run:
     # Print the generated JSON objects
     for i, obj in enumerate(output_objects):
-        with open(f"{output_path}/pro_{(i + start_pro):03}.json", "w") as file:
+        with open(f"{output_path}/pro_{(i):03}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
 

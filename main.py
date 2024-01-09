@@ -47,9 +47,11 @@ village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 
 increasing_grid_limits = [[2, 3]]
 
-internet_graph_0_25_ber_limits = [[2, i] for i in [2, 3, 4, 5, 6, 7, 8, 9]]
-internet_graph_0_25_ber_limits += [[3, i] for i in [4, 5, 6, 7]]
-internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+
+internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
+internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 
 # graphTypes = ["as_graph", "city", "flights", "village"]
 # graphTypes = ["as_graph_ber_5", "as_graph_ber_25", "as_graph_ber_500"]
@@ -57,8 +59,8 @@ graphTypes = ["internet_graph_0_25_ber"]
 
 CHOSEN_PATH = comparison_experiment_path
 
-disableFullSearch = False
-disableHeuristic = True
+disableFullSearch = True
+disableHeuristic = False
 
 ###########################################################################
 ###########################################################################
@@ -70,7 +72,6 @@ for graphType in graphTypes:
     pathToNIOFiles = f"{CHOSEN_PATH}/nio_files/{graphType}/"
     pathToPROFiles = f"{CHOSEN_PATH}/pro_files/{graphType}/"
 
-    outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}_heuristic.csv"
 
     limit_entries = []
     if "as_graph" in graphType:
@@ -144,9 +145,7 @@ for graphType in graphTypes:
         def handler(signum, frame):
             raise Exception("end of time")
 
-        timePerPROSeconds = 60
-        # timePerPROSeconds = 300 # 5 minutes = 300 seconds
-        # timePerPROSeconds = 3600 # 1 hour
+        timePerPROSeconds = 300 # 5 minutes = 300 seconds
 
         print("Note: FINDING FULL PATH with slowpoke SMARTBFS. SO settle in cos this is going to take some time.....")
 
@@ -183,10 +182,18 @@ for graphType in graphTypes:
 
     print("Finding paths using speedy boiiiiiiiiii")
 
-    # reset results file
-    open(outputFilePathHeuristic, "w")
+
+    outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}.csv"
+
+
+    if "tradeoff" in CHOSEN_PATH:
+        # reset results file
+        open(outputFilePathHeuristic, "w")
 
     for current_limits in limit_entries:
+        if "comparison" in CHOSEN_PATH:
+            outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}_{current_limits}.csv"
+            open(outputFilePathHeuristic, "w")
         with open(outputFilePathHeuristic, 'a') as file:
 
             improvements = []

@@ -2,6 +2,7 @@ from statistics import mean, median
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from matplotlib.lines import Line2D
 
 
 
@@ -50,76 +51,156 @@ def cdf(data, title, xlabel, ylabel):
     # plt.show()
 
 
-experiment = "as_graph"
-graphTitle = "AS Graph Network"
+def boxplotMe(differences, xLabel, yLabel, title):
+    plt.rcParams["font.family"] = "monospace"
+    plt.rcParams["font.size"] = "18"
+
+    fig, ax1 = plt.subplots()
+    xdata = range(1, len(differences.keys()) + 1)
+
+    c = "#9ce37d"
+    # ax1.boxplot(differences.values(),
+    #         notch=True,
+    #         patch_artist=True,
+    #         boxprops=dict(facecolor=c, color=c),
+    #         capprops=dict(color=c),
+    #         whiskerprops=dict(color=c),
+    #         flierprops=dict(color=c, markeredgecolor=c),
+    #         medianprops=dict(color="orange")
+    #         )
+    violin = ax1.violinplot(differences.values(), showmeans=True,
+                     showextrema=True, showmedians=True, widths=0.8)
+
+    for pc in violin["bodies"]:
+        pc.set_facecolor("green")
+        pc.set_edgecolor("black")
+        pc.set_alpha(0.5)
+
+    violin["cmedians"].set_edgecolor("red")
+    violin["cmeans"].set_edgecolor("yellow")
+
+    plt.xticks(xdata, labels=differences.keys(), rotation=25)
+    ax1.set_xlim([0, len(differences) + 1])
+    ax1.set_yticks([i for i in range(0, 26, 2)] + [25], labels=[str(i) for i in range(0, 26, 2)] + [str(25)])
+    ax1.set_ylim([-0.25, 25])
+
+    medians = []
+    maxes = []
+    for r in differences.values():
+        medians.append(np.median(r))
+        maxes.append(np.max(r))
+
+    yline2 = [2 for i in xdata]
+    ax1.plot(xdata, yline2, linestyle="dashed", label="Score difference = 2", color = "grey")
+    yline1 = [1 for i in xdata]
+    ax1.plot(xdata, yline1, linestyle="dotted", label="Score difference = 1", color = "grey")
+
+
+
+
+    ax1.set_xlabel(xLabel)
+    ax1.set_ylabel(yLabel)
+    ax1.set_title(title)
+
+    plt.legend()
+
+    handles1, labels = ax1.get_legend_handles_labels()
+    line = Line2D([0], [0], label='mean value of violin plot', color='yellow')
+    line2 = Line2D([0], [0], label='median value of violin plot', color='red')
+    handles1.extend([line, line2])
+    # plt.legend(handles=handles1, loc=(0.005, 0.05))
+    plt.legend(handles=handles1, loc="upper left", fontsize = 16)
+
+
+    fig = plt.gcf()
+    fig.set_size_inches(19.5, 9)
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/{experiment}-comparison.pdf", bbox_inches="tight")
+
+    # plt.show()
+
+
+experiment = "internet_graph_0_25_ber"
+graphTitle = "Score differences between heuristic and globally best solution"
 
 
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
-pathHeuristicPaths = f"2_comparison_experiment/results/{experiment}_heuristic.csv"
 
-scoreFullPaths = {}
-scoreHeuristicPaths = {}
 
-nrOfItems = 100
-counter = 0
-with open(pathFullPaths, "r") as file:
-    for line in file:
-        if counter < 100:
-            counter += 1
-        else:
-            break
+internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
+internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3, 4]]
+internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3]]
 
-        items = line.split(",")
+differencesDict = {}
+for limit in internet_graph_0_25_ber_limits:
+    heuristicPath = f"2_comparison_experiment/results/{experiment}_{limit}.csv"
 
-        scoreFullPaths[items[0]] = {
-            "hopcount": int(items[1]),
-            "nrBER": int(items[2]),
-            "runtime": float(items[3])
-        }
+    scoreFullPaths = {}
+    scoreHeuristicPaths = {}
 
-with open(pathHeuristicPaths, "r") as file:
-    for line in file:
-        items = line.split(",")
+    nrOfItems = 100
+    counter = 0
+    with open(pathFullPaths, "r") as file:
+        for line in file:
+            if counter < 100:
+                counter += 1
+            else:
+                break
 
-        scoreHeuristicPaths[items[0]] = {
-            "hopcount": int(items[1]),
-            "nrBER": int(items[2]),
-            "runtime": float(items[3])
-        }
+            items = line.split(",")
 
-hopcountFull = []
-hopcountHeuristic = []
-nrBERFull = []
-nrBERHeuristic = []
-runtimeFull = []
-runtimeHeuristic = []
+            scoreFullPaths[items[0]] = {
+                "hopcount": int(items[1]),
+                "nrBER": int(items[2]),
+                "runtime": float(items[3])
+            }
 
-hopcountDiff = []
-BERdiff = []
+    with open(heuristicPath, "r") as file:
+        for line in file:
+            items = line.split(",")
 
-for pro in scoreFullPaths:
-    hopcountFull.append(scoreFullPaths[pro]["hopcount"])
-    nrBERFull.append(scoreFullPaths[pro]["nrBER"])
-    runtimeFull.append(scoreFullPaths[pro]["runtime"])
+            scoreHeuristicPaths[items[0]] = {
+                "hopcount": int(items[1]),
+                "nrBER": int(items[2]),
+                "runtime": float(items[3])
+            }
 
-    hopcountHeuristic.append(scoreHeuristicPaths[pro]["hopcount"])
-    nrBERHeuristic.append(scoreHeuristicPaths[pro]["nrBER"])
-    runtimeHeuristic.append(scoreHeuristicPaths[pro]["runtime"])
+    hopcountFull = []
+    hopcountHeuristic = []
+    nrBERFull = []
+    nrBERHeuristic = []
+    runtimeFull = []
+    runtimeHeuristic = []
 
-    hopcountDiff.append(scoreFullPaths[pro]["hopcount"] - scoreHeuristicPaths[pro]["hopcount"])
-    BERdiff.append(scoreFullPaths[pro]["nrBER"] - scoreHeuristicPaths[pro]["nrBER"])
+    hopcountDiff = []
+    BERdiff = []
 
-hopcounts = {
-    "globally best paths": hopcountFull,
-    "heuristic paths": hopcountHeuristic
-}
-hopcountDiffDict = {
-    "global hopcount -- heuristic hopcount": hopcountDiff
-}
+    for pro in scoreFullPaths:
+        hopcountFull.append(scoreFullPaths[pro]["hopcount"])
+        nrBERFull.append(scoreFullPaths[pro]["nrBER"])
+        runtimeFull.append(scoreFullPaths[pro]["runtime"])
 
+        hopcountHeuristic.append(scoreHeuristicPaths[pro]["hopcount"])
+        nrBERHeuristic.append(scoreHeuristicPaths[pro]["nrBER"])
+        runtimeHeuristic.append(scoreHeuristicPaths[pro]["runtime"])
+
+        hopcountDiff.append(scoreFullPaths[pro]["hopcount"] - scoreHeuristicPaths[pro]["hopcount"])
+        BERdiff.append(scoreFullPaths[pro]["nrBER"] - scoreHeuristicPaths[pro]["nrBER"])
+
+    hopcounts = {
+        "globally best paths": hopcountFull,
+        "heuristic paths": hopcountHeuristic
+    }
+    hopcountDiffDict = {
+        "global hopcount -- heuristic hopcount": hopcountDiff
+    }
+
+
+    differencesDict[f"[{limit[0]},{limit[1]}]"] = BERdiff
 
 #
-cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
+# cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
+boxplotMe(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle)
 
 
 # print(nrBERFull)
@@ -134,8 +215,8 @@ for i in range(len(nrBERFull)):
 
 
 # print(relativeDifferences)
-total = sum(relativeDifferences)
-avg = total / len(relativeDifferences) * 100
+# total = sum(relativeDifferences)
+# avg = total / len(relativeDifferences) * 100
 # print("avg rel performance: ", avg)
 
 
