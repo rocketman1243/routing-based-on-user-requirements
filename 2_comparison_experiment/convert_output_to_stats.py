@@ -118,10 +118,54 @@ def boxplotMe(differences, xLabel, yLabel, title):
 
     # plt.show()
 
+def bar():
+    plt.rcParams["font.family"] = "monospace"
+    plt.rcParams["font.size"] = "18"
+
+    # Feature ranges
+    x = ["4-5", "20-25", "80-100", "400-500"]
+    y = [97.80, 98.83, 98.79, 97.14]
+    # different graph types
+    # x = ["AS Graph", "City", "Flights", "Village"]
+    # y = [98.79, 85.11, 98.43, 90.28]
+    # selected limit values
+    # x = ["4-5", "20-25", "80-100", "400-500"]
+    # depthLimitValues = [3, 2, 2, 2]
+    # neighbourLimitValues = [6, 15, 8, 2]
+    # xticks = np.arange(4)
+
+    x.reverse()
+    # neighbourLimitValues.reverse()
+    # depthLimitValues.reverse()
+
+    # bar_colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red']
+    bar_colors = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+    bar_colors.reverse()
+    plt.barh(x, y, color=bar_colors)
+    # plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
+    # plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit")
+    plt.title("Relative performance of heuristic", fontsize=18)
+    plt.xticks(range(0, 101, 10), labels=[str(i) + "%" for i in range(0, 101, 10)])
+    # plt.xlim([0, 16])
+    plt.yticks(range(4), labels=x)
+    plt.ylabel("Feature range")
+    plt.xlabel("Score relative to globally optimal score")
+    # plt.legend(loc="lower right")
+
+
+    plt.tight_layout()
+    fig = plt.gcf()
+    fig.set_size_inches(11, 3)
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/variable_score_range--relative_performance.pdf", bbox_inches="tight")
+    # plt.show()
+
+
 
 experiment = "internet_graph_0_25_ber"
 graphTitle = "Score differences between heuristic and globally best solution"
 
+bar()
+exit(0)
 
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
 
@@ -200,7 +244,8 @@ for limit in internet_graph_0_25_ber_limits:
 
 #
 # cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
-boxplotMe(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle)
+
+# boxplotMe(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle)
 
 
 # print(nrBERFull)
@@ -211,13 +256,21 @@ boxplotMe(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", g
 relativeDifferences = []
 for i in range(len(nrBERFull)):
     # print(nrBERFull[i], BERdiff[i], BERdiff[i] / nrBERFull[i] )
-    relativeDifferences.append((nrBERFull[i] - BERdiff[i]) / nrBERFull[i])
+    if nrBERFull[i] > 0:
+        relativeDifferences.append((nrBERFull[i] - BERdiff[i]) / nrBERFull[i])
+    else:
+        relativeDifferences.append(0)
+
+
 
 
 # print(relativeDifferences)
 # total = sum(relativeDifferences)
 # avg = total / len(relativeDifferences) * 100
 # print("avg rel performance: ", avg)
+
+
+# Quick and dirty bar stats
 
 
 # OLD stats
@@ -227,3 +280,4 @@ for i in range(len(nrBERFull)):
 # spit_stats(runtimeFull, runtimeHeuristic, f"Runtime to find global path much larger than heuristic for the {experiment} graph type.", "path request number", "runtime (seconds)", "runtime (s)")
 
 # spit_stats(hopcountDiff,[], f"Runtime comparison for the {experiment} graph type.\n\nPositive: Global path is longer. Negative: Heuristic path is longer", "", "path request number", "Difference in hopcount")
+

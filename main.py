@@ -18,18 +18,22 @@ comparison_experiment_path = "2_comparison_experiment"
 ############# TWEAK HERE #################################################
 ##########################################################################
 
-# as_graph_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
-# as_graph_limits = []
-# as_graph_limits += [[2, i] for i in [1, 2, 3, 4, 5]]
-# as_graph_limits += [[3, i] for i in [4, 5, 6, 7]]
-# as_graph_limits += [[4, i] for i in [1, 2, 3, 4, 5]]
+as_graph_limits = []
+# as_graph_limits += [[1, i] for i in [10, 20, 30, 40, 50]]
+# as_graph_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7]]
+as_graph_limits += [[3, i] for i in [1, 2, 3]]
+# as_graph_limits += [[4, i] for i in [1, 2, 3, 4]]
 
-as_graph_limits = [[2, 3]] # BEST LIMITS
+# as_graph_limits = [[2, 3]] # BEST LIMITS
 
 
-# city_limits = [[i, 3] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-# city_limits = [[3, i] for i in [1, 2]]
-city_limits = [[2, 3]]
+
+city_limits = [[1, i] for i in [1, 2, 3]]
+city_limits = [[2, i] for i in [1, 2, 3]]
+city_limits += [[3, i] for i in [1, 2, 3]]
+city_limits += [[4, i] for i in [1, 2]]
+
+# city_limits = [[2, 3]]
 
 
 # flights_limits = [[1, i] for i in [30, 40, 50, 60]]
@@ -54,10 +58,9 @@ internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 1
 internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 
 # graphTypes = ["as_graph", "city", "flights", "village"]
-# graphTypes = ["as_graph_ber_5", "as_graph_ber_25", "as_graph_ber_500"]
-graphTypes = ["internet_graph_0_25_ber"]
+graphTypes = ["as_graph_ber_500"]
 
-CHOSEN_PATH = comparison_experiment_path
+CHOSEN_PATH = tradeoff_experiment_path
 
 disableFullSearch = True
 disableHeuristic = False
@@ -183,7 +186,7 @@ for graphType in graphTypes:
     print("Finding paths using speedy boiiiiiiiiii")
 
 
-    outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}.csv"
+    outputFilePathHeuristic = f"{CHOSEN_PATH}/results/{graphType}_heuristic.csv"
 
 
     if "tradeoff" in CHOSEN_PATH:
