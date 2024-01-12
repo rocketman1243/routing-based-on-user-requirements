@@ -132,10 +132,124 @@ from scipy.optimize import curve_fit
 
 # def function(x, a, b, c):
 #     return a * pow(b, x) + c
-def function(x, a, b, c):
-    return a * x * x + b * x + c
+# def function(x, a, b, c):
+#     return a * x * x + b * x + c
 
-def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2ylim, step):
+# def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2ylim, step):
+#     plt.rcParams["font.family"] = "monospace"
+#     plt.rcParams["font.size"] = "18"
+
+#     fig, ax1 = plt.subplots()
+#     xdata = range(1, len(runtimes.keys()) + 1)
+
+#     c = "#c4a672"
+#     fill_color = "#f7ce86"
+#     bp = ax1.boxplot(runtimes.values(), notch=True, patch_artist=True,
+#             boxprops=dict(facecolor=fill_color, color=c),
+#             capprops=dict(color=c),
+#             whiskerprops=dict(color=c),
+#             flierprops=dict(color=c, markeredgecolor=c),
+#             medianprops=dict(color="orange"),
+#             showmeans=True
+#             )
+#     ax1.set_xticklabels(runtimes.keys())
+#     ax1.set_xlim([0, len(runtimes) + 1])
+#     plt.xticks(rotation=25)
+#     ax1.set_yticks([i/100 for i in range(0, upperLimit * 100 + 1, 25)], labels=[str(i*10) for i in range(0, upperLimit * 100 + 1, 25)], color=c)
+#     print(upperLimit)
+#     # ax1.set_yticks([i for i in range(0, upperLimit, 1000)], labels=[str(i) for i in range(0, upperLimit, 1000)], color="green")
+#     # ax1.set_ylim([0, upperLimit])
+#     ax1.set_ylim([0, 5])
+
+#     medians = []
+#     maxes = []
+#     for r in runtimes.values():
+#         medians.append(np.median(r))
+#         maxes.append(np.max(r))
+
+#     yline1 = [0.5 for i in xdata]
+#     ax1.plot(xdata, yline1, linestyle="dotted", label="500 ms", color = "red")
+
+#     # Fit curve
+#     # poptMax, pcov = curve_fit(function, xdata, maxes)
+#     # poptMed, pcov = curve_fit(function, xdata, medians)
+#     # print("max parameters:", poptMax)
+#     # print("med parameters:", poptMed)
+#     # ax1.plot(xdata, function(xdata, *poptMax), label = f"Polynomial approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot x^2 - {abs(round(poptMax[1], 3))} \cdot x + {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
+#     # ax1.plot(xdata, function(xdata, *poptMed), label = f"Polynomial approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot x^2 + {round(poptMed[1], 3)} \cdot x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
+#     # ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with y = {round(poptMed[0], 3)} * {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}", linestyle="dashed", color="g")
+
+#     # Get avg path improvement in same graph
+#     ax2 = ax1.twinx()
+#     ax2.plot(xdata, pathImprovements, color="blue", label="avg score improvement (right axis)", linestyle="solid")
+#     # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
+#     ax2.set_ylabel("average score improvement", color="blue", fontsize=16)
+
+#     yticklabels2 = []
+#     # originalStep = step
+#     # if step < 1:
+#     #     ax2ylim *= 10
+#     #     step *= 10
+#     #     step = int(step)
+#     # print(step, ax2ylim)
+#     yticks2 = [round(i*step, 1) for i in range(0, math.ceil(ax2ylim / step + 1), 1)]
+#     # print(yticks2)
+#     for yt in yticks2:
+#         yticklabels2.append(yt)
+#     ax2.set_yticks(yticks2, labels=yticklabels2, color="blue", fontsize = 16)
+#     ax2.set_ylim(0, ax2ylim)
+#     ax2.grid()
+
+
+
+
+
+#     ax1.set_xlabel(xLabel)
+#     ax1.set_ylabel(yLabel, color = c)
+#     ax1.set_title(title, fontsize=16)
+
+
+#     handles1, labels = ax1.get_legend_handles_labels()
+#     handles2, labels = ax2.get_legend_handles_labels()
+#     # patchGreen = mpatches.Patch(color=greenColour, alpha=greenAlpha, label='fast enough')
+#     # patchRed = mpatches.Patch(color=redColour, alpha=redAlpha, label='too slow')
+#     triangle = Line2D([0], [0], label='average runtime', marker="^", color='green', linestyle='None')
+#     # handles1.extend([patchGreen, patchRed])
+#     handles2.append(triangle)
+#     handles2.extend(handles1)
+#     # plt.legend(handles=handles1, loc=(0.005, 0.05))
+
+#     legendLocation = "upper left"
+#     plt.legend(handles=handles2, loc=legendLocation, fontsize = 16)
+
+#     # if len(yValues2) > 0:
+#     #     # ax1_colour = (0.99, 0.32, 0.32)
+#     #     # ax1.set_ylabel(yLabel, fontsize=12)
+
+#     #     ax2 = ax1.twinx()
+#     #     yticklabels = []
+
+#     #     # yticks = range(0, int(math.ceil(cap)) + 1, 10)
+#     #     # for yt in yticks:
+#     #     #     yticklabels.append("")
+#     #     ax2_colour = (0.22, 0.3, 0.9)
+#     #     ax2.plot(yValues2, color=ax2_colour, label=yLabel)
+#     #     # ax2.set_ylabel(yLabel2, color=ax2_colour, fontsize=12)
+#     #     # ax2.set_yticks(yticks, labels=yticklabels)
+#     #     # ax2.tick_params(axis='y', labelcolor=ax2_colour)
+#     #     ax2.set_xticks(range(len(runtimes.keys())))
+#     #     ax2.set_ylim([0, cap])
+
+
+#     fig = plt.gcf()
+#     fig.set_size_inches(19.5, 7)
+#     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/{experiment}-feature-range-runtimes-boxplot.pdf", bbox_inches="tight")
+
+
+#     # plt.show()
+
+
+def realisticScenarioBoxplots(runtimes, yLabel, xLabel, title):
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
@@ -149,17 +263,18 @@ def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2
             capprops=dict(color=c),
             whiskerprops=dict(color=c),
             flierprops=dict(color=c, markeredgecolor=c),
-            medianprops=dict(color="orange"),
+            medianprops=dict(color="black"),
             showmeans=True
             )
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
     plt.xticks(rotation=25)
-    ax1.set_yticks([i/100 for i in range(0, upperLimit * 100 + 1, 25)], labels=[str(i*10) for i in range(0, upperLimit * 100 + 1, 25)], color=c)
+    upperLimit = 50
+    ax1.set_yticks([i/100 for i in range(0, upperLimit * 100 + 1, 5)], labels=[str(i*10) for i in range(0, upperLimit * 100 + 1, 5)], color=c)
     print(upperLimit)
     # ax1.set_yticks([i for i in range(0, upperLimit, 1000)], labels=[str(i) for i in range(0, upperLimit, 1000)], color="green")
     # ax1.set_ylim([0, upperLimit])
-    ax1.set_ylim([0, 5])
+    ax1.set_ylim([0, 0.5])
 
     medians = []
     maxes = []
@@ -167,41 +282,10 @@ def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2
         medians.append(np.median(r))
         maxes.append(np.max(r))
 
-    yline1 = [0.5 for i in xdata]
-    ax1.plot(xdata, yline1, linestyle="dotted", label="500 ms", color = "red")
-
-    # Fit curve
-    # poptMax, pcov = curve_fit(function, xdata, maxes)
-    # poptMed, pcov = curve_fit(function, xdata, medians)
-    # print("max parameters:", poptMax)
-    # print("med parameters:", poptMed)
-    # ax1.plot(xdata, function(xdata, *poptMax), label = f"Polynomial approximation of maximum values, with " + fr"$y = {round(poptMax[0], 3)} \cdot x^2 - {abs(round(poptMax[1], 3))} \cdot x + {abs(round(poptMax[2], 3))}$", linestyle="dashdot", color="purple")
-    # ax1.plot(xdata, function(xdata, *poptMed), label = f"Polynomial approximation of median values, with " + fr"$y = {round(poptMed[0], 3)} \cdot x^2 + {round(poptMed[1], 3)} \cdot x - {abs(round(poptMed[2], 3))}$", linestyle="dashed", color="g")
-    # ax1.plot(xdata, function(xdata, *poptMed), label = f"Approximation of median values, with y = {round(poptMed[0], 3)} * {round(poptMed[1], 3)}^x - {abs(round(poptMed[2], 3))}", linestyle="dashed", color="g")
-
-    # Get avg path improvement in same graph
-    ax2 = ax1.twinx()
-    ax2.plot(xdata, pathImprovements, color="blue", label="avg score improvement (right axis)", linestyle="solid")
-    # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
-    ax2.set_ylabel("average score improvement", color="blue", fontsize=16)
-
-    yticklabels2 = []
-    # originalStep = step
-    # if step < 1:
-    #     ax2ylim *= 10
-    #     step *= 10
-    #     step = int(step)
-    # print(step, ax2ylim)
-    yticks2 = [round(i*step, 1) for i in range(0, math.ceil(ax2ylim / step + 1), 1)]
-    # print(yticks2)
-    for yt in yticks2:
-        yticklabels2.append(yt)
-    ax2.set_yticks(yticks2, labels=yticklabels2, color="blue", fontsize = 16)
-    ax2.set_ylim(0, ax2ylim)
-    ax2.grid()
-
-
-
+    yline2 = [0.04 for i in xdata]
+    ax1.plot(xdata, yline2, linestyle="dashed", label="40 ms", color = "grey")
+    yline1 = [0.02 for i in xdata]
+    ax1.plot(xdata, yline1, linestyle="dotted", label="20 ms", color = "grey")
 
 
     ax1.set_xlabel(xLabel)
@@ -210,17 +294,17 @@ def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2
 
 
     handles1, labels = ax1.get_legend_handles_labels()
-    handles2, labels = ax2.get_legend_handles_labels()
+    # handles2, labels = ax2.get_legend_handles_labels()
     # patchGreen = mpatches.Patch(color=greenColour, alpha=greenAlpha, label='fast enough')
     # patchRed = mpatches.Patch(color=redColour, alpha=redAlpha, label='too slow')
     triangle = Line2D([0], [0], label='average runtime', marker="^", color='green', linestyle='None')
     # handles1.extend([patchGreen, patchRed])
-    handles2.append(triangle)
-    handles2.extend(handles1)
+    handles1 = [triangle] + handles1
+    # handles2.extend(handles1)
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
 
     legendLocation = "upper left"
-    plt.legend(handles=handles2, loc=legendLocation, fontsize = 16)
+    plt.legend(handles=handles1, loc=legendLocation, fontsize = 16)
 
     # if len(yValues2) > 0:
     #     # ax1_colour = (0.99, 0.32, 0.32)
@@ -243,7 +327,7 @@ def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2
 
     fig = plt.gcf()
     fig.set_size_inches(19.5, 7)
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/{experiment}-feature-range-runtimes-boxplot.pdf", bbox_inches="tight")
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/{experiment}-runtimes.pdf", bbox_inches="tight")
 
 
     # plt.show()
@@ -252,8 +336,8 @@ def boxplotMe(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2
 
 
 
-
-experiment = "as_graph_ber_5"
+experiment = "internet_graph_0_25_ber"
+# pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
 
 depthLimits = []
@@ -362,15 +446,24 @@ runtime_threshold = [0.5 for i in range(len(xTicks))]
 # # runtime_threshold = [0.5 for i in range(1, len(increasing_depths_runtime_dict) + 3) ]
 # boxplotMe(increasing_depths_runtime_dict, "runtime (seconds)", "#hops between start and end node", "Boxplots of runtimes for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
 
-# Realistic scenario runtimes plot
-mapName = "4 - 5"
-step = 0.2
 
-# print(list(runtimesBoxplotDict))
-upperLimit = 0
-for key in runtimesBoxplotDict:
-    if math.ceil(max(runtimesBoxplotDict[key])) > upperLimit:
-        upperLimit = math.ceil(max(runtimesBoxplotDict[key]))
-boxplotMe(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", f"Boxplots of runtimes and plot of average path improvement for the {mapName} feature range", upperLimit, avg_improvements, math.ceil(max(avg_improvements)), step)
+
+
+# Realistic scenario runtimes plot
+realisticScenarioBoxplots(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", f"Boxplots of runtimes for the realistic scenario experiment")
+
+
+
+
+
+
+# Limit stage boxplots
+# mapName = "4 - 5"
+# step = 0.2
+# upperLimit = 0
+# for key in runtimesBoxplotDict:
+#     if math.ceil(max(runtimesBoxplotDict[key])) > upperLimit:
+#         upperLimit = math.ceil(max(runtimesBoxplotDict[key]))
+# limitStage8xBoxplots(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", f"Boxplots of runtimes and plot of average path improvement for the {mapName} feature range", upperLimit, avg_improvements, math.ceil(max(avg_improvements)), step)
 
 

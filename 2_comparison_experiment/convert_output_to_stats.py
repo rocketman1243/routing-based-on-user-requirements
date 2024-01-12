@@ -32,24 +32,23 @@ from matplotlib.lines import Line2D
 #     plt.legend(loc="upper left")
 #     plt.show()
 
-def cdf(data, title, xlabel, ylabel):
-    plt.rcParams["font.family"] = "monospace"
-    plt.rcParams["font.size"] = "18"
+# def cdf(data, title, xlabel, ylabel):
+#     plt.rcParams["font.family"] = "monospace"
+#     plt.rcParams["font.size"] = "18"
 
 
-    plt.hist(data, color = (0.2, 0.9, 0.2), histtype="barstacked", bins=np.arange(12))
-    plt.yticks(list(range(0, 101, 10)), labels=[str(i) for i in list(range(0, 101, 10))])
-    plt.xticks(list(range(12)))
-    # plt.xlim(0, 11)
+#     plt.hist(data, color = (0.2, 0.9, 0.2), histtype="barstacked", bins=np.arange(12))
+#     plt.yticks(list(range(0, 101, 10)), labels=[str(i) for i in list(range(0, 101, 10))])
+#     plt.xticks(list(range(12)))
+#     # plt.xlim(0, 11)
 
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+#     plt.title(title)
+#     plt.xlabel(xlabel)
+#     plt.ylabel(ylabel)
 
-    plt.tight_layout()
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/comparison-{experiment}.pdf", bbox_inches="tight")
-    # plt.show()
-
+#     plt.tight_layout()
+#     # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/comparison-{experiment}.pdf", bbox_inches="tight")
+#     # plt.show()
 
 def boxplotMe(differences, xLabel, yLabel, title):
     plt.rcParams["font.family"] = "monospace"
@@ -57,27 +56,70 @@ def boxplotMe(differences, xLabel, yLabel, title):
 
     fig, ax1 = plt.subplots()
     xdata = range(1, len(differences.keys()) + 1)
+    c = "#9ce37d"
+    ax1.boxplot(differences.values(),
+            notch=True,
+            patch_artist=True,
+            showmeans=True,
+            boxprops=dict(facecolor=c, color=c),
+            capprops=dict(color=c),
+            whiskerprops=dict(color=c),
+            flierprops=dict(color=c, markeredgecolor=c),
+            medianprops=dict(color="orange")
+            )
+
+    yline2 = [0.01 for i in xdata]
+    ax1.plot(xdata, yline2, linestyle="dashed", label="10 ms", color = "grey")
+    yline1 = [0.04 for i in xdata]
+    ax1.plot(xdata, yline1, linestyle="dotted", label="40 ms", color = "grey")
+
+
+
+
+    ax1.set_xlabel(xLabel)
+    ax1.set_ylabel(yLabel)
+    ax1.set_title(title)
+
+    plt.legend()
+
+    handles1, labels = ax1.get_legend_handles_labels()
+    line = Line2D([0], [0], label='Average value', color='green', linestyle='None', marker="^")
+    handles1.extend([line])
+    # plt.legend(handles=handles1, loc=(0.005, 0.05))
+    plt.legend(handles=handles1, loc="upper left", fontsize = 16)
+
+
+    fig = plt.gcf()
+    fig.set_size_inches(19.5, 9)
+    # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/{experiment}-comparison.pdf", bbox_inches="tight")
+
+    plt.show()
+
+def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
+    plt.rcParams["font.family"] = "monospace"
+    plt.rcParams["font.size"] = "18"
+
+    fig, ax1 = plt.subplots()
+    xdata = range(1, len(differences.keys()) + 1)
 
     c = "#9ce37d"
-    # ax1.boxplot(differences.values(),
-    #         notch=True,
-    #         patch_artist=True,
-    #         boxprops=dict(facecolor=c, color=c),
-    #         capprops=dict(color=c),
-    #         whiskerprops=dict(color=c),
-    #         flierprops=dict(color=c, markeredgecolor=c),
-    #         medianprops=dict(color="orange")
-    #         )
     violin = ax1.violinplot(differences.values(), showmeans=True,
-                     showextrema=True, showmedians=True, widths=0.8)
+                     showextrema=True, showmedians=False, widths=0.8)
+
+    for i in range(len(differences)):
+        ax1.annotate(
+            str(round(avgRelativeDiffs[i])) + "%",
+            (i + 1 - 0.2, max(differences[list(differences)[i]]) + 0.2),
+            ha="left",
+            rotation=0)
 
     for pc in violin["bodies"]:
-        pc.set_facecolor("green")
+        pc.set_facecolor("#7ef77c")
         pc.set_edgecolor("black")
-        pc.set_alpha(0.5)
+        pc.set_alpha(0.8)
 
-    violin["cmedians"].set_edgecolor("red")
-    violin["cmeans"].set_edgecolor("yellow")
+    violin["cmeans"].set_edgecolor("blue")
+    # violin["cmedians"].set_edgecolor("red")
 
     plt.xticks(xdata, labels=differences.keys(), rotation=25)
     ax1.set_xlim([0, len(differences) + 1])
@@ -105,9 +147,9 @@ def boxplotMe(differences, xLabel, yLabel, title):
     plt.legend()
 
     handles1, labels = ax1.get_legend_handles_labels()
-    line = Line2D([0], [0], label='mean value of violin plot', color='yellow')
-    line2 = Line2D([0], [0], label='median value of violin plot', color='red')
-    handles1.extend([line, line2])
+    line = Line2D([0], [0], label='average value of violin plot', color='blue')
+    # line2 = Line2D([0], [0], label='median value of violin plot', color='red')
+    handles1.extend([line])
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
     plt.legend(handles=handles1, loc="upper left", fontsize = 16)
 
@@ -123,59 +165,67 @@ def bar():
     plt.rcParams["font.size"] = "18"
 
     # Feature ranges
-    x = ["4-5", "20-25", "80-100", "400-500"]
-    y = [97.80, 98.83, 98.79, 97.14]
+    # x = ["4-5", "20-25", "80-100", "400-500"]
+    # y = [97.80, 98.83, 98.79, 97.14]
     # different graph types
-    # x = ["AS Graph", "City", "Flights", "Village"]
+    x = ["AS Graph", "City", "Flights", "Village"]
     # y = [98.79, 85.11, 98.43, 90.28]
     # selected limit values
     # x = ["4-5", "20-25", "80-100", "400-500"]
-    # depthLimitValues = [3, 2, 2, 2]
-    # neighbourLimitValues = [6, 15, 8, 2]
-    # xticks = np.arange(4)
+
+    # depthLimitValues = [3, 2, 2, 2] # variable score range values
+    # neighbourLimitValues = [6, 15, 8, 2] # variable score range values
+    depthLimitValues = [2, 2, 2, 14]
+    neighbourLimitValues = [8, 3, 30, 3]
+    xticks = np.arange(4)
 
     x.reverse()
-    # neighbourLimitValues.reverse()
-    # depthLimitValues.reverse()
+    neighbourLimitValues.reverse()
+    depthLimitValues.reverse()
 
     # bar_colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red']
-    bar_colors = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
-    bar_colors.reverse()
-    plt.barh(x, y, color=bar_colors)
-    # plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
-    # plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit")
+    # bar_colors = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+    # bar_colors.reverse()
+    # plt.barh(x, y, color=bar_colors)
+    plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
+    plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit")
     plt.title("Relative performance of heuristic", fontsize=18)
-    plt.xticks(range(0, 101, 10), labels=[str(i) + "%" for i in range(0, 101, 10)])
+    # plt.xticks(range(0, 101, 10), labels=[str(i) + "%" for i in range(0, 101, 10)])
+    customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 33, 2))
+    plt.xticks(customXticks, labels=[str(i) for i in customXticks])
     # plt.xlim([0, 16])
     plt.yticks(range(4), labels=x)
-    plt.ylabel("Feature range")
-    plt.xlabel("Score relative to globally optimal score")
-    # plt.legend(loc="lower right")
+    # plt.ylabel("Feature range")
+    plt.ylabel("Graph type")
+    # plt.xlabel("Score relative to globally optimal score")
+    plt.xlabel("Limit value")
+    plt.legend(loc="upper right")
 
 
     plt.tight_layout()
     fig = plt.gcf()
     fig.set_size_inches(11, 3)
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/variable_score_range--relative_performance.pdf", bbox_inches="tight")
-    # plt.show()
+    # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
+    plt.show()
 
 
 
 experiment = "internet_graph_0_25_ber"
 graphTitle = "Score differences between heuristic and globally best solution"
 
-bar()
-exit(0)
+# bar()
+# exit(0)
 
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
 
 
 internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
 internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3, 4]]
-internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3]]
+internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3]]
+internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2]]
 
 differencesDict = {}
+avgRelativeDifferences = []
 for limit in internet_graph_0_25_ber_limits:
     heuristicPath = f"2_comparison_experiment/results/{experiment}_{limit}.csv"
 
@@ -218,6 +268,7 @@ for limit in internet_graph_0_25_ber_limits:
 
     hopcountDiff = []
     BERdiff = []
+    relativeDifferences = []
 
     for pro in scoreFullPaths:
         hopcountFull.append(scoreFullPaths[pro]["hopcount"])
@@ -231,6 +282,14 @@ for limit in internet_graph_0_25_ber_limits:
         hopcountDiff.append(scoreFullPaths[pro]["hopcount"] - scoreHeuristicPaths[pro]["hopcount"])
         BERdiff.append(scoreFullPaths[pro]["nrBER"] - scoreHeuristicPaths[pro]["nrBER"])
 
+        if scoreFullPaths[pro]["nrBER"] > 0:
+            relativeDifferences.append((scoreHeuristicPaths[pro]["nrBER"]) / scoreFullPaths[pro]["nrBER"] * 100)
+        else:
+            relativeDifferences.append(100)
+
+    avgRelativeDifferences.append(np.average(relativeDifferences))
+    relativeDifferences = []
+
     hopcounts = {
         "globally best paths": hopcountFull,
         "heuristic paths": hopcountHeuristic
@@ -242,35 +301,21 @@ for limit in internet_graph_0_25_ber_limits:
 
     differencesDict[f"[{limit[0]},{limit[1]}]"] = BERdiff
 
+
+
+
 #
 # cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
 
-# boxplotMe(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle)
+playMeSomeViolinPlots(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle, avgRelativeDifferences)
 
 
 # print(nrBERFull)
 # print(BERdiff)
 # print(relativeDifferences)
 
-# get avg relative diff:
-relativeDifferences = []
-for i in range(len(nrBERFull)):
-    # print(nrBERFull[i], BERdiff[i], BERdiff[i] / nrBERFull[i] )
-    if nrBERFull[i] > 0:
-        relativeDifferences.append((nrBERFull[i] - BERdiff[i]) / nrBERFull[i])
-    else:
-        relativeDifferences.append(0)
 
 
-
-
-# print(relativeDifferences)
-# total = sum(relativeDifferences)
-# avg = total / len(relativeDifferences) * 100
-# print("avg rel performance: ", avg)
-
-
-# Quick and dirty bar stats
 
 
 # OLD stats
