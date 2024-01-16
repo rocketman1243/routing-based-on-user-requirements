@@ -12,7 +12,7 @@ import queue
 import heapq
 from custom_shortest_path import bidirectionalBFSWithFilter, fulfillsStrictRequirements
 
-def MP(G, pro, limits):
+def localSearchHeuristic(G, pro, limits):
 
     tic = time.time()
 
@@ -77,7 +77,6 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
                 detourEnd = path[endIndex]
                 bottleneck = path[startIndex + 1:endIndex]
 
-
                 bottleneckFreeBER = copy.deepcopy(ber)
                 for c in set(path).difference(set(bottleneck)):
                     bottleneckFreeBER = bottleneckFreeBER.intersection(G.nodes[c]["features"])
@@ -117,6 +116,7 @@ def augmentPathToBiggestSubset(G, pro, path, depthLimit, neighbourLimit):
                     # Ensure no silly mistakes were made
                     if nx.is_simple_path(G, potential_path):
                         path = potential_path
+
 
     afterBER = copy.deepcopy(ber)
     for i in path:

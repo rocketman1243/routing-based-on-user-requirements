@@ -1,4 +1,4 @@
-from path_calculator import MP, globalBFS
+from path_calculator import localSearchHeuristic, globalBFS
 import os
 import json
 from types import SimpleNamespace
@@ -210,7 +210,7 @@ for graphType in graphTypes:
                 print(graphType + " - pro", i)
                 pro = pro_objects[i]
 
-                totalHops, extraHops, totalNrOfBER, improvement, runtime, pathfinderTime = MP(G, pro, current_limits)
+                totalHops, extraHops, totalNrOfBER, improvement, runtime, pathfinderTime = localSearchHeuristic(G, pro, current_limits)
 
                 if "comparison" in CHOSEN_PATH:
                     comparison_result_string = f"{i},{totalHops},{totalNrOfBER},{round(runtime, 3)}\n"
