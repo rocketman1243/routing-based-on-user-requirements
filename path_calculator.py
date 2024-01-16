@@ -224,16 +224,8 @@ def globalBFS(G, PRO):
             continue # Stop exploring after final node
 
 
-        neighboursWithBERIntersectionScore = []
         neighbours = list(nx.neighbors(G, vc))
-        for n in neighbours:
-            BERIntersectionScore = len(set(G.nodes[n]["features"]).intersection(Bc))
-            neighboursWithBERIntersectionScore.append([n, BERIntersectionScore])
-
-        neighboursSortedOnDescendingScore = sorted(neighboursWithBERIntersectionScore, key=lambda x: x[1], reverse=True)
-        neighboursSortedOnSCore = list(el[0] for el in neighboursSortedOnDescendingScore)
-
-        for vi in neighboursSortedOnSCore:
+        for vi in neighbours:
             viSatisfiesStrictRequirements = fulfillsStrictRequirements(G, PRO, vi)
             if vi not in Pc and viSatisfiesStrictRequirements:
                 Q.append((vi, Pc, Bc))
