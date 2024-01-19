@@ -160,53 +160,145 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
 
     # plt.show()
 
-def bar():
+# def infrastructure_experiment_limit_values():
+#     plt.rcParams["font.family"] = "monospace"
+#     plt.rcParams["font.size"] = "18"
+
+#     x = ["AS Graph", "City", "Flights", "Village"]
+#     depthLimitValues = [2, 2, 2, 14]
+#     neighbourLimitValues = [8, 3, 30, 3]
+#     xticks = np.arange(4)
+
+#     x.reverse()
+#     neighbourLimitValues.reverse()
+#     depthLimitValues.reverse()
+
+#     plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
+#     plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit", hatch="/")
+#     plt.title("Limit values for infrastructure experiment", fontsize=18)
+#     customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 33, 2))
+#     plt.xticks(customXticks, labels=[str(i) for i in customXticks])
+#     plt.yticks(range(4), labels=x)
+#     plt.ylabel("Graph type")
+#     plt.xlabel("Limit value")
+#     plt.legend(loc="upper right")
+
+
+#     plt.tight_layout()
+#     fig = plt.gcf()
+#     fig.set_size_inches(11, 3)
+#     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
+#     # plt.show()
+
+def score_range_limit_values():
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
-    # Feature ranges
-    # x = ["4-5", "20-25", "80-100", "400-500"]
-    # y = [97.80, 98.83, 98.79, 97.14]
-    # different graph types
-    x = ["AS Graph", "City", "Flights", "Village"]
-    # y = [98.79, 85.11, 98.43, 90.28]
-    # selected limit values
-    # x = ["4-5", "20-25", "80-100", "400-500"]
+    x = ["4-5", "20-25", "80-100", "400-500"]
 
-    # depthLimitValues = [3, 2, 2, 2] # variable score range values
-    # neighbourLimitValues = [6, 15, 8, 2] # variable score range values
-    depthLimitValues = [2, 2, 2, 14]
-    neighbourLimitValues = [8, 3, 30, 3]
+    depthLimitValues = [3, 2, 2, 2] # variable score range values
+    neighbourLimitValues = [6, 15, 8, 3] # variable score range values
     xticks = np.arange(4)
 
     x.reverse()
     neighbourLimitValues.reverse()
     depthLimitValues.reverse()
 
-    # bar_colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red']
-    # bar_colors = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
-    # bar_colors.reverse()
-    # plt.barh(x, y, color=bar_colors)
     plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
-    plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit")
-    plt.title("Relative performance of heuristic", fontsize=18)
-    # plt.xticks(range(0, 101, 10), labels=[str(i) + "%" for i in range(0, 101, 10)])
-    customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 33, 2))
+    plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit", hatch="/")
+    plt.title("Limit values for each feature range", fontsize=18)
+    customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 16, 2))
     plt.xticks(customXticks, labels=[str(i) for i in customXticks])
-    # plt.xlim([0, 16])
+    plt.xlim([0, 16])
     plt.yticks(range(4), labels=x)
-    # plt.ylabel("Feature range")
-    plt.ylabel("Graph type")
-    # plt.xlabel("Score relative to globally optimal score")
+    plt.ylabel("Feature range")
     plt.xlabel("Limit value")
-    plt.legend(loc="upper right")
-
+    plt.legend(loc="lower right")
 
     plt.tight_layout()
     fig = plt.gcf()
     fig.set_size_inches(11, 3)
-    # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
-    plt.show()
+    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/feature-range-limit_values.pdf", bbox_inches="tight")
+    # plt.show()
+
+# def ratio_limit_values_bars():
+#     plt.rcParams["font.family"] = "monospace"
+#     plt.rcParams["font.size"] = "18"
+
+#     x = ["2:3", "3:4", "4:5", "5:6"]
+
+#     depthLimitValues = [2, 2, 2, 2] # variable score range values
+#     neighbourLimitValues = [10, 9, 8, 9] # variable score range values
+#     xticks = np.arange(4)
+
+#     x.reverse()
+#     neighbourLimitValues.reverse()
+#     depthLimitValues.reverse()
+
+#     plt.barh(xticks+0.2, depthLimitValues, color="#42a4f5", height=0.4, label="depthLimit")
+#     plt.barh(xticks-0.2, neighbourLimitValues, color="#f5bc42", height=0.4, label="neighbourLimit", hatch="x", alpha=.99)
+#     plt.title("Limit values for each feature ratio", fontsize=18)
+#     customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+#     plt.xticks(customXticks, labels=[str(i) for i in customXticks])
+#     plt.xlim([0, 16])
+#     plt.yticks(range(4), labels=x)
+#     plt.ylabel("Ratio")
+#     plt.xlabel("Limit value")
+#     plt.legend(loc="lower right")
+
+#     plt.tight_layout()
+#     fig = plt.gcf()
+#     fig.set_size_inches(11, 3)
+#     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/ratios-limit-values.pdf", bbox_inches="tight")
+#     # plt.show()
+
+# def bar():
+#     plt.rcParams["font.family"] = "monospace"
+#     plt.rcParams["font.size"] = "18"
+
+#     # Feature ranges
+#     # x = ["4-5", "20-25", "80-100", "400-500"]
+#     # y = [97.80, 98.83, 98.79, 97.14]
+#     # different graph types
+#     x = ["AS Graph", "City", "Flights", "Village"]
+#     # y = [98.79, 85.11, 98.43, 90.28]
+#     # selected limit values
+#     # x = ["4-5", "20-25", "80-100", "400-500"]
+
+#     # depthLimitValues = [3, 2, 2, 2] # variable score range values
+#     # neighbourLimitValues = [6, 15, 8, 2] # variable score range values
+#     depthLimitValues = [2, 2, 2, 14]
+#     neighbourLimitValues = [8, 3, 30, 3]
+#     xticks = np.arange(4)
+
+#     x.reverse()
+#     neighbourLimitValues.reverse()
+#     depthLimitValues.reverse()
+
+#     # bar_colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red']
+#     # bar_colors = ['tab:orange', 'tab:blue', 'tab:green', 'tab:red']
+#     # bar_colors.reverse()
+#     # plt.barh(x, y, color=bar_colors)
+#     plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
+#     plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit", hatch="/")
+#     plt.title("Limit values for infrastructure experiment", fontsize=18)
+#     # plt.xticks(range(0, 101, 10), labels=[str(i) + "%" for i in range(0, 101, 10)])
+#     customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 33, 2))
+#     plt.xticks(customXticks, labels=[str(i) for i in customXticks])
+#     # plt.xlim([0, 16])
+#     plt.yticks(range(4), labels=x)
+#     # plt.ylabel("Feature range")
+#     plt.ylabel("Graph type")
+#     # plt.xlabel("Score relative to globally optimal score")
+#     plt.xlabel("Limit value")
+#     plt.legend(loc="upper right")
+
+
+#     plt.tight_layout()
+#     fig = plt.gcf()
+#     fig.set_size_inches(11, 3)
+#     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
+    # plt.show()
 
 
 
@@ -214,7 +306,11 @@ experiment = "internet_graph_0_25_ber"
 graphTitle = "Score differences between heuristic and globally best solution"
 
 # bar()
-# exit(0)
+score_range_limit_values()
+# infrastructure_experiment_limit_values()
+# ratio_limit_values_bars()
+
+exit(0)
 
 pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
 

@@ -11,7 +11,7 @@ import time
 # CHOSEN_PATH = test_path
 # path_to_nio_files = test_nio_path
 
-tradeoff_experiment_path = "1_tradeoff_experiment"
+limit_stage_path = "1_tradeoff_experiment"
 comparison_experiment_path = "2_comparison_experiment"
 
 ##########################################################################
@@ -51,16 +51,24 @@ village_limits = [[11, i] for i in [1, 2, 3, 4, 5, 6, 7, 8]]
 
 increasing_grid_limits = [[2, 3]]
 
-
-internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
+internet_graph_0_25_ber_limits = []
+internet_graph_0_25_ber_limits += [[1, i] for i in [10, 20, 30, 40, 50]]
 internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
 
-# graphTypes = ["as_graph", "city", "flights", "village"]
-graphTypes = ["as_graph_ber_500"]
 
-CHOSEN_PATH = tradeoff_experiment_path
+
+ratio_limits = []
+# ratio_limits += [[1, i] for i in [10, 20, 30, 40, 50]]
+ratio_limits += [[2, i] for i in [11, 12, 13, 14]]
+# ratio_limits += [[3, i] for i in [1, 2, 3, 4, 5]]
+# ratio_limits += [[4, i] for i in [1, 2, 3]]
+
+# graphTypes = ["as_graph", "city", "flights", "village"]
+graphTypes = ["ratio_2_3"]
+
+CHOSEN_PATH = limit_stage_path
 
 disableFullSearch = True
 disableHeuristic = False
@@ -89,6 +97,8 @@ for graphType in graphTypes:
         limit_entries = increasing_grid_limits
     if graphType == "internet_graph_0_25_ber":
         limit_entries = internet_graph_0_25_ber_limits
+    if "ratio" in graphType:
+        limit_entries = ratio_limits
     if len(limit_entries) == 0:
         print("NO LIMITS RECOGNIZED, EXITING")
         exit(0)

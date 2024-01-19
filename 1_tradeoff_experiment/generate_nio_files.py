@@ -19,7 +19,11 @@ prefix = "1_tradeoff_experiment/"
 # experiment = "village"
 # experiment = "increasing_grid"
 # experiment = "scalability_internet"
-experiment = "internet_graph_0_25_ber"
+# experiment = "internet_graph_0_25_ber"
+# experiment = "ratio_2_3"
+# experiment = "ratio_3_4"
+# experiment = "ratio_4_5"
+experiment = "ratio_5_6"
 
 
 
@@ -29,13 +33,13 @@ dry_run = False
 
 
 
-minNrOfFeatures = 0
-maxNrOfFeatures = 25
+minNrOfFeatures = 85
+maxNrOfFeatures = 102
 
 # COMMENT/UNCOMMENT AS NEEDED
 
 output_path = ""
-if "as_graph" in experiment or "internet" in experiment:
+if "as_graph" in experiment or "internet" in experiment or "ratio" in experiment:
     # number_of_nodes = 75388
     edges = []
     with open(prefix + "as-links.txt", "r") as file:

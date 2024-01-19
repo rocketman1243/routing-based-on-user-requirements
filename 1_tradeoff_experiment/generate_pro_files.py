@@ -17,9 +17,14 @@ from generate_internet_scalability_paths import generate_path_with_minimum_lengt
 # experiment = "village"
 # experiment = "increasing_grid"
 # experiment = "scalability_internet"
-experiment = "internet_graph_0_25_ber"
+# experiment = "internet_graph_0_25_ber"
+# experiment = "ratio_2_3"
+# experiment = "ratio_3_4"
+# experiment = "ratio_4_5"
+experiment = "ratio_5_6"
 
-n = 25
+
+n = 102
 best_effort_min_amount = n
 best_effort_max_amount = n
 nr_of_features = n
