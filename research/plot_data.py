@@ -3,7 +3,6 @@ import numpy as np
 import math
 
 
-
 map = "as_graph"
 title = "AS"
 
@@ -35,9 +34,6 @@ for i in range(xs):
 print(np.average(differences))
 
 
-
-
-
 plt.rcParams["font.family"] = "monospace"
 plt.rcParams["font.size"] = "16"
 plt.plot(range(len(dataset_degrees)), dataset_degrees, label="dataset degrees")
@@ -50,7 +46,7 @@ plt.ylabel("degree")
 plt.legend()
 plt.title(f"Degree distribution comparison plot for the {title} graph")
 ax = plt.gca()
-ax.set_yscale('log')
+ax.set_yscale("log")
 
 # fig = plt.gcf()
 # fig.set_size_inches(12, 5)

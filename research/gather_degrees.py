@@ -79,17 +79,10 @@ if not nowrite:
             file.write(f"{degree}\n")
 
 
-
 # print(degrees)
 # print(comparison_degrees)
 
 # print(stats.ks_2samp(degrees, comparison_degrees, method="asymp"))
-
-
-
-
-
-
 
 
 # target = 4416
@@ -98,5 +91,3 @@ if not nowrite:
 #     for j in range(40, 80):
 #         if i * j == target:
 #             print(i, j, i * j)
-
-

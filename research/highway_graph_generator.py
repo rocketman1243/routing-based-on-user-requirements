@@ -9,6 +9,7 @@ remove og edges
 remove duplicate highways
 """
 
+
 def generateHighwayGraph(m, n, minEdgeLength, maxEdgeLength):
     G = nx.grid_2d_graph(m, n)
     updated = {}
@@ -44,5 +45,6 @@ def generateHighwayGraph(m, n, minEdgeLength, maxEdgeLength):
     # plt.show()
 
     return G
+
 
 # G = generateHighwayGraph(5, 10, 2, 5)
