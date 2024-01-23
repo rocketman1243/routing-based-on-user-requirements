@@ -1,6 +1,6 @@
 import networkx as nx
 
-prefix = "1_filter_stage/"
+prefix = "1_limit_stage/"
 
 # for internet scalability
 edges = []

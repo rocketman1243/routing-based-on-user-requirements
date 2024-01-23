@@ -24,22 +24,19 @@ from generate_internet_scalability_paths import generate_path_with_minimum_lengt
 experiment = "ratio_5_6"
 
 
-n = 102
-best_effort_min_amount = n
-best_effort_max_amount = n
-nr_of_features = n
-
+best_effort_min_amount = 102
+best_effort_max_amount = 102
+nr_of_features = 102
+max_number_of_strict_requirements = 0
 
 num_objects = 100
-
 
 dry_run = False
 
 requirements = list(range(1, nr_of_features + 1))
-max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 
-prefix = "1_filter_stage/"
+prefix = "1_limit_stage/"
 
 ###################################33
 

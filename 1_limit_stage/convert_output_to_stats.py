@@ -19,7 +19,7 @@ from scipy.optimize import curve_fit
 #     zoneBoundaries = [5.07]
 
 
-#     # with open("1_filter_stage/annotation_parameters.csv", "r") as file:
+#     # with open("1_limit_stage/annotation_parameters.csv", "r") as file:
 #     #     for line in csv.DictReader(file):
 #     #         if line["graphType"] == experiment:
 #     #             ax2ylim = int(line["ax2ylim"])
@@ -317,8 +317,8 @@ def limitStage8xBoxplots(
 
 
 experiment = "ratio_3_4"
-# pathHeuristicPaths = f"1_filter_stage/results/{experiment}_heuristic.csv"
-pathHeuristicPaths = f"1_filter_stage/results/{experiment}_heuristic.csv"
+# pathHeuristicPaths = f"1_limit_stage/results/{experiment}_heuristic.csv"
+pathHeuristicPaths = f"1_limit_stage/results/{experiment}_heuristic.csv"
 
 depthLimits = []
 neighbourLimits = []

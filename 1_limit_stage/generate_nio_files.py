@@ -6,7 +6,7 @@ import random
 from highway_graph_generator import generateHighwayGraph
 from generate_features_distribution import generate_linear_features
 
-prefix = "1_filter_stage/"
+prefix = "1_limit_stage/"
 
 # experiment = "as_graph"
 # experiment = "as_graph_ber_5"
@@ -23,7 +23,7 @@ prefix = "1_filter_stage/"
 # experiment = "ratio_2_3"
 # experiment = "ratio_3_4"
 # experiment = "ratio_4_5"
-experiment = "ratio_5_6"
+# experiment = "ratio_5_6"
 
 
 dry_run = False
