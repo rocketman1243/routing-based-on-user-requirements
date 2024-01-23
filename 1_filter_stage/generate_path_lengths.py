@@ -1,6 +1,6 @@
 import networkx as nx
 
-prefix = "1_tradeoff_experiment/"
+prefix = "1_filter_stage/"
 
 # for internet scalability
 edges = []

@@ -9,7 +9,6 @@ import csv
 from scipy.optimize import curve_fit
 
 
-
 # def graphMe(xTicks, yValues0, yValues1, yValues2, experiment):
 #     # plt.rcParams["font.family"] = "monospace"
 #     # plt.rcParams["font.size"] = "18"
@@ -20,7 +19,7 @@ from scipy.optimize import curve_fit
 #     zoneBoundaries = [5.07]
 
 
-#     # with open("1_tradeoff_experiment/annotation_parameters.csv", "r") as file:
+#     # with open("1_filter_stage/annotation_parameters.csv", "r") as file:
 #     #     for line in csv.DictReader(file):
 #     #         if line["graphType"] == experiment:
 #     #             ax2ylim = int(line["ax2ylim"])
@@ -29,7 +28,6 @@ from scipy.optimize import curve_fit
 #     #             legendLocation = line["legendLocation"]
 #     #             zoneBoundariesString = line["zoneBoundaries"].split("-")
 #     #             zoneBoundaries = [float(x) for x in zoneBoundariesString]
-
 
 
 #     plt.rcParams["font.family"] = "monospace"
@@ -49,12 +47,10 @@ from scipy.optimize import curve_fit
 #     ax1.set_ylim(0, 1.2)
 
 
-
 #     ax2 = ax1.twinx()
 #     plot2 = ax2.plot(range(len(xTicks)), yValues2, color="blue", label="avg score improvement (right axis)", linestyle="solid")
 #     # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
 #     ax2.set_ylabel("average score improvement", color="blue", fontsize=16)
-
 
 
 #     yticklabels2 = []
@@ -114,8 +110,6 @@ from scipy.optimize import curve_fit
 #     plt.legend(handles=handles1, loc=legendLocation, fontsize = 16)
 
 
-
-
 #     # plt.legend(loc="upper left")
 
 #     ax1.set_title(f"Score improvement and runtime per limit for the {experiment} graph type", fontsize = 16)
@@ -135,7 +129,10 @@ from scipy.optimize import curve_fit
 # def function(x, a, b, c):
 #     return a * x * x + b * x + c
 
-def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2ylim, step):
+
+def limitStage8xBoxplots(
+    runtimes, yLabel, xLabel, title, upperLimit, pathImprovements, ax2ylim, step
+):
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
@@ -144,18 +141,25 @@ def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprov
 
     c = "#f5bc42"
     fill_color = "#f7ce86"
-    bp = ax1.boxplot(runtimes.values(), notch=True, patch_artist=True,
-            boxprops=dict(facecolor=fill_color, color=c),
-            capprops=dict(color=c),
-            whiskerprops=dict(color=c),
-            flierprops=dict(color=c, markeredgecolor=c),
-            medianprops=dict(color="orange"),
-            showmeans=True
-            )
+    bp = ax1.boxplot(
+        runtimes.values(),
+        notch=True,
+        patch_artist=True,
+        boxprops=dict(facecolor=fill_color, color=c),
+        capprops=dict(color=c),
+        whiskerprops=dict(color=c),
+        flierprops=dict(color=c, markeredgecolor=c),
+        medianprops=dict(color="orange"),
+        showmeans=True,
+    )
     ax1.set_xticklabels(runtimes.keys())
     ax1.set_xlim([0, len(runtimes) + 1])
     plt.xticks(rotation=25)
-    ax1.set_yticks([i/100 for i in range(0, upperLimit * 100 + 1, 25)], labels=[str(i*10) for i in range(0, upperLimit * 100 + 1, 25)], color=c)
+    ax1.set_yticks(
+        [i / 100 for i in range(0, upperLimit * 100 + 1, 25)],
+        labels=[str(i * 10) for i in range(0, upperLimit * 100 + 1, 25)],
+        color=c,
+    )
     print(upperLimit)
     # ax1.set_yticks([i for i in range(0, upperLimit, 1000)], labels=[str(i) for i in range(0, upperLimit, 1000)], color="green")
     # ax1.set_ylim([0, upperLimit])
@@ -168,12 +172,18 @@ def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprov
         maxes.append(np.max(r))
 
     yline1 = [0.5 for i in xdata]
-    ax1.plot(xdata, yline1, linestyle="dotted", label="500 ms", color = "red")
+    ax1.plot(xdata, yline1, linestyle="dotted", label="500 ms", color="red")
 
     # Get avg path improvement in same graph
     ax2 = ax1.twinx()
     runtime_color = "#429ef5"
-    ax2.plot(xdata, pathImprovements, color=runtime_color, label="avg score improvement (right axis)", linestyle="solid")
+    ax2.plot(
+        xdata,
+        pathImprovements,
+        color=runtime_color,
+        label="avg score improvement (right axis)",
+        linestyle="solid",
+    )
     # ax2.plot(X_, Y2_, color="blue", label="avg #BER improvement")
     ax2.set_ylabel("average score improvement", color=runtime_color, fontsize=16)
 
@@ -184,42 +194,40 @@ def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprov
     #     step *= 10
     #     step = int(step)
     # print(step, ax2ylim)
-    yticks2 = [round(i*step, 1) for i in range(0, math.ceil(ax2ylim / step + 1), 1)]
+    yticks2 = [round(i * step, 1) for i in range(0, math.ceil(ax2ylim / step + 1), 1)]
     # print(yticks2)
     for yt in yticks2:
         yticklabels2.append(yt)
-    ax2.set_yticks(yticks2, labels=yticklabels2, color=runtime_color, fontsize = 16)
+    ax2.set_yticks(yticks2, labels=yticklabels2, color=runtime_color, fontsize=16)
 
     ax2.set_ylim(0, ax2ylim)
     ax2.grid()
 
-
-
-
-
     ax1.set_xlabel(xLabel)
-    ax1.set_ylabel(yLabel, color = c)
+    ax1.set_ylabel(yLabel, color=c)
     ax1.set_title(title, fontsize=16)
-
 
     handles1, labels = ax1.get_legend_handles_labels()
     handles2, labels = ax2.get_legend_handles_labels()
     # patchGreen = mpatches.Patch(color=greenColour, alpha=greenAlpha, label='fast enough')
     # patchRed = mpatches.Patch(color=redColour, alpha=redAlpha, label='too slow')
-    triangle = Line2D([0], [0], label='average runtime', marker="^", color='green', linestyle='None')
+    triangle = Line2D(
+        [0], [0], label="average runtime", marker="^", color="green", linestyle="None"
+    )
     # handles1.extend([patchGreen, patchRed])
     handles2.append(triangle)
     handles2.extend(handles1)
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
 
     legendLocation = "upper left"
-    plt.legend(handles=handles2, loc=legendLocation, fontsize = 16)
-
+    plt.legend(handles=handles2, loc=legendLocation, fontsize=16)
 
     fig = plt.gcf()
     fig.set_size_inches(19.5, 7)
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/{experiment}-runtimes-boxplot.pdf", bbox_inches="tight")
-
+    plt.savefig(
+        f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/{experiment}-runtimes-boxplot.pdf",
+        bbox_inches="tight",
+    )
 
     # plt.show()
 
@@ -308,12 +316,9 @@ def limitStage8xBoxplots(runtimes, yLabel, xLabel, title, upperLimit, pathImprov
 #     # plt.show()
 
 
-
-
-
 experiment = "ratio_3_4"
-# pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
-pathHeuristicPaths = f"1_tradeoff_experiment/results/{experiment}_heuristic.csv"
+# pathHeuristicPaths = f"1_filter_stage/results/{experiment}_heuristic.csv"
+pathHeuristicPaths = f"1_filter_stage/results/{experiment}_heuristic.csv"
 
 depthLimits = []
 neighbourLimits = []
@@ -355,15 +360,13 @@ with open(pathHeuristicPaths, "r") as file:
         #         index = i - 10 + j
         #         increasing_depths_runtime_dict[i].append(runtimes[j])
 
-
-
         neighbourLimitDict = {
             "avg_improvement": float(items[2]),
             "avg_relative_improvement": float(items[3]) * 100,
             "avg_runtime": float(items[4]),
-            "runtimes": runtimes
+            "runtimes": runtimes,
         }
-        depthLimitDict[depthLimit][neighbourLimit] =  neighbourLimitDict
+        depthLimitDict[depthLimit][neighbourLimit] = neighbourLimitDict
 
 
 xTicks = []
@@ -377,10 +380,16 @@ runtime_dict = {}
 for depthLimit in depthLimitDict:
     for neighbourLimit in depthLimitDict[depthLimit]:
         xTicks.append(f"[{depthLimit}, {neighbourLimit}]")
-        avg_improvements.append(depthLimitDict[depthLimit][neighbourLimit]["avg_improvement"])
-        avg_relative_improvements.append(depthLimitDict[depthLimit][neighbourLimit]["avg_relative_improvement"])
+        avg_improvements.append(
+            depthLimitDict[depthLimit][neighbourLimit]["avg_improvement"]
+        )
+        avg_relative_improvements.append(
+            depthLimitDict[depthLimit][neighbourLimit]["avg_relative_improvement"]
+        )
         avg_runtimes.append(depthLimitDict[depthLimit][neighbourLimit]["avg_runtime"])
-        runtime_dict[f"[{depthLimit}, {neighbourLimit}]"] = depthLimitDict[depthLimit][neighbourLimit]["runtimes"]
+        runtime_dict[f"[{depthLimit}, {neighbourLimit}]"] = depthLimitDict[depthLimit][
+            neighbourLimit
+        ]["runtimes"]
 
 # print(xTicks, avg_improvements,"\n", avg_relative_improvements,"\n", avg_runtimes,"\n", runtimes_dict)
 
@@ -422,14 +431,8 @@ runtime_threshold = [0.5 for i in range(len(xTicks))]
 # boxplotMe(increasing_depths_runtime_dict, "runtime (seconds)", "#hops between start and end node", "Boxplots of runtimes for increasing hop lengths on grid graph", boxplot_cap, runtime_threshold, "runtime threshold of 0.5 seconds")
 
 
-
-
 # Realistic scenario runtimes plot
 # realisticScenarioBoxplots(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", f"Boxplots of runtimes for the realistic scenario experiment")
-
-
-
-
 
 
 # Limit stage boxplots
@@ -439,7 +442,16 @@ upperLimit = 0
 for key in runtimesBoxplotDict:
     if math.ceil(max(runtimesBoxplotDict[key])) > upperLimit:
         upperLimit = math.ceil(max(runtimesBoxplotDict[key]))
-limitStage8xBoxplots(runtimesBoxplotDict, "runtime (milliseconds)", "[depthLimit, neighbourLimit]", f"Boxplots of runtimes and plot of average path improvement for the {mapName} feature ratio", upperLimit, avg_improvements, math.ceil(max(avg_improvements)), step)
+limitStage8xBoxplots(
+    runtimesBoxplotDict,
+    "runtime (milliseconds)",
+    "[depthLimit, neighbourLimit]",
+    f"Boxplots of runtimes and plot of average path improvement for the {mapName} feature ratio",
+    upperLimit,
+    avg_improvements,
+    math.ceil(max(avg_improvements)),
+    step,
+)
 
 
 #

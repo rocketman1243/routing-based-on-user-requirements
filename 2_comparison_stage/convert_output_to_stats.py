@@ -5,7 +5,6 @@ import math
 from matplotlib.lines import Line2D
 
 
-
 # def spit_stats(x, y, title, xlabel, ylabel, metric):
 
 #     plt.rcParams["font.family"] = "monospace"
@@ -50,6 +49,7 @@ from matplotlib.lines import Line2D
 #     # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/comparison-{experiment}.pdf", bbox_inches="tight")
 #     # plt.show()
 
+
 def boxplotMe(differences, xLabel, yLabel, title):
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
@@ -57,24 +57,22 @@ def boxplotMe(differences, xLabel, yLabel, title):
     fig, ax1 = plt.subplots()
     xdata = range(1, len(differences.keys()) + 1)
     c = "#9ce37d"
-    ax1.boxplot(differences.values(),
-            notch=True,
-            patch_artist=True,
-            showmeans=True,
-            boxprops=dict(facecolor=c, color=c),
-            capprops=dict(color=c),
-            whiskerprops=dict(color=c),
-            flierprops=dict(color=c, markeredgecolor=c),
-            medianprops=dict(color="orange")
-            )
+    ax1.boxplot(
+        differences.values(),
+        notch=True,
+        patch_artist=True,
+        showmeans=True,
+        boxprops=dict(facecolor=c, color=c),
+        capprops=dict(color=c),
+        whiskerprops=dict(color=c),
+        flierprops=dict(color=c, markeredgecolor=c),
+        medianprops=dict(color="orange"),
+    )
 
     yline2 = [0.01 for i in xdata]
-    ax1.plot(xdata, yline2, linestyle="dashed", label="10 ms", color = "grey")
+    ax1.plot(xdata, yline2, linestyle="dashed", label="10 ms", color="grey")
     yline1 = [0.04 for i in xdata]
-    ax1.plot(xdata, yline1, linestyle="dotted", label="40 ms", color = "grey")
-
-
-
+    ax1.plot(xdata, yline1, linestyle="dotted", label="40 ms", color="grey")
 
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
@@ -83,17 +81,19 @@ def boxplotMe(differences, xLabel, yLabel, title):
     plt.legend()
 
     handles1, labels = ax1.get_legend_handles_labels()
-    line = Line2D([0], [0], label='Average value', color='green', linestyle='None', marker="^")
+    line = Line2D(
+        [0], [0], label="Average value", color="green", linestyle="None", marker="^"
+    )
     handles1.extend([line])
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
-    plt.legend(handles=handles1, loc="upper left", fontsize = 16)
-
+    plt.legend(handles=handles1, loc="upper left", fontsize=16)
 
     fig = plt.gcf()
     fig.set_size_inches(19.5, 9)
     # plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/{experiment}-comparison.pdf", bbox_inches="tight")
 
     plt.show()
+
 
 def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
     plt.rcParams["font.family"] = "monospace"
@@ -103,15 +103,21 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
     xdata = range(1, len(differences.keys()) + 1)
 
     c = "#9ce37d"
-    violin = ax1.violinplot(differences.values(), showmeans=True,
-                     showextrema=True, showmedians=False, widths=0.8)
+    violin = ax1.violinplot(
+        differences.values(),
+        showmeans=True,
+        showextrema=True,
+        showmedians=False,
+        widths=0.8,
+    )
 
     for i in range(len(differences)):
         ax1.annotate(
             str(round(avgRelativeDiffs[i])) + "%",
             (i + 1 - 0.2, max(differences[list(differences)[i]]) + 0.2),
             ha="left",
-            rotation=0)
+            rotation=0,
+        )
 
     for pc in violin["bodies"]:
         pc.set_facecolor("#7ef77c")
@@ -123,7 +129,10 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
 
     plt.xticks(xdata, labels=differences.keys(), rotation=25)
     ax1.set_xlim([0, len(differences) + 1])
-    ax1.set_yticks([i for i in range(0, 26, 2)] + [25], labels=[str(i) for i in range(0, 26, 2)] + [str(25)])
+    ax1.set_yticks(
+        [i for i in range(0, 26, 2)] + [25],
+        labels=[str(i) for i in range(0, 26, 2)] + [str(25)],
+    )
     ax1.set_ylim([-0.25, 25])
 
     medians = []
@@ -133,12 +142,13 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
         maxes.append(np.max(r))
 
     yline2 = [2 for i in xdata]
-    ax1.plot(xdata, yline2, linestyle="dashed", label="Score difference = 2", color = "grey")
+    ax1.plot(
+        xdata, yline2, linestyle="dashed", label="Score difference = 2", color="grey"
+    )
     yline1 = [1 for i in xdata]
-    ax1.plot(xdata, yline1, linestyle="dotted", label="Score difference = 1", color = "grey")
-
-
-
+    ax1.plot(
+        xdata, yline1, linestyle="dotted", label="Score difference = 1", color="grey"
+    )
 
     ax1.set_xlabel(xLabel)
     ax1.set_ylabel(yLabel)
@@ -147,18 +157,21 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
     plt.legend()
 
     handles1, labels = ax1.get_legend_handles_labels()
-    line = Line2D([0], [0], label='average value of violin plot', color='blue')
+    line = Line2D([0], [0], label="average value of violin plot", color="blue")
     # line2 = Line2D([0], [0], label='median value of violin plot', color='red')
     handles1.extend([line])
     # plt.legend(handles=handles1, loc=(0.005, 0.05))
-    plt.legend(handles=handles1, loc="upper left", fontsize = 16)
-
+    plt.legend(handles=handles1, loc="upper left", fontsize=16)
 
     fig = plt.gcf()
     fig.set_size_inches(19.5, 9)
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/{experiment}-comparison.pdf", bbox_inches="tight")
+    plt.savefig(
+        f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - comparison experiment/{experiment}-comparison.pdf",
+        bbox_inches="tight",
+    )
 
     # plt.show()
+
 
 # def infrastructure_experiment_limit_values():
 #     plt.rcParams["font.family"] = "monospace"
@@ -190,22 +203,36 @@ def playMeSomeViolinPlots(differences, xLabel, yLabel, title, avgRelativeDiffs):
 #     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
 #     # plt.show()
 
+
 def score_range_limit_values():
     plt.rcParams["font.family"] = "monospace"
     plt.rcParams["font.size"] = "18"
 
     x = ["4-5", "20-25", "80-100", "400-500"]
 
-    depthLimitValues = [3, 2, 2, 2] # variable score range values
-    neighbourLimitValues = [6, 15, 8, 3] # variable score range values
+    depthLimitValues = [3, 2, 2, 2]  # variable score range values
+    neighbourLimitValues = [6, 15, 8, 3]  # variable score range values
     xticks = np.arange(4)
 
     x.reverse()
     neighbourLimitValues.reverse()
     depthLimitValues.reverse()
 
-    plt.barh(xticks+0.2, depthLimitValues, color="tab:orange", height=0.4, label="depthLimit")
-    plt.barh(xticks-0.2, neighbourLimitValues, color="tab:green", height=0.4, label="neighbourLimit", hatch="/")
+    plt.barh(
+        xticks + 0.2,
+        depthLimitValues,
+        color="tab:orange",
+        height=0.4,
+        label="depthLimit",
+    )
+    plt.barh(
+        xticks - 0.2,
+        neighbourLimitValues,
+        color="tab:green",
+        height=0.4,
+        label="neighbourLimit",
+        hatch="/",
+    )
     plt.title("Limit values for each feature range", fontsize=18)
     customXticks = [0, 1, 2, 3, 4, 5, 6, 7, 8] + list(range(10, 16, 2))
     plt.xticks(customXticks, labels=[str(i) for i in customXticks])
@@ -218,8 +245,12 @@ def score_range_limit_values():
     plt.tight_layout()
     fig = plt.gcf()
     fig.set_size_inches(11, 3)
-    plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/feature-range-limit_values.pdf", bbox_inches="tight")
+    plt.savefig(
+        f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/feature-range-limit_values.pdf",
+        bbox_inches="tight",
+    )
     # plt.show()
+
 
 # def ratio_limit_values_bars():
 #     plt.rcParams["font.family"] = "monospace"
@@ -298,8 +329,7 @@ def score_range_limit_values():
 #     fig = plt.gcf()
 #     fig.set_size_inches(11, 3)
 #     plt.savefig(f"/home/timon/Dropbox/Studie/Master/thesis/figures/figs - limit stage/infra-limit-values.pdf", bbox_inches="tight")
-    # plt.show()
-
+# plt.show()
 
 
 experiment = "internet_graph_0_25_ber"
@@ -312,7 +342,7 @@ score_range_limit_values()
 
 exit(0)
 
-pathFullPaths = f"2_comparison_experiment/results/{experiment}_global.csv"
+pathFullPaths = f"2_comparison_stage/results/{experiment}_global.csv"
 
 
 internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
@@ -323,7 +353,7 @@ internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2]]
 differencesDict = {}
 avgRelativeDifferences = []
 for limit in internet_graph_0_25_ber_limits:
-    heuristicPath = f"2_comparison_experiment/results/{experiment}_{limit}.csv"
+    heuristicPath = f"2_comparison_stage/results/{experiment}_{limit}.csv"
 
     scoreFullPaths = {}
     scoreHeuristicPaths = {}
@@ -342,7 +372,7 @@ for limit in internet_graph_0_25_ber_limits:
             scoreFullPaths[items[0]] = {
                 "hopcount": int(items[1]),
                 "nrBER": int(items[2]),
-                "runtime": float(items[3])
+                "runtime": float(items[3]),
             }
 
     with open(heuristicPath, "r") as file:
@@ -352,7 +382,7 @@ for limit in internet_graph_0_25_ber_limits:
             scoreHeuristicPaths[items[0]] = {
                 "hopcount": int(items[1]),
                 "nrBER": int(items[2]),
-                "runtime": float(items[3])
+                "runtime": float(items[3]),
             }
 
     hopcountFull = []
@@ -375,11 +405,15 @@ for limit in internet_graph_0_25_ber_limits:
         nrBERHeuristic.append(scoreHeuristicPaths[pro]["nrBER"])
         runtimeHeuristic.append(scoreHeuristicPaths[pro]["runtime"])
 
-        hopcountDiff.append(scoreFullPaths[pro]["hopcount"] - scoreHeuristicPaths[pro]["hopcount"])
+        hopcountDiff.append(
+            scoreFullPaths[pro]["hopcount"] - scoreHeuristicPaths[pro]["hopcount"]
+        )
         BERdiff.append(scoreFullPaths[pro]["nrBER"] - scoreHeuristicPaths[pro]["nrBER"])
 
         if scoreFullPaths[pro]["nrBER"] > 0:
-            relativeDifferences.append((scoreHeuristicPaths[pro]["nrBER"]) / scoreFullPaths[pro]["nrBER"] * 100)
+            relativeDifferences.append(
+                (scoreHeuristicPaths[pro]["nrBER"]) / scoreFullPaths[pro]["nrBER"] * 100
+            )
         else:
             relativeDifferences.append(100)
 
@@ -388,30 +422,28 @@ for limit in internet_graph_0_25_ber_limits:
 
     hopcounts = {
         "globally best paths": hopcountFull,
-        "heuristic paths": hopcountHeuristic
+        "heuristic paths": hopcountHeuristic,
     }
-    hopcountDiffDict = {
-        "global hopcount -- heuristic hopcount": hopcountDiff
-    }
-
+    hopcountDiffDict = {"global hopcount -- heuristic hopcount": hopcountDiff}
 
     differencesDict[f"[{limit[0]},{limit[1]}]"] = BERdiff
-
-
 
 
 #
 # cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
 
-playMeSomeViolinPlots(differencesDict, "[depthLimit, neighbourLimit]", "Score difference", graphTitle, avgRelativeDifferences)
+playMeSomeViolinPlots(
+    differencesDict,
+    "[depthLimit, neighbourLimit]",
+    "Score difference",
+    graphTitle,
+    avgRelativeDifferences,
+)
 
 
 # print(nrBERFull)
 # print(BERdiff)
 # print(relativeDifferences)
-
-
-
 
 
 # OLD stats
@@ -421,4 +453,3 @@ playMeSomeViolinPlots(differencesDict, "[depthLimit, neighbourLimit]", "Score di
 # spit_stats(runtimeFull, runtimeHeuristic, f"Runtime to find global path much larger than heuristic for the {experiment} graph type.", "path request number", "runtime (seconds)", "runtime (s)")
 
 # spit_stats(hopcountDiff,[], f"Runtime comparison for the {experiment} graph type.\n\nPositive: Global path is longer. Negative: Heuristic path is longer", "", "path request number", "Difference in hopcount")
-

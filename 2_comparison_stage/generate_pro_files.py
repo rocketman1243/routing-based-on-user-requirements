@@ -32,7 +32,7 @@ requirements = list(range(1, nr_of_features + 1))
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 
-prefix = "2_comparison_experiment/"
+prefix = "2_comparison_stage/"
 
 ###################################33
 
@@ -60,15 +60,16 @@ output_objects = []
 
 
 for index in range(num_objects):
-
     endpoints = random.sample(ases, 2)
-    features = list(range(1,nr_of_features + 1))
+    features = list(range(1, nr_of_features + 1))
 
     as_source = endpoints[0]
     as_destination = endpoints[1]
 
     # Requirements for privacy
-    strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
+    strict_amount = random.randint(
+        0, min(max_number_of_strict_requirements, len(features))
+    )
     strict_requirements = random.sample(features, strict_amount)
     strict_requirements.sort()
 
@@ -96,17 +97,15 @@ for index in range(num_objects):
         "requirements": {
             "strict": strict_requirements,
             "best_effort": best_effort_requirements,
-            "best_effort_mode": best_effort_mode
+            "best_effort_mode": best_effort_mode,
         },
-        "geolocation": {
-            "exclude": geolocation_exclude
-        },
+        "geolocation": {"exclude": geolocation_exclude},
         "path_optimization": path_optimization,
         "multipath": {
             "target_amount_of_paths": target_amount_of_paths,
-            "minimum_number_of_paths": minimum_number_of_paths
+            "minimum_number_of_paths": minimum_number_of_paths,
         },
-        "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp
+        "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp,
     }
 
     output_objects.append(data)
@@ -116,4 +115,3 @@ if not dry_run:
     for i, obj in enumerate(output_objects):
         with open(f"{output_path}/pro_{(i):03}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
-

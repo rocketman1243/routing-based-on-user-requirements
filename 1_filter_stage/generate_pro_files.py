@@ -30,8 +30,6 @@ best_effort_max_amount = n
 nr_of_features = n
 
 
-
-
 num_objects = 100
 
 
@@ -41,7 +39,7 @@ requirements = list(range(1, nr_of_features + 1))
 max_number_of_strict_requirements = 0
 max_nr_geolocations = 0
 
-prefix = "1_tradeoff_experiment/"
+prefix = "1_filter_stage/"
 
 ###################################33
 
@@ -52,7 +50,11 @@ if dry_run:
 # causing dead files from previous runs to still exist
 
 output_path = prefix + "pro_files/" + experiment
-if not dry_run and experiment != "increasing_grid" and experiment != "scalability_internet":
+if (
+    not dry_run
+    and experiment != "increasing_grid"
+    and experiment != "scalability_internet"
+):
     files = os.listdir(output_path)
     for file in files:
         file_path = os.path.join(output_path, file)
@@ -81,10 +83,9 @@ output_objects = []
 
 
 for index in range(num_objects):
-
     endpoints = random.sample(ases, 2)
 
-    features = list(range(1,nr_of_features + 1))
+    features = list(range(1, nr_of_features + 1))
 
     as_source = endpoints[0]
     as_destination = endpoints[1]
@@ -101,7 +102,6 @@ for index in range(num_objects):
         as_destination = f"({start_index + index}, {multiplier})"
 
     if experiment == "scalability_internet":
-
         # 10 through 200 in steps of 10
         length = 10
         print("before path generations")
@@ -115,15 +115,14 @@ for index in range(num_objects):
                     as_source = i
                     as_destination = j
 
-
-
         print("after")
         # as_source = path[0]
         # as_destination = path[-1]
 
-
     # Requirements for privacy
-    strict_amount = random.randint(0, min(max_number_of_strict_requirements, len(features)))
+    strict_amount = random.randint(
+        0, min(max_number_of_strict_requirements, len(features))
+    )
     strict_requirements = random.sample(features, strict_amount)
     strict_requirements.sort()
 
@@ -151,17 +150,15 @@ for index in range(num_objects):
         "requirements": {
             "strict": strict_requirements,
             "best_effort": best_effort_requirements,
-            "best_effort_mode": best_effort_mode
+            "best_effort_mode": best_effort_mode,
         },
-        "geolocation": {
-            "exclude": geolocation_exclude
-        },
+        "geolocation": {"exclude": geolocation_exclude},
         "path_optimization": path_optimization,
         "multipath": {
             "target_amount_of_paths": target_amount_of_paths,
-            "minimum_number_of_paths": minimum_number_of_paths
+            "minimum_number_of_paths": minimum_number_of_paths,
         },
-        "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp
+        "fallback_to_ebgp_if_no_path_found": fallback_to_ebgp,
     }
 
     output_objects.append(data)
@@ -171,4 +168,3 @@ if not dry_run:
     for i, obj in enumerate(output_objects):
         with open(f"{output_path}/pro_{(i):03}.json", "w") as file:
             file.write(f"{json.dumps(obj, indent=2)}")
-

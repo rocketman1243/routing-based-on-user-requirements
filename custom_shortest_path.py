@@ -1,4 +1,3 @@
-
 def fulfillsStrictRequirements(G, pro, node):
     # If we encountered this node before and deemed it UNWORTHY, Call out the same sentence AGAIN!!!
 
@@ -15,9 +14,6 @@ def fulfillsStrictRequirements(G, pro, node):
     # use they are to them and the rest of society.
     G.nodes[node]["filtered"] = True
     return False
-
-
-
 
 
 """
@@ -62,6 +58,8 @@ under the condition of copying with it the full license text. Thus, here it is:
    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
+
+
 def find_predecessors_and_successors(G, pro):
     """Bidirectional shortest path helper.
 
@@ -71,7 +69,6 @@ def find_predecessors_and_successors(G, pro):
     """
     source = pro.as_source
     target = pro.as_destination
-
 
     # Do BFS from both source and target and meet in the middle
     if target == source:
@@ -116,7 +113,6 @@ def find_predecessors_and_successors(G, pro):
 
     # If we come here, there exists no path... :(
     return [], [], -1
-
 
 
 def bidirectionalBFSWithFilter(G, pro):

@@ -14,7 +14,7 @@ with open(oldfile, "r") as old:
             i += 1
 
             # if i > 10:
-            #     break
+            #     break a
 
             # print(items[0], items[1])
             new.write(f"{items[0]} {items[1]}\n")

@@ -1,13 +1,16 @@
 import networkx as nx
 import random
 
+
 def sortNeighboursOnDescendingDegree(G, neighbours):
     neighboursWithBERIntersectionScore = []
     for n in neighbours:
         degree = nx.degree(G, n)
         neighboursWithBERIntersectionScore.append([n, degree])
 
-    neighboursSortedOnDescendingScore = sorted(neighboursWithBERIntersectionScore, key=lambda x: x[1], reverse=True)
+    neighboursSortedOnDescendingScore = sorted(
+        neighboursWithBERIntersectionScore, key=lambda x: x[1], reverse=True
+    )
     sortedNeighbours = list(el[0] for el in neighboursSortedOnDescendingScore)
     return sortedNeighbours
 
@@ -37,7 +40,6 @@ def generate_path_with_minimum_length(G, length):
     #     if len(path) == length and len(shortestPath) == length:
     #         correctLengthAndShortestPath = True
     pathLengths = nx.shortest_path_length(G)
-
 
     return path
 

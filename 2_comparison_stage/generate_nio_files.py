@@ -6,8 +6,7 @@ import random
 from highway_graph_generator import generateHighwayGraph
 from generate_features_distribution import generate_linear_features
 
-prefix = "2_comparison_experiment/"
-
+prefix = "2_comparison_stage/"
 
 
 # experiment = "as_graph"
@@ -56,9 +55,6 @@ if len(output_path) == 0:
     exit(0)
 
 
-
-
-
 if dry_run:
     print("DRY RUN")
 
@@ -79,9 +75,6 @@ if not dry_run:
 #######################3
 
 
-
-
-
 # Rename nodes to string to work with the rest of the system
 mapping = {}
 for n in G.nodes:
@@ -92,19 +85,28 @@ node_info = {}
 
 ################### GENERATE FEATURE DISTRIBUTION & ADD TO GRAPH #################
 
-def generate_features(number_of_features_per_as: int, min_nr_of_features:int, as_numbers):
+
+def generate_features(
+    number_of_features_per_as: int, min_nr_of_features: int, as_numbers
+):
     features = list(range(1, number_of_features_per_as + 1))
 
     mapping = {}
 
     for as_number in as_numbers:
-        mapping[as_number] = random.sample(features, random.randint(0, len(features) - min_nr_of_features) + min_nr_of_features)
+        mapping[as_number] = random.sample(
+            features,
+            random.randint(0, len(features) - min_nr_of_features) + min_nr_of_features,
+        )
 
     return mapping
 
+
 features = generate_features(maxNrOfFeatures, minNrOfFeatures, list(G.nodes))
 if "linear" in experiment:
-    features = generate_linear_features(maxNrOfFeatures, minNrOfFeatures - 1, G.nodes, G)
+    features = generate_linear_features(
+        maxNrOfFeatures, minNrOfFeatures - 1, G.nodes, G
+    )
 
 as_numbers_path = prefix + "as_numbers/" + experiment + "_as_numbers.txt"
 with open(as_numbers_path, "w") as file:
@@ -136,7 +138,6 @@ for asn in list(G.nodes):
     edges_local = []
     latencies = []
     for e in G.edges(asn):
-
         latency = random.randint(2, 100)
         edges_local.append(e[1])
         latencies.append(latency)
