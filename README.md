@@ -13,7 +13,7 @@ The code is mainly set up to set up and run the same experiments many times
 ## How to install
 
 1. Clone the git repository or download a zip of the code
-2. Install python
+2. Install python version 3.10
 3. Install networkx using `pip install networkx`
 4. Install any other needed python dependencies using `pip install <dependency>`
 

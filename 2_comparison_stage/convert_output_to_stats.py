@@ -332,29 +332,32 @@ def score_range_limit_values():
 # plt.show()
 
 
-experiment = "internet_graph_0_25_ber"
-graphTitle = "Score differences between heuristic and globally best solution"
+experiment = "as_graph"
+graphTitle = "AS graph"
 
 # bar()
-score_range_limit_values()
+# score_range_limit_values()
 # infrastructure_experiment_limit_values()
 # ratio_limit_values_bars()
 
-exit(0)
+# exit(0)
 
 pathFullPaths = f"2_comparison_stage/results/{experiment}_global.csv"
 
 
-internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
-internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
-internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3]]
-internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2]]
+# internet_graph_0_25_ber_limits = [[1, i] for i in [10, 20, 30, 40, 50]]
+# internet_graph_0_25_ber_limits += [[2, i] for i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]
+# internet_graph_0_25_ber_limits += [[3, i] for i in [1, 2, 3]]
+# internet_graph_0_25_ber_limits += [[4, i] for i in [1, 2]]
+
+heuristicPath = f"2_comparison_stage/results/{experiment}_heuristic.csv"
 
 differencesDict = {}
 avgRelativeDifferences = []
-for limit in internet_graph_0_25_ber_limits:
-    heuristicPath = f"2_comparison_stage/results/{experiment}_{limit}.csv"
+# for limit in internet_graph_0_25_ber_limits:
+#     heuristicPath = f"2_comparison_stage/results/{experiment}_{limit}.csv"
 
+if True:  # Swap if comparing limits for realistic case
     scoreFullPaths = {}
     scoreHeuristicPaths = {}
 
@@ -426,19 +429,22 @@ for limit in internet_graph_0_25_ber_limits:
     }
     hopcountDiffDict = {"global hopcount -- heuristic hopcount": hopcountDiff}
 
-    differencesDict[f"[{limit[0]},{limit[1]}]"] = BERdiff
+    # differencesDict[f"[{limit[0]},{limit[1]}]"] = BERdiff
 
 
 #
 # cdf(BERdiff, graphTitle, "BER difference", "# Path Requests")
 
-playMeSomeViolinPlots(
-    differencesDict,
-    "[depthLimit, neighbourLimit]",
-    "Score difference",
-    graphTitle,
-    avgRelativeDifferences,
-)
+# playMeSomeViolinPlots(
+#     differencesDict,
+#     "[depthLimit, neighbourLimit]",
+#     "Score difference",
+#     graphTitle,
+#     avgRelativeDifferences,
+# )
+
+print(np.average(runtimeHeuristic))
+print(np.average(runtimeFull))
 
 
 # print(nrBERFull)
